@@ -1,14 +1,11 @@
 #!/usr/local/bin/perl -w
 
+# This is just a simple demo of how to use Net::ICal::Alarm. 
+# Nothing fancy to see here, move along. 
+
 use strict;
-
 use lib '../lib';
-
-use Net::ICal::Alarm;
-use Net::ICal::Attendee;
-use Net::ICal::Duration;
-use Net::ICal::Time;
-use Net::ICal::Trigger;
+use Net::ICal;
 
 $a = new Net::ICal::Alarm (action => 'EMAIL',
                            trigger => "300",
@@ -29,7 +26,7 @@ print $a->as_ical;
 #$b->restore_config ('test.foo');
 #print $b->as_ical;
 
-print "paste in the output from the script above (or any valid VALARM)\n";
+print "paste in the output from above (or any valid VALARM), then hid Ctrl-D\n";
 
 undef $/; # slurp mode
 $a = Net::ICal::Component->new_from_ical (<STDIN>);

@@ -2,23 +2,33 @@
 # -*- Mode: perl -*-
 #======================================================================
 #
-# This package is free software and is provided "as is" without express
-# or implied warranty.  It may be used, redistributed and/or modified
-# under the same terms as perl itself. ( Either the Artistic License or the
-# GPL. ) 
+# This package is free software and is provided "as is" without
+# express or implied warranty.  It may be used, redistributed and/or
+# modified under the same terms as perl itself. ( Either the Artistic
+# License or the GPL. )
 #
-# $Id: Period.pm,v 1.3 2001/03/25 20:37:46 srl Exp $
+# $Id: Period.pm,v 1.18 2001/07/26 05:51:05 srl Exp $
 #
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
 #
-# See the AUTHORS file included in the distribution for a full list. 
+# See the AUTHORS file included in the distribution for a full list.
 #======================================================================
 
-
-=pod
 =head1 NAME
 
 Net::ICal::Period -- represent a period of time
+
+=cut
+
+package Net::ICal::Period;
+use strict;
+
+use UNIVERSAL;
+use base qw(Net::ICal::Property);
+
+use Data::Dumper;
+use Net::ICal::Duration;
+use Net::ICal::Time;
 
 =head1 SYNOPSIS
 
@@ -47,24 +57,6 @@ time will slide the end time correspondingly.
 
 =head1 BASIC METHODS
 
-=cut
-
-
-#=========================================================================
-
-package Net::ICal::Period;
-use strict;
-use Net::ICal::Time;
-use Net::ICal::Duration;
-
-use UNIVERSAL qw(isa);
-
-BEGIN {
-   @Net::ICal::Period::ISA = qw(Net::ICal::Property);
-}
-
-
-=pod
 =head2 new($time, $time|$duration)
 
 Creates a new period object given to parameters: The first must be a
@@ -91,15 +83,12 @@ Either give a start time and an end time, or a start time and a duration.
 
 #-------------------------------------------------------------------------
 
-=pod
 =head2 new($time, $time|$duration)
 
 Creates a new period object given to parameters: The first must be a
 I<Time> object or valid argument to Net::ICal::Time::new.
 
 The second can be either: 
-
-=pod
 
 =over 4
 
@@ -114,6 +103,59 @@ The second can be either:
 =back 
 
 Either give a start time and an end time, or a start time and a duration.
+
+=begin testing
+
+
+use Net::ICal::Period;
+
+my $p = Net::ICal::Period->new();  # should FAIL
+
+ok(!defined($p), "new() with no args fails properly");
+
+my $begin = "19890324T123000Z";
+my $end = '19890324T163000Z';
+my $durstring = 'PT4H';
+
+$p = Net::ICal::Period->new(
+    Net::ICal::Time->new(ical => $begin),
+    Net::ICal::Time->new(ical => $end)
+    );
+
+ok(defined($p), "new() with 2 time objects as args succeeds");
+
+# TODO: new() tests with all the argument types listed in the
+# docs. I'm *sure* some of them don't work, because the API
+# for Time and Duration has changed since that POD was written. -srl
+
+ok($p->as_ical eq "$begin/$end", "ical output is correct");
+
+
+$p = Net::ICal::Period->new($begin, $end);
+
+ok(defined($p), "new() with 2 time strings as args succeeds");
+
+# TODO: new() tests with all the argument types listed in the
+# docs. I'm *sure* some of them don't work, because the API
+# for Time and Duration has changed since that POD was written. -srl
+
+ok($p->as_ical eq "$begin/$end", "ical output is correct for dtstart/dtend");
+
+
+$p = Net::ICal::Period->new($begin, $durstring);
+
+ok(defined($p), "new() with timestring and durstring as args succeeds");
+
+# TODO: new() tests with all the argument types listed in the
+# docs. I'm *sure* some of them don't work, because the API
+# for Time and Duration has changed since that POD was written. -srl
+
+print $p->as_ical . "\n";
+
+ok($p->as_ical eq "$begin/$durstring", "ical output is correct for dtstart/duration strings");
+
+
+=end testing
 
 =cut
 
@@ -133,19 +175,19 @@ sub new{
   if( ref($arg1) eq 'Net::ICal::Time'){
     $self->{START} = $arg1->clone();
   } else  {
-    $self->{START} = new Net::ICal::Time($arg1);
+    $self->{START} = new Net::ICal::Time(ical => $arg1);
   } 
     
 
-  if(isa($arg2,'Net::ICal::Time')){ 
+  if(UNIVERSAL::isa($arg2,'Net::ICal::Time')){ 
     $self->{END} = $arg2->clone();
-  } elsif (isa($arg2,'Net::ICal::Duration')) {
+  } elsif (UNIVERSAL::isa($arg2,'Net::ICal::Duration')) {
     $self->{DURATION} = $arg2->clone();
   } elsif ($arg2 =~ /^P/) {
     $self->{DURATION} = new Net::ICal::Duration($arg2);
   } else {
     # Hope that it is a time string
-    $self->{END} = new Net::ICal::Time($arg2);
+    $self->{END} = new Net::ICal::Time(ical => $arg2);
   }
 
   return bless($self,$package);
@@ -157,14 +199,26 @@ sub new{
 
 Create a copy of this component
 
+=begin testing
+
+ok($p->clone() ne "Not implemented", "clone method is implemented");
+
+$q = $p->clone();
+ok($p->as_ical eq $q->as_ical , "clone method creates an exact copy");
+
+=end testing
+
 =cut
-# XXX implement this
+
 sub clone {
-    return "Not implemented";
+    my $self = shift;
+
+    return bless( {%$self},ref($self));
+
 }
 
 #----------------------------------------------------------------------------
-=pod
+
 =head2 is_valid()
 
 Return true if:
@@ -175,6 +229,12 @@ Return true if:
      The end time is after the start time. 
 
   There is a duration and the duration is positive  
+
+=begin testing
+
+ok($p->is_valid() ne "Not implemented", "is_valid method is implemented");
+
+=end testing
 
 =cut
 
@@ -193,6 +253,13 @@ Can also take a valid time string or an integer (number of
 seconds since the epoch) as a parameter. If a second parameter
 is given, it'll set this Duration's start time. 
 
+=begin testing
+
+# TODO: write tests
+ok(0, 'start accessor tests exist');
+
+=end testing
+
 =cut
 
 sub start{
@@ -200,7 +267,7 @@ sub start{
   my $t = shift;
 
   if($t){
-    if(isa($t,'Net::ICal::Time')){ 
+    if(UNIVERSAL::isa($t,'Net::ICal::Time')){ 
       $self->{START} = $t->clone();
     } else {
       $self->{START} = new Net::ICal::Time($t);
@@ -218,6 +285,13 @@ Accessor for the end time. Takes a I<Time> object, a valid time string,
 or an integer and returns a time object. This routine is coupled to 
 the I<duration> accessor. See I<duration> below for more imformation. 
 
+=begin testing
+
+# TODO: write tests
+ok(0, 'end accessor tests exist');
+
+=end testing
+
 =cut
 
 sub end{
@@ -227,7 +301,7 @@ sub end{
   my $end;
 
   if($t){
-    if(isa($t,'Net::ICal::Time')){
+    if(UNIVERSAL::isa($t,'Net::ICal::Time')){
       $end = $t->clone();
     } else {
       $end = new Net::ICal::Time($t);
@@ -274,6 +348,13 @@ duration. This is required so that a CUA can take an incoming
 component from a server, modify it, and send it back out in the same
 basic form.
 
+=begin testing
+
+# TODO: write tests
+ok(0, 'duration accessor tests exist');
+
+=end testing
+
 =cut
 
 sub duration{
@@ -282,7 +363,7 @@ sub duration{
   my $dur;
 
   if($d){
-    if(isa($d,'Net::ICal::Duration')){ 
+    if(UNIVERSAL::isa($d,'Net::ICal::Duration')){ 
       $dur = $d->clone();
     } else {
       $dur = new Net::ICal::Duration($d);
@@ -307,30 +388,31 @@ sub duration{
 }
 
 #------------------------------------------------------------------------
-=pod
 
 =head2 as_ical()
 
 Return a string that holds the RFC2445 text form of this period 
 
+=begin testing
+
+# TODO: write tests
+ok(0, "as_ical tests exist");
+
+=end testing
+
 =cut
+
 sub as_ical {
   my $self = shift;
   my $out;
 
-  # N::I::Time->as_ical currently returns colons at the beginning;
-  # This is not good for our purposes, so we'll pull off the leading colon.
-  # Hackery, but it works. 
-  my $colon_clipped_date = $self->{START}->as_ical();
-  $colon_clipped_date =~ s/^://;
+  my $colon_clipped_date = $self->{START}->as_ical_value();
   $out = $colon_clipped_date ."/";
 
   if($self->{DURATION}){
-    $out .= $self->{DURATION}->as_ical(); 
+    $out .= $self->{DURATION}->as_ical_value(); 
   } else {
-    # more hackery.
-    $colon_clipped_date = $self->{END}->as_ical();
-    $colon_clipped_date =~ s/^://;
+    $colon_clipped_date = $self->{END}->as_ical_value();
     $out .= $colon_clipped_date;
   }
  
@@ -344,6 +426,13 @@ sub as_ical {
 
 Another name for as_ical.
 
+=begin testing
+
+# TODO: write tests
+ok(0, "as_ical_value tests exist");
+
+=end testing
+
 =cut
 
 sub as_ical_value {
@@ -352,102 +441,99 @@ sub as_ical_value {
   return $self->as_ical();
 }
 
-#------------------------------------------------------------------------
+
+
 =pod
 
-=head2 test()
+=head2 compare([$time])
 
-A set of developers' tests to make sure the module's working properly.
+Takes a Net::ICal::Time as a parameter.
+If the parameter is a Time, returns 0 if I<time> is in the period, 
+-1 if the time is before the period and 1 if the time is after the period.
+
+=begin testing
+
+# TODO: write tests
+ok(0, "compare tests exist");
+
+=end testing
 
 =cut
 
-# Run this with a one-liner:
-#   perl -e "use lib('/home/srl/dev/rk/reefknot/base/'); use Net::ICal::Period; Net::ICal::Period::test();"
-# adjusted for your environment. 
-sub test {
+sub compare {
+    my ($self, $t) = @_;
+    my $time;
 
-  print("--------- Test Net::ICal::Period --------------\n");
+    if($t){
+        
+        if(UNIVERSAL::isa($t,'Net::ICal::Time')){
+            $time = $t->clone();
+        } else {
+            $time = new Net::ICal::Time(ical => $t);
+        }
+        
+        # If the time is before the start of the duration
+        if($self->start->compare($time) < 0) {
+            return -1;
+        }
+        # If the time is after the end of the duration
+        if($self->end->compare($time) >= 0) {
+            return 1;
+        }
 
+        return 0;
+    }
 
-  my $p = new Net::ICal::Period("19970101T180000Z/19970102T070000Z");
-  print $p->as_ical()."\n";
-  die if $p->as_ical() ne "19970101T180000Z/19970102T070000Z";
-
-  $p = new Net::ICal::Period("19970101T180000Z/PT5H30M");
-  print $p->as_ical()."\n";
-  die if $p->as_ical() ne "19970101T180000Z/PT5H30M";
-
-  $p->duration("PT5H30M10S");
-  print $p->as_ical()."\n";
-  die if $p->as_ical() ne "19970101T180000Z/PT5H30M10S" ;
-
-  $p->duration(new Net::ICal::Duration("P10DT30M5S"));
-  print $p->as_ical()."\n";
-  die if $p->as_ical() ne "19970101T180000Z/P10DT30M5S" ;
-
-  $p->end("19970101T183000Z");
-  print $p->as_ical()."\n";
-  die if $p->as_ical() ne "19970101T180000Z/PT30M" ;
-
-  $p = new Net::ICal::Period("19970101T180000Z/19970102T070000Z");
-
-  $p->end("19970101T183000Z");
-  print $p->as_ical()."\n";
-  die if $p->as_ical() ne "19970101T180000Z/19970101T183000Z" ;
-
-  $p->duration("P1DT1H10M");
-  print $p->as_ical()."\n";
-  die if $p->as_ical() ne "19970101T180000Z/19970102T191000Z" ;
+  return undef;
+}
 
 
 
+
+=pod
+
+=head2 union([$period])
+
+Takes another Period as a parameter. Returns 0 if the given I<period> overlaps 
+this period, -1 if the given Period is before this one,  and 1 if the given Period
+is after this one.
+
+=begin testing
+
+# TODO: write tests
+ok(0, "union tests exist");
+
+=end testing
+
+=cut
+
+# XXX: Perhaps this should return a Period if the two periods overlap.
+# Or maybe that's a separate function.
+sub union {
+
+  my ($self, $period2) = @_;
+
+  # does $period2 overlap with this period?
+  if($period2){
+
+    # If the start of the parameter period is after this period:
+    if($self->end->compare($period2->start) >= 0) {
+      return 1;
+    }
+    # If the end of this period is before the end of the parameter period
+    if($self->start->compare($period2->end) <= 0) {
+      return -1;
+    }
+    return 0;
+  }
+
+  return undef;
 }
 
 1;
 
+=head1 SEE ALSO
 
-__END__
+More documentation pointers can be found in L<Net::ICal>.
 
-sub new {
-  my ($class, $content, $arg2) = @_;
-
-  my %args;
-  my $ref = ref ($content);
-
-  unless ($ref) {
-    if ($content =~ /^[\+-]?P/) {
-      %args = (content => new Net::ICal::Time ($content));
-    } else {
-      # explicitly set everything to default
-      %args = (value   => 'PERIOD',
-	    related => 'START',
-	    content => Net::ICal::PERIOD->new ($content));
-    }
-  } elsif ($ref eq 'Net::ICal::Time') {
-    %args = (content => $content);
-  } else {
-    warn "Argument $content is not a valid Time";
-    return undef;
-  }
-  return &_create ($class, %args);
-}
-
-
-sub _create {
-  my ($class, %args) = @_;
-
-  my $map = {
-    value => {
-	  type => 'parameter',
-	  doc => '',
-	  domain => 'ref',
-	  options => 'ARRAY',
-    },
-  };
-
-  my $self = $class->SUPER::new ('PERIOD', $map, %args);
-
-  return $self;
-}
-
-
+=cut

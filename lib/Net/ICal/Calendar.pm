@@ -1,43 +1,36 @@
 #!/usr/bin/perl -w
+# vi:sts=4:shiftwidth=4
 # -*- Mode: perl -*-
 #======================================================================
 #
-# This package is free software and is provided "as is" without express
-# or implied warranty.  It may be used, redistributed and/or modified
-# under the same terms as perl itself. ( Either the Artistic License or the
-# GPL. ) 
+# This package is free software and is provided "as is" without
+# express or implied warranty.  It may be used, redistributed and/or
+# modified under the same terms as perl itself. ( Either the Artistic
+# License or the GPL. )
 #
-# $Id: Calendar.pm,v 1.6 2001/03/25 00:15:08 srl Exp $
+# $Id: Calendar.pm,v 1.19 2001/07/24 02:28:08 srl Exp $
 #
-# (C) COPYRIGHT 2000, Reefknot developers, including: 
-#   Eric Busboom, http://www.softwarestudio.org
-# 
-# See the AUTHORS file included in the distribution for a full list. 
+# (C) COPYRIGHT 2000-2001, Reefknot developers.
+#
+# See the AUTHORS file included in the distribution for a full list.
 #======================================================================
-
-package Net::ICal::Calendar;
-use strict;
-
-use Net::ICal::Component;
-
-BEGIN {
-  @Net::ICal::Calendar::ISA = qw(Net::ICal::Component);
-}
-
-
-1;
-
-
 
 =head1 NAME
 
 Net::ICal::Calendar -- Hold and manipulate events, todo items and
 journal entries.
 
+=cut
+
+package Net::ICal::Calendar;
+use strict;
+
+use base qw(Net::ICal::Component);
+
 =head1 SYNOPSIS
 
   use Net::ICal;
-  
+
   my $cal = new Net::ICal::Calendar(
   	alarms 	  => [ array of alarm objects ],
    	events 	  => [ array of event objects ],
@@ -57,10 +50,10 @@ journal entries.
   foreach $message ($cal->messages() ){
     if($message->method() eq 'REQUEST' &&
        $message->type() eq 'VEVENT' &&
-       $message->organizer() eq "mailto:larray@example.com"){
-      
+       $message->organizer() eq 'mailto:larray@example.com'){
+
       my @overlaps = $cal->overlap_search($message);
-      
+
       if($#overlaps){
 	# Reject or counterpropose the request
 	my $new_time = 
@@ -96,17 +89,32 @@ items, journal entries (and incoming messages?).
 =cut
 
 #=======================================================================
-=pod
 
 =head2 new()
 
 Construct a new calendar, given sets of data to put in the calendar.
 See the example above. 
 
+=begin testing
+
+use Net::ICal::Calendar;
+use Net::ICal::Event;
+
+my $c = Net::ICal::Calendar->new();
+
+ok(!(defined($c)), "create fails properly if params are empty");
+
+$c = Net::ICal::Calendar->new (events => [
+            Net::ICal::Event->new(dtstart => '20010402T021030Z')
+                                ]);
+
+ok(defined($c), 'create passes if at least one event');
+
+=end testing
+
 =cut
+
 #=======================================================================
-# FIXME: should this also allow you to feed it, say, some iCal?
-# for now, we'll put that in another method. 
 
 sub new {
     my ($class, %args) = @_;
@@ -120,13 +128,22 @@ sub new {
    			 defined $args{'timezones'} );		
     #use Data::Dumper;
     #print Dumper %args;			
-    return &_create ($class, %args);
+    my $self = &_create ($class, %args);
+
+    # set here instead of in the map so we can read in other stuff
+    # in new_from_ical and still check for duplicates by testing
+    # for undef
+    $self->version ('2.0');
+    # TODO: find out what we have to do to make sure this is unique.
+    $self->prodid ('-//Reefknot Project//NONSGML Net::ICal//EN');
+
+    return $self;
 }
 
 
 # Documentation below swiped from N::I::Component, which this is a child class of. 
 #============================================================================
-=pod
+
 =head2 new_from_ical
    
 Creates a new Net::ICal::Calendar from an ical stream.
@@ -135,6 +152,7 @@ Use this to read in a new object before you do things with it.
 curious.)
 
 =cut
+
 #============================================================================
 # XXX: this is commented out because right now we're just using the 
 # N::I::Component version of this sub. We might want to run new_from_ical items
@@ -143,23 +161,29 @@ curious.)
 #sub new_from_ical {}
 
 
+=head1 METHODS FOR INTERNAL USE ONLY
 
-#=============================================================================
-# _create ($class, %args)
-#
-# Set up a Class::MethodMapper map to describe the data in this class,
-# then initialize the object. Takes a classname and a hash of arguments,
-# returns a Net::ICal::Calendar.
-#=============================================================================
+None of the following methods should be relied on by anything outside
+this module. Use at your own risk.
 
-# TODO: document this more clearly. C::MM is voodoo.
+=head2 _create ($class, %args)
+
+Sets up a Class::MethodMapper map to describe the data in this class,
+then initialize the object. Takes a classname and a hash of arguments,
+returns a Net::ICal::Calendar. See the Class::MethodMapper docs if you
+want to understand what this does slightly better.
+
+=cut
+
 sub _create {
   my ($class, %args) = @_;
-   
+
+  # See the Class::MethodMapper docs to understand more about what this does.
+  # Basically, it sets up a series of accessor functions for various tiny
+  # data elements within a calendar. 
   my $map = {
 
-    # first, the attributes of the calendar as a whole. See RFC2445 4.7
-      
+    # the attributes of the calendar as a whole. See RFC2445 4.7
     calscale => {	# RFC2445 4.7.1  - OPTIONAL
 	  type => 'parameter',
 	  doc => 'what sort of calendar is this (default gregorian)',
@@ -179,23 +203,17 @@ sub _create {
 	  # a response to a request, or what. 
 	  type => 'parameter',	
 	  doc => 'RFC2446 method string',
-	  domain => '',
 	  value => undef, 
     },	
 
     prodid => {	# RFC2445 4.7.3   - REQUIRED, DEFAULT INCLUDED
 	  type => 'parameter',
 	  doc => 'what product created this iCalendar',
-	  domain => '', 
-	  # TODO: find out what we have to do to make sure this is unique.
-	  value => '-//Reefknot Project//NONSGML Net::ICal//EN' ,
     },	
     
     version => {  	# RFC2445 4.7.4   - REQUIRED, DEFAULT INCLUDED
 	  type => 'parameter',
 	  doc => 'version of the iCalendar spec this iCal conforms to',
-	  domain => '',
-	  value => '2.0', 
     },	
       
     # things that go 'inside' a calendar object; see RFC2445 4.6
@@ -262,5 +280,10 @@ sub _create {
 # deleted it in preparation for the release of Net::ICal 0.13. 
 # We can always retrieve it from CVS if we want it back. --srl
 
+1;
 
-__END__
+=head1 SEE ALSO
+
+More documentation pointers can be found in L<Net::ICal>.
+
+=cut

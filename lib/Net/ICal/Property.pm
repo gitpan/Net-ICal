@@ -7,9 +7,11 @@
 # modified under the same terms as perl itself. ( Either the Artistic
 # License or the GPL. )
 #
+# $Id: Property.pm,v 1.15 2001/07/19 05:20:49 srl Exp $
+#
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
 #
-# See the AUTHORS file included in the distribution for a full list. 
+# See the AUTHORS file included in the distribution for a full list.
 #======================================================================
 
 # eek. 44 subclasses
@@ -23,13 +25,11 @@ Net::ICal::Property -- base class for ICalender properties
 package Net::ICal::Property;
 use strict;
 
-use Class::MethodMapper;
-
-BEGIN {
-   @Net::ICal::Property::ISA = qw(Class::MethodMapper);
-}
+use UNIVERSAL;
+use base qw(Class::MethodMapper);
 
 =head1 SYNOPSIS
+
 Creating a property from a ical string:
     $p = Net::ICal::Property->new_from_ical ($str);
 
@@ -48,7 +48,14 @@ You never call this directly. Instead you call the new constructor for
 a specific property type, which in turn calls this:
 
     $p = Net::ICal::Trigger (300);
-   
+
+=begin testing
+
+# TODO: write tests
+ok(0, 'write tests for new()');
+
+=end testing
+
 =cut
 
 sub new {
@@ -73,13 +80,21 @@ sub new {
    return $self;
 }
 
+=begin testing
+
+# TODO: write tests
+ok(0, 'write tests for _reclass_set()');
+
+=end testing
+
+=cut
 sub _reclass_set {
    my ($self, $key, $val) = @_;
 
    my ($class) = $self =~ /^(.*?)=/g;
 
    foreach my $pclass (values %{$self->get_meta ('options', $key)}) {
-      if ($val->isa ($pclass)) {
+      if (UNIVERSAL::isa ($val, $pclass)) {
 	 $self->{$key}->{value} = $val;
 	 return;
       }
@@ -93,6 +108,13 @@ sub _reclass_set {
 
 Creates a new Net::ICal property from a string in ICal format
 
+=begin testing
+
+# TODO: write tests
+ok(0, 'write tests for new_from_ical()');
+
+=end testing
+
 =cut
 
 sub new_from_ical {
@@ -105,22 +127,21 @@ sub new_from_ical {
    }
    my $self = $class->_create;
 
-   my $copy = $ical;
    my $cb = sub {
-      return undef if $copy eq "";
-      if ($copy =~ /^;/) {
+      return undef if $ical eq "";
+      if ($ical =~ /^;/) {
 	 #FIXME: make this more robust (; in "" inside a field is possible
 	 #BUG: 133739
-	 $copy =~ s/;(.*?)\=(.*?)(;|$)/$3/;
+	 $ical =~ s/;(.*?)\=(.*?)(;|$)/$3/;
 	 #FIXME: make sure we definitely don't need anything but plain
 	 #       key/value
 	 my ($name, $value) = ($1, $2);
 	 $name =~ s/\W/_/g;
 	 return (lc($name), $value);
       } else {
-	 $copy =~ s/^.*?([;:])/$1/;
+	 $ical =~ s/^.*?([;:])/$1/;
 	 # this too
-	 $copy =~ s/:(.*?)$//;
+	 $ical =~ s/:(.*?)$//;
 	 my $value = $1;
 
 	 # Check if this is a property that can be one of several
@@ -162,6 +183,13 @@ property type you are creating.
 =head2 as_ical
 
 returns an ICal string describing the property
+
+=begin testing
+
+# TODO: write tests
+ok(0, 'write tests for as_ical()');
+
+=end testing
 
 =cut
 
@@ -205,11 +233,10 @@ sub as_ical {
    return $ical;
 }
 
-
 1;
-__END__
 
-=head1 SEEALSO
+=head1 SEE ALSO
 
-See the main Net::ICal page for more information
+L<Net::ICal>
 
+=cut

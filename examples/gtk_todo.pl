@@ -1,47 +1,41 @@
-#!/usr/local/bin/perl -w
-
+#!/usr/bin/perl -w
 # -*- Mode: perl -*-
 #======================================================================
 #
-# This package is free software and is provided "as is" without express
-# or implied warranty.  It may be used, redistributed and/or modified
-# under the same terms as perl itself. ( Either the Artistic License or the
-# GPL. )
+# This package is free software and is provided "as is" without
+# express or implied warranty.  It may be used, redistributed and/or
+# modified under the same terms as perl itself. ( Either the Artistic
+# License or the GPL. )
 #
-# $Id
+# $Id: gtk_todo.pl,v 1.7 2001/07/23 15:09:50 lotr Exp $
 #
-# (C) COPYRIGHT 2001, Reefknot developers, including:
-#       Eric Busboom, http://www.softwarestudio.org
-#       Shane Landrum, srl AT users dot sourceforge dot net
+# (C) COPYRIGHT 2000-2001, Reefknot developers.
+#
+# See the AUTHORS file included in the distribution for a full list.
 #======================================================================
-
 
 # gtk_todo.pl - an example for how to edit TODO items with Gtk. 
 # Knows how to save its items out to a file and restore them from that file.
 #
 # This is fundamentally a quick hack; it should be reworked for use in the
 # real world. 
-# 
-
 
 use strict;
 
 use lib '../lib';
 
-use Net::ICal::Attendee;
-use Net::ICal::Time;
-use Net::ICal::Calendar;
-use Net::ICal::Todo;
+use Carp;
 use Date::Parse;
 use Gtk;
 use Gnome;
-use Carp;
 
-my $data_dir = "~/.reefknot/"; 	# name of the dir where we store data.
-$data_dir = "./";				# override the above for demo purposes.
+use Net::ICal;
 
-my $todo_file = "todo.ics";		# file we store todo info in. 
-my $DEBUG = 1; 					# print debugging messages?
+my $data_dir = "~/.reefknot/";	# name of the dir where we store data.
+$data_dir = "./";		# override the above for demo purposes.
+
+my $todo_file = "todo.ics";	# file we store todo info in. 
+my $DEBUG = 1;			# print debugging messages?
 
 # convenience variables for true and false
 my $false = 0;
@@ -280,7 +274,7 @@ sub CloseAppWindow {
 ### Callback function to output ical to the terminal.
 sub OutputICal {
 
-	print "\n" 	. $cal->as_ical . "\n";
+	print "\n" . $cal->as_ical . "\n";
 	return $true;
 }
 

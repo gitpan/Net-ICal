@@ -7,7 +7,7 @@
 # under the same terms as perl itself. ( Either the Artistic License or the
 # GPL. ) 
 #
-# $Id: Attendee.pm,v 1.9 2001/03/21 03:42:31 srl Exp $
+# $Id: Attendee.pm,v 1.19 2001/07/09 14:35:34 lotr Exp $
 #
 # (C) COPYRIGHT 2000, Reefknot developers, including: 
 #   Eric Busboom, http://www.softwarestudio.org
@@ -24,18 +24,14 @@ Net::ICal::Attendee -- represents an attendee or organizer of a meeting
 package Net::ICal::Attendee;
 use strict;
 
-use Net::ICal::Property;
-use UNIVERSAL qw(isa);
-
-BEGIN {
-   @Net::ICal::Attendee::ISA = qw(Net::ICal::Property);
-}
+use UNIVERSAL;
+use base qw(Net::ICal::Property);
 
 =head1 SYNOPSIS
 
   use Net::ICal;
-  $a = new Net::ICal::Attendee("mailto:alice@example.com");
-  $a = new Net::ICal::Attendee("mailto:alice@example.com",
+  $a = new Net::ICal::Attendee('mailto:alice@example.com');
+  $a = new Net::ICal::Attendee('mailto:alice@example.com',
 				cn => 'Alice Anders',
                 role => 'REQ-PARTICIPANT');
 
@@ -51,7 +47,7 @@ in iCalendar (RFC2445) format.
 New will take a string and optional key-value pairs. The string is the
 calender user address of the Attendee (usually a mailto uri).
 
-    $a = new Net::ICal::Attendee("mailto:alice@example.com");
+    $a = new Net::ICal::Attendee('mailto:alice@example.com');
     $a = new Net::ICal::Attendee('mailto:alice@example.com',
                                   cn => 'Alice Anders',
                                   role => 'REQ-PARTICIPANT');
@@ -94,6 +90,18 @@ attendee; for example, a secretary for his/her boss, or a parent for his/her
 To understand more about the uses for each of these properties,
 read the source for this module and and look at RFC2445. 
 
+=begin testing
+#generic stuff
+use lib "./lib";
+use Net::ICal::Attendee;
+$mail = 'mailto:alice@example.com';
+
+
+#start of tests
+ok(my $a = Net::ICal::Attendee->new ($mail), "Simple attendee creation");
+ok(not(Net::ICal::Attendee->new ("xyzzy")), "Nonsense email address");
+
+=end testing
 =cut
 
 sub new {
@@ -101,9 +109,36 @@ sub new {
   
    $args{content} = $value;
 
-   #TODO: rsvp should default to false.
+   #TODO: rsvp should default to false; see rfc2445 4.2.17 and SF bug 424101
+
+   my $self = _create ($class, %args);
+
+   return undef unless $self;
+
+   return undef unless $self->validate;
    
-   return &_create ($class, %args);
+   return $self;
+}
+
+=pod
+
+=head2 validate
+
+Returns 1 for valid attendee data, undef for invalid.
+
+=for testing
+ok($a->validate, "Simple validation");
+
+=cut
+
+sub validate {
+    my ($self) = @_;
+
+    # TODO: write this routine! SF bug 435998
+
+    return undef unless ($self->content =~ /^mailto:.*\@/i);
+
+    return 1;
 }
 
 sub _create {
@@ -183,9 +218,8 @@ sub _create {
 
 1;
 
-__END__
-
 =head1 SEE ALSO
 
-More documentation pointers can be found in the perldoc for Net::ICal
-itself.
+More documentation pointers can be found in L<Net::ICal>.
+
+=cut

@@ -1,35 +1,30 @@
 #!/usr/bin/perl -w
+# vi:sts=4:shiftwidth=4
 # -*- Mode: perl -*-
 #======================================================================
 #
-# This package is free software and is provided "as is" without express
-# or implied warranty.  It may be used, redistributed and/or modified
-# under the same terms as perl itself. ( Either the Artistic License or the
-# GPL. ) 
+# This package is free software and is provided "as is" without
+# express or implied warranty.  It may be used, redistributed and/or
+# modified under the same terms as perl itself. ( Either the Artistic
+# License or the GPL. )
 #
-# $Id: Event.pm,v 1.10 2001/03/25 06:33:31 srl Exp $
+# $Id: Event.pm,v 1.19 2001/07/19 03:32:32 srl Exp $
 #
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
-# 
-# See the AUTHORS file included in the distribution for a full list. 
+#
+# See the AUTHORS file included in the distribution for a full list.
 #======================================================================
-
-package Net::ICal::Event;
-
-BEGIN {
-   @Net::ICal::Event::ISA = qw(Net::ICal::ETJ);
-}
-
-use Carp;
-use strict;
-use UNIVERSAL qw(isa);
-use Net::ICal::ETJ;
-
-=pod 
 
 =head1 NAME
 
 Net::ICal::Event -- Event class
+
+=cut
+
+package Net::ICal::Event;
+use strict;
+
+use base qw(Net::ICal::ETJ);
 
 =head1 SYNOPSIS
 
@@ -129,37 +124,103 @@ recurring exception to a recurring event.
 
 =back
 
+=begin testing
+
+use Net::ICal::Event;
+
+my $e = Net::ICal::Event->new();
+
+ok(!(defined($e)), 'new() called with no params should fail');
+
+# FIXME: grah, this should work; DWIM. 
+$e = Net::ICal::Event->new(dtstart => '20011031Z');
+
+ok(defined($e), 'new() called with only dtstart(string) should succeed');
+
+$e = Net::ICal::Event->new(dtstart => Net::ICal::Time->new(
+                                        ical => '20011031Z')
+                            );
+
+ok(defined($e), 'new() called with only dtstart(object) should succeed');
+
+
+# output this object as ical, then read it back in from ical and test
+# to make sure nothing changed. This is the only way I can see to 
+# sanely test creation of complex objects. 
+
+my $e_ical = $e->as_ical;
+my $e2 = Net::ICal::Event->new_from_ical($e_ical);
+ok(defined($e2), "reading in iCal I created succeeds at a basic level");
+
+print "e2 dtstart is " . $e2->dtstart()->as_ical . "\n";
+print "e dtstart is " . $e->dtstart()->as_ical . "\n";
+
+ok(($e2->dtstart->as_ical eq $e->dtstart->as_ical), 'iCal output and reimport of simple event works');
+
+=end testing
+
 =cut
 
 
 sub new {
-   	my ($class, %args) = @_;
+    my ($class, %args) = @_;
 
-	# TODO: check for args that are specifically required in Events.
-	
-	# check all the args.
-	#use Data::Dumper;
-	#print Dumper %args;
-	
-	$class->validate (\%args) and do {
-	    my $self = &_create ($class, %args);
-	    return $self;
-        }
+    #TODO: check for args that are specifically required in Events.
+    #BUG: 424137
+
+    my $self = &_create ($class, %args);
+    $self->_init;
+
+    return undef unless ($self and $self->validate);
+
+    return $self;
+}
+
+sub validate {
+    my ($self) = @_;
+
+    if (defined $self->dtend and $self->duration) {
+	add_validation_error ($self, "Can't have both dtend and duration in one Event");
+    }
+
+    return $self->SUPER::validate;
 }
 
 sub _create {
-   	my ($class, %args) = @_;
+    my ($class, %args) = @_;
 
-	# this sucks, because now we don't use the validity checks in
-	# ETJ::new
-	my $self = $class->SUPER::_create ('VEVENT', %args);
-	bless $self, $class;
+    my $self = $class->SUPER::_create ('VEVENT');
 
-	# TODO: modify the map to include map values that are specific to Events, 
-	# if any.
-   	return $self;
+    #TODO: modify the map to include map values that are specific
+    #      to Events, if any.
+    #BUG: 424139
+    my $map = {
+	dtend => { # 4.8.2.2
+	    type => 'parameter',
+	    doc => 'when this event ends',
+	    domain => 'ref',
+	    options => 'Net::ICal::Time',
+	    value => undef,
+	},
+	transp => { # 4.8.2.7
+	    type => 'parameter',
+	    doc => 'does this event block out time',
+	    domain => 'enum',
+	    options => [qw(OPAQUE TRANSPARENT)],
+	    value => undef,
+	},
+    };
+
+    $self->set_map (%$map);
+    $self->set (%args);
+
+    return $self;
 }
 
 1;
 
-__END__
+=head1 SEE ALSO
+
+More documentation pointers can be found in L<Net::ICal>.
+
+=cut

@@ -1,34 +1,32 @@
 #!/usr/bin/perl -w
+# vi:sts=4:shiftwidth=4
 # -*- Mode: perl -*-
 #======================================================================
 #
-# This package is free software and is provided "as is" without express
-# or implied warranty.  It may be used, redistributed and/or modified
-# under the same terms as perl itself. ( Either the Artistic License or the
-# GPL. ) 
+# This package is free software and is provided "as is" without
+# express or implied warranty.  It may be used, redistributed and/or
+# modified under the same terms as perl itself. ( Either the Artistic
+# License or the GPL. )
 #
-# $Id: Journal.pm,v 1.2 2001/03/25 18:54:53 srl Exp $
+# $Id: Journal.pm,v 1.14 2001/07/09 14:35:34 lotr Exp $
 #
-# (C) COPYRIGHT 2000, Reefknot developers.
-# 
-# See the AUTHORS file included in the distribution for a full list. 
+# (C) COPYRIGHT 2000-2001, Reefknot developers.
+#
+# See the AUTHORS file included in the distribution for a full list.
 #======================================================================
-
-package Net::ICal::Journal; 
-BEGIN {
-   @Net::ICal::Journal::ISA = qw(Net::ICal::ETJ);
-}
-
-use Carp;
-use strict;
-use UNIVERSAL qw(isa);
-use Net::ICal::ETJ;
-
-=pod 
 
 =head1 NAME
 
 Net::ICal::Journal -- Journal class
+
+=cut
+
+package Net::ICal::Journal; 
+use strict;
+
+use base qw(Net::ICal::ETJ);
+
+use Carp;
 
 =head1 SYNOPSIS
 
@@ -137,6 +135,7 @@ on this Journal item.
 Journal is related to. 
 
 =cut
+
 # XXX: how do we express related_to in iCal? with UIDs?
 
 =pod
@@ -168,16 +167,52 @@ first Wednesday of the month" is an example.
 
 =back
 
+=for testing
+use lib "./lib";
+use Net::ICal::Journal;
+use Net::ICal::Attendee;
+%bogusargs = ();
+%args = ( organizer => new Net::ICal::Attendee('mailto:alice@example.com'));
+ok($c = new Net::ICal::Journal ( %args ), "Create a Journal object");
+#ok(not( $d = new Net::ICal::Journal ( %bogusargs )), "Create a bogus Journal object");
+
 =cut
 
 
 sub new {
-   	my ($class, %args) = @_;
-	# do some validation here
+    my ($class, %args) = @_;
 
-	return undef unless _validate ($class, \%args);
+    my $self = _create ($class, %args);
+    $self->_init;
 
-   	return &_create ($class, %args);
+    return undef unless (defined $self);
+    return undef unless $self->validate;
+
+    return $self;
+}
+
+=pod
+
+=head2 validate
+
+Validates a Journal object.  Returns 1 for success, undef for failure.
+
+TODO: make sure that this object has the bare minimum requirements
+specified by the RFC.
+
+=for testing
+ok($c->validate          , "Simple validation should pass");
+#ok(not($d->validate), "Bogus args should fail");
+
+=cut
+
+sub validate {
+    my ($self) = @_;
+
+    #TODO: fill in validation checks
+    #BUG: 424137
+
+    return $self->SUPER::validate;
 }
 
 
@@ -189,45 +224,40 @@ Creates a new Journal object from a string of valid iCalendar text.
 =cut
 
 
-#=====INTERNAL FUNCTIONS=====================================================
+=pod
 
-#----------------------------------------------------------------------------
-# validate ($class, $ref_to_args_hash)
-# make sure that this object has the bare minimum requirements
-# specified by the RFC.
-#----------------------------------------------------------------------------
-sub _validate {
-	my ($class, $args) = @_;
-	
-	# fill these in later, for example
-	# return undef unless $args{attendee};
+=head1 DEVELOPER METHODS
 
-	# make sure that ETJ has validated these args too. 
-	return undef unless $class->SUPER::validate($args);
-	
-	return 1;
-}
+=pod
 
+=head2 _create($class, %args)
+
+Class::MethodMapper creation routine.  Returns a blessed object.
+
+=cut
 
 sub _create {
-   	my ($class, %args) = @_;
+    my ($class, %args) = @_;
 
-	# this sucks, because now we don't use the validity checks in
-	# ETJ::new
-	my $self = $class->SUPER::_create ('VJOURNAL', %args);
-	bless $self, $class;
+    my $self = $class->SUPER::_create ('VJOURNAL', %args);
 
-	# TODO: modify the map to include map values that are specific to Journals, 
-	# if any.
-   	return $self;
+    #TODO: modify the map to include map values that are specific
+    #      to Journals, if any.
+    #BUG: 424139
+
+    # no location in a Journal
+    $self->delete_map (qw(location priority resources duration));
+
+    return $self;
 }
 
 1;
 
-__END__
-
-=pod
 =head1 SEE ALSO
 
-Net::ICal::Time; Net::ICal::Recurrence; Net::ICal::Attendee. If you
-want to know how this works, read this and the source for Net::ICal::ETJ.
+L<Net::ICal::Time>, L<Net::ICal::Recurrence>, L<Net::ICal::Attendee>. If you
+want to know how this works, read the source for this and L<Net::ICal::ETJ>.
+
+More documentation pointers can also be found in L<Net::ICal>.
+
+=cut

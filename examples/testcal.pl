@@ -8,7 +8,7 @@
 # under the same terms as perl itself. ( Either the Artistic License or the
 # GPL. )
 #
-# $Id: testcal.pl,v 1.11 2001/03/25 18:54:53 srl Exp $
+# $Id: testcal.pl,v 1.2 2001/07/23 15:09:50 lotr Exp $
 #
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
 # 
@@ -19,13 +19,7 @@ use strict;
 
 use lib '../lib';
 
-use Net::ICal::Alarm;
-use Net::ICal::Attendee;
-use Net::ICal::Duration;
-use Net::ICal::Event;
-use Net::ICal::Time;
-use Net::ICal::Trigger;
-use Net::ICal::Calendar;
+use Net::ICal;
 
 # send email an hour before to remind us of tea.
 my $a = new Net::ICal::Alarm (action => 'EMAIL',

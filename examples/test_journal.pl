@@ -8,7 +8,7 @@
 # under the same terms as perl itself. ( Either the Artistic License or the
 # GPL. )
 #
-# $Id: test_journal.pl,v 1.1 2001/03/25 18:54:53 srl Exp $
+# $Id: test_journal.pl,v 1.1 2001/07/19 03:31:14 srl Exp $
 #
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
 # 

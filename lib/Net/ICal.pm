@@ -1,16 +1,17 @@
+#!/usr/bin/perl -w
 # -*- Mode: perl -*-
 #======================================================================
 #
-# This package is free software and is provided "as is" without express
-# or implied warranty.  It may be used, redistributed and/or modified
-# under the same terms as perl itself. ( Either the Artistic License or the
-# GPL. ) 
+# This package is free software and is provided "as is" without
+# express or implied warranty.  It may be used, redistributed and/or
+# modified under the same terms as perl itself. ( Either the Artistic
+# License or the GPL. )
 #
-# $Id: ICal.pm,v 1.6 2001/03/25 18:54:53 srl Exp $
+# $Id: ICal.pm,v 1.11 2001/07/26 05:57:09 srl Exp $
 #
-# (C) COPYRIGHT 2000-2001, Reefknot developers
-# 
-# See the AUTHORS file included in the distribution for a full list. 
+# (C) COPYRIGHT 2000-2001, Reefknot developers.
+#
+# See the AUTHORS file included in the distribution for a full list.
 #======================================================================
 
 use Net::ICal::Alarm;     
@@ -28,8 +29,9 @@ use Net::ICal::Recurrence;
 use Net::ICal::Time;     
 use Net::ICal::Todo;
 use Net::ICal::Trigger;
+use Net::ICal::Util;
 
-$VERSION = "0.13";
+$VERSION = "0.14";
 
 package Net::ICal;
 
@@ -50,11 +52,11 @@ and scheduling protocol.
 =head1 DESCRIPTION
 
 Net::ICal is a collection of Perl modules for manipulating iCalendar
-(RFC2445) calendar data. i
+(RFC2445) calendar data.
 
 As of the 0.13 release, most of the functionality you want to 
-find out about is in Net::ICal::Calendar. See its manpages for more
-details. 
+find out about is in L<Net::ICal::Calendar>. See its manpages for
+more details. 
 
 This is ALPHA QUALITY SOFTWARE; it is under active development and
 is not fully functional. For more information, see 
@@ -62,7 +64,7 @@ http://reefknot.sourceforge.net.
 
 =head1 METHODS
 
-None for now; see Net::ICal::Calendar. 
+None for now; see L<Net::ICal::Calendar>.
 
 =head1 SEE ALSO
 
@@ -134,6 +136,12 @@ Net::ICal::Todo
 =item *
 
 Net::ICal::Trigger
+
 =back
 
+=begin testing
 
+# test that this module can be loaded okay
+BEGIN { use_ok( 'Net::ICal' ); }
+
+=end testing

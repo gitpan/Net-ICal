@@ -7,7 +7,11 @@
 # modified under the same terms as perl itself. ( Either the Artistic
 # License or the GPL. )
 #
+# $Id: Trigger.pm,v 1.10 2001/06/30 20:42:06 lotr Exp $
 #
+# (C) COPYRIGHT 2000-2001, Reefknot developers.
+#
+# See the AUTHORS file included in the distribution for a full list.
 #======================================================================
 
 =head1 NAME
@@ -19,13 +23,10 @@ Net::ICal::Trigger -- represent the TRIGGER property for VALARMs
 package Net::ICal::Trigger;
 use strict;
 
-use Net::ICal::Property;
-use Net::ICal::Time;
-use Net::ICal::Duration;
+use base qw(Net::ICal::Property);
 
-BEGIN {
-   @Net::ICal::Trigger::ISA = qw(Net::ICal::Property);
-}
+use Net::ICal::Duration;
+use Net::ICal::Time;
 
 =head1 SYNOPSIS
 
@@ -45,10 +46,24 @@ BEGIN {
 Triggers are time markers, used most commonly for Alarms. They're attached to
 Times or Durations. 
 
+=begin testing
+
+use lib './lib';
+use Net::ICal;
+$duration = Net::ICal::Duration->new ('PT5M');
+$datetime = Net::ICal::Time->new (ical => '20000101T073000');
+
+=end testing
+
 =head1 CONSTRUCTORS
 
 =head2 new
-   
+
+=for testing
+ok(Net::ICal::Trigger->new (300), "Create from integer number of seconds");
+ok(Net::ICal::Trigger->new ($duration), "Create from a Net::ICal::Duration");
+ok(Net::ICal::Trigger->new ($datetime), "Create from a Net::ICal::Time");
+
 =cut
 
 sub new {
@@ -61,7 +76,7 @@ sub new {
 	 %args = (content => new Net::ICal::Duration ($content));
       } elsif ($content =~ /T/) {
 	 %args = (value   => 'DATE-TIME',
-		  content => new Net::ICal::Time ($content));
+		  content => new Net::ICal::Time (ical => $content));
       } else {
 	 # explicitly set everything to default
 	 %args = (value   => 'DURATION',
@@ -151,6 +166,8 @@ __END__
 
 =head1 SEE ALSO
 
-Net::ICal::Time, Net::ICal::Duration, Net::ICal::Alarm.
+L<Net::ICal::Time>, L<Net::ICal::Duration>, L<Net::ICal::Alarm>.
 
-See the Net::ICal main page for more information. 
+More information can be found in L<Net::ICal>.
+
+=cut

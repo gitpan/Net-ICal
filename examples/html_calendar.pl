@@ -1,22 +1,27 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/perl -w
+# -*- Mode: perl -*-
+#======================================================================
+#
+# This package is free software and is provided "as is" without
+# express or implied warranty.  It may be used, redistributed and/or
+# modified under the same terms as perl itself. ( Either the Artistic
+# License or the GPL. )
+#
+# $Id: html_calendar.pl,v 1.3 2001/07/23 15:09:50 lotr Exp $
+#
+# (C) COPYRIGHT 2000-2001, Reefknot developers.
+#
+# See the AUTHORS file included in the distribution for a full list.
+#======================================================================
 
 use strict;
-use lib '/home/srl/dev/rk/Net-ICal/lib';
-
-use CGI qw(:standard);
-use Net::ICal::Alarm;
-use Net::ICal::Attendee;
-use Net::ICal::Duration;
-use Net::ICal::Event;
-use Net::ICal::Time;
-use Net::ICal::Todo;
-use Net::ICal::Trigger;
-use Net::ICal::Calendar;
-
-use HTML::CalendarMonthSimple;
-
+use lib '../lib';
 
 use Carp;
+use CGI qw(:standard);
+use HTML::CalendarMonthSimple;
+
+use Net::ICal;
 
 my $DEBUG = 1;
 
@@ -37,7 +42,7 @@ if ($cgi->param("action")) {
 		display_ical_todo_list($cgi, $ical);
 
 	} elsif ($cgi->param("action") eq "send") {
-		# TODO slurp up iCal that was sent by the user
+		# TODO: slurp up iCal that was sent by the user
 
 	}
 

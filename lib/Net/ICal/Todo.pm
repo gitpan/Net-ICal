@@ -1,47 +1,48 @@
 #!/usr/bin/perl -w
+# vi:sts=4:shiftwidth=4
 # -*- Mode: perl -*-
 #======================================================================
 #
-# This package is free software and is provided "as is" without express
-# or implied warranty.  It may be used, redistributed and/or modified
-# under the same terms as perl itself. ( Either the Artistic License or the
-# GPL. ) 
+# This package is free software and is provided "as is" without
+# express or implied warranty.  It may be used, redistributed and/or
+# modified under the same terms as perl itself. ( Either the Artistic
+# License or the GPL. )
 #
-# $Id: Todo.pm,v 1.7 2001/03/23 17:42:47 shutton Exp $
+# $Id: Todo.pm,v 1.16 2001/07/09 20:52:57 lotr Exp $
 #
-# (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
+# (C) COPYRIGHT 2000-2001, Reefknot developers.
 #
+# See the AUTHORS file included in the distribution for a full list.
 #======================================================================
-
-package Net::ICal::Todo;
-
-BEGIN {
-   @Net::ICal::Todo::ISA = qw(Net::ICal::ETJ);
-}
-
-use Carp;
-use strict;
-use UNIVERSAL qw(isa);
-use Net::ICal::ETJ;
-
-
-# TODO: work on this documentation.
 
 =head1 NAME
 
 Net::ICal::Todo -- Todo class
+
+=cut
+
+package Net::ICal::Todo;
+use strict;
+
+use base qw(Net::ICal::ETJ);
+
+use Net::ICal::Util qw(add_validation_error);
+# TODO: work on this documentation.
 
 =head1 SYNOPSIS
 
   use Net::ICal::Todo;
   my $c = new Net::ICal::Todo();
 
-  }
+=begin testing
+
+use Net::ICal::Todo;
+
+=end testing
 
 =head1 DESCRIPTION
 
 Net::ICal::Todo represents something someone needs to get done.   
-
 
 =head1 BASIC METHODS
 
@@ -49,7 +50,6 @@ Net::ICal::Todo represents something someone needs to get done.
 
 Construct a new Todo. Parameters are in a hash.
 Meaningful parameters are:
-
 
 =head2 REQUIRED
 
@@ -156,85 +156,115 @@ recurring exception to a recurring task.
 
 =back
 
+=for testing
+ok($c = Net::ICal::Todo->new , "Simple creation should return an object");
+
 =cut
-
-
 
 sub new {
     my ($class, %args) = @_;
-   
-	# do some validation here
 
-	return undef unless validate ($class, \%args);
-	
-	my $self = &_create ($class, %args);
-	bless $self, $class;
+    my $self = &_create ($class, %args);
+    return undef unless (defined $self);
+    $self->_init;
+    return undef unless ($self->validate);
 
-   	return $self;
-		
+    return $self;
 }
 
+=pod
 
-# make sure that this object has the bare minimum requirements
-# specified by the RFC.
+=head2 $class->validate
+
+Validates the properties of a Todo.  Returns 1 for success, undef for
+failure.
+
+TODO: make sure that this object has the bare minimum requirements
+specified by the RFC.
+
+=for testing
+ok( $c->validate , "Simple todo should pass");
+
+=cut
 
 sub validate {
-	my ($class, $args) = @_;
-	
-	# fill these in later
-	# like:
-	# return undef unless $args{foo};
+    my ($self) = @_;
 
-	# make sure that ETJ has validated these args too. 
-	return undef unless $class->SUPER::validate($args);
-	
-	return 1;
+    if (defined $self->due and $self->duration) {
+	add_validation_error ($self, "Can't have both due and duration in one Todo");
+    }
+    if ($self->dtstart and $self->due) { # 4.8.2.3
+	my $foo = $self->dtstart->compare ($self->due);
+	if ($self->dtstart->compare ($self->due) > 0) {
+	add_validation_error ($self, "the due time must not be earlier than the dtstart time");
+	}
+    }
+    if ($self->completed and $self->completed !~ /Z$/) { # 4.8.2.1
+	add_validation_error ($self, "The completed date/time MUST be a UTC value");
+    }
+
+    return $self->SUPER::validate;
 }
 
+=pod
 
+=head1 DEVELOPER METHODS
+
+The following methods are probably not of interest to you unless you are
+a Reefknot developer.
+
+=head2 $c->_create(%args)
+
+Class::MethodMapper creation routine.
+
+=for testing
+#ok($c->_create(%args), "Simple _create call");
+
+=cut
 
 sub _create {
-   	my ($class, %args) = @_;
+    my ($class, %args) = @_;
 
-	# set up a standard ETJ object. Note that since we're
-	# calling _create, not new(), we don't validate %args right away.
-
-    # don't pass in the %args yet, since we haven't created the
-    # TODO specific bits. Passing %args now would result in those
-    # keys not being set.
+    # don't pass in the %args just yet, as we don't have a complete
+    # map
     my $self = $class->SUPER::_create ('VTODO');
 
-	bless $self, $class;
+    # add new elements to the map. 
+    my $map = {	
+	completed => { # 4.8.2.1
+	    type => 'parameter',
+	    doc => 'the time this to-do was completed',
+	    domain => 'ref',
+	    options => 'Net::ICal::Time',
+	    value => undef,
+	},
+	percent_complete => { # RFC2445 4.8.1.8 - optional in a VTODO 
+	    type => 'parameter',
+	    doc => 'how completed this task is',
+	    value => undef, 
+	},
+	due => { # RFC2445 4.8.2.3 - optional in a VTODO 
+	    type => 'parameter',
+	    doc => 'when this has to be done',
+	    domain => 'ref',
+	    options => 'Net::ICal::Time',
+	    value => undef, 
 
-	# FIXME: the above approach means we never get to merge these
-	# map elements into the map. This is Bad.
-
-	# add new elements to the map. 
-   	my $map = {	
-     	percent_complete => { # RFC2445 4.8.1.8 - optional in a VTODO 
-	 		type => 'parameter',
-	 		doc => 'how completed this task is',
-	 		value => undef, 
-      	},
-  	  	due => { # RFC2445 4.8.2.3 - optional in a VTODO 
-	 		type => 'parameter',
-	 		doc => 'when this has to be done',
-			domain => 'ref',
-			options => 'Net::ICal::Time',
-			value => undef, 
-
-      	},
-  	};
-
-
-    # set up the new map.
-
-    $self->set_map(%$map);
+	},
+    };
+    # add the extra map item definitions
+    $self->set_map (%$map);
+    
+    # now fill in the map values
     $self->set (%args);
 
-    # use Data::Dumper; print Dumper $self;
-
-	return $self;
+    return $self;
 }
 
 1;
+
+=head1 SEE ALSO
+
+More documentation pointers can be found in L<Net::ICal>.
+
+=cut

@@ -7,40 +7,40 @@
 # modified under the same terms as perl itself. ( Either the Artistic
 # License or the GPL. )
 #
+# $Id: FreebusyItem.pm,v 1.7 2001/07/19 04:50:35 srl Exp $
+#
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
-# 
-# See the AUTHORS file included in the distribution for a full list. 
+#
+# See the AUTHORS file included in the distribution for a full list.
 #======================================================================
 
 =head1 NAME
 
-Net::ICal::FreebusyItem -- represent the FREEBUSY property for VFREEBUSYs
+Net::ICal::FreebusyItem -- represents the FREEBUSY property for
+VFREEBUSY objects.
 
 =cut
 
 package Net::ICal::FreebusyItem;
 use strict;
 
-use Net::ICal::Property;
-use Net::ICal::Time;
-use Net::ICal::Duration;
+use base qw(Net::ICal::Property);
 
-BEGIN {
-   @Net::ICal::FreebusyItem::ISA = qw(Net::ICal::Property);
-}
+use Net::ICal::Duration;
+use Net::ICal::Time;
 
 =head1 SYNOPSIS
 
   use Net::ICal;
 
-  my $p1 = new Net::ICal::Period("19970101T120000","19970101T123000");
-  my $p2 = new Net::ICal::Period("19970101T133000","19970101T140000");
+  my $p1 = Net::ICal::Period->new("19970101T120000","19970101T123000");
+  my $p2 = Net::ICal::Period->new("19970101T133000","19970101T140000");
 
-  my $item1 = new Net::ICal::FreebusyItem($p1, (fbtype => 'BUSY'));
-  my $item2 = new Net::ICal::FreebusyItem($p2, (fbtype => 'BUSY'));
+  my $item1 = Net::ICal::FreebusyItem->new($p1, (fbtype => 'BUSY'));
+  my $item2 = Net::ICal::FreebusyItem->new($p2, (fbtype => 'BUSY'));
 
   # TODO: we ought to be able to do things like:
-    my $item3 = new Net::ICal::FreebusyItem([$p1, $p2], (fbtype => 'BUSY'));
+    my $item3 = Net::ICal::FreebusyItem->new([$p1, $p2], (fbtype => 'BUSY'));
   # so that both items show up on the same line. 
 
 =head1 DESCRIPTION
@@ -64,6 +64,44 @@ BUSY means there's already something scheduled in this time slot. FREE
 means that this time slot is open. BUSY-UNAVAILABLE means that this 
 time slot can't be scheduled. BUSY-TENTATIVE means that this time slot
 has something tentatively scheduled for it. 
+
+=back
+
+=begin testing
+
+use Net::ICal::FreebusyItem;
+use Net::ICal::Period;
+
+my $p1 = Net::ICal::Period->new("19970101T120000","19970101T123000");
+my $p2 = Net::ICal::Period->new("19970101T133000","19970101T140000");
+
+my $item1 = Net::ICal::FreebusyItem->new();   # should fail
+ok(!defined($item1), 'new FreebusyItem without args should fail');
+
+$item1 = Net::ICal::FreebusyItem->new($p1, (fbtype => 'BUSY'));
+my $item2 = Net::ICal::FreebusyItem->new($p2, (fbtype => 'BUSY'));
+
+ok(defined($item1), "creation of basic freebusyitem works");
+
+my $item1_ical = $item1->as_ical;
+
+$item1a = Net::ICal::FreebusyItem->new_from_ical($item1_ical);
+
+ok($item1->as_ical eq $item1a->as_ical, 
+    "exporting ical and reading it back in creates an identical object");
+    
+# TODO: tests that need to work eventually: see Test::More docs
+# This is commented out because it's reporting a syntax error. hrm.
+#todo {
+#    # TODO: we ought to be able to do things like:
+#    my $item3 = Net::ICal::FreebusyItem->new([$p1, $p2], (fbtype => 'BUSY'));
+#    # so that both items show up on the same line. 
+#    
+#    ok(defined($item3), "freebusy items can be created with arrays of periods");
+#
+#} 1, "this code needs to be written";
+
+=end testing
 
 =cut
 
@@ -131,11 +169,14 @@ sub _create {
   return $self;
 }
 
-
 1;
 __END__
 
 =head1 SEE ALSO
 
-Net::ICal::Period; Net::ICal::Freebusy. There are a lot of
+L<Net::ICal::Period>, L<Net::ICal::Freebusy>. There are a lot of
 semantics to handling these for real usage; see RFC2445.
+
+More documentation can also be found in L<Net::ICal>.
+
+=cut

@@ -18,10 +18,7 @@ use strict;
 
 use lib '../lib';
 
-use Net::ICal::Attendee;
-use Net::ICal::Time;
-use Net::ICal::Calendar;
-use Net::ICal::Todo;
+use Net::ICal;
 
 # test_todo: a demonstration of how to organize a TODO list with Net::ICal.
 
@@ -34,24 +31,24 @@ my $me = new Net::ICal::Attendee('me');
 
 my $todos = [ 
 	 		new Net::ICal::Todo (organizer => $me,
-							 dtstart => new Net::ICal::Time("20010207T120000Z"),
+							 dtstart => new Net::ICal::Time(ical => "20010207T120000Z"),
 							 summary => 'get work done',
 							 percent_complete => 5,
-							 due => new Net::ICal::Time("20010208T090000Z"),
+							 due => new Net::ICal::Time(ical => "20010208T090000Z"),
 				),
 
  			new Net::ICal::Todo (organizer => $me,
-							 dtstart => new Net::ICal::Time("20010207T160000Z"),
+							 dtstart => new Net::ICal::Time(ical => "20010207T160000Z"),
 							 summary => 'talk to PHB',
 				),
 
 			new Net::ICal::Todo (organizer => $me,
-							 dtstart => new Net::ICal::Time("20010207T1630000Z"),
+							 dtstart => new Net::ICal::Time(ical => "20010207T1630000Z"),
 							 summary => 'have a meeting',
 				),
 
 			new Net::ICal::Todo (organizer => $me,
-							 dtstart => new Net::ICal::Time("20010207T170000Z"),
+							 dtstart => new Net::ICal::Time(ical => "20010207T170000Z"),
 							 summary => 'recover from meeting',
 							 # FIXME: why doesn't this show up?
 							 location => 'corner pub',

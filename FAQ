@@ -14,7 +14,7 @@ For more information, see:
  
 For a developers' roadmap of what we plan to do in the future, see:
 
-  http://cs.smith.edu/~slandrum/reefknot/developer_roadmap/t1.html
+  http://reefknot.sourceforge.net/developer_roadmap/t1.html
 
 --------------------------------------------------------------------------
 Q. I found a bug. Where should I send the bug report?
@@ -59,4 +59,4 @@ calendaring works.
 Net::ICal::Libical, which is taking the wrapper approach. It's just not
 what we're doing. If you're working on Net::ICal::Libical, more power to
 you though. We'd love to see it. The more standards-compatible tools,
-the better.
+the better.)
