@@ -1,0 +1,108 @@
+ICal version 0.02
+Copyright (c) 1999, Eric Busboom
+
+------------------------------------------------------------------------
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the Artistic License, a copy of which can be
+    found with perl.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    Artistic License for more details.
+------------------------------------------------------------------------
+
+
+#########################################################################
+Note, this is alpha level software. It is and is primarily intended
+for developers and those who want an early peek. It works OK for all
+of the example programs, but any serious diversion will probably break
+it.
+#########################################################################
+
+The Net::ICal module is a perl binding to libical, a C language
+implementation of the iCalendar calendaring and scheduling
+protocols. The iCalendar data units and protocols permit users to
+store and retrieve calendar data on remote servers and to schedule
+events with other calendar users. The protocols are specified in
+RFC 2445, RFC 2446 , RFC 2447 and two IETF drafts. For more
+information, see the working group's web page at:
+
+	http://www.imc.org/ietf-calendar/
+
+This code is under active development. If you would like to contribute
+to the project, you can contact me, Eric Busboom, at
+eric@softwarestudio.org. The project has a webpage at
+
+	http://softwarestudio.org/libical/index.html 
+
+and a mailing list that you can join by sending the following mail:
+
+	------------
+	To: minimalist@softwarestudio.org
+	Subject: subscribe libical
+	------------
+
+REQUIREMENTS
+
+1) libical-0.15a or later
+2) the MIME perl module. 
+and maybe 
+3) SWIG
+
+You will need SWIG if netical_wrap.c fails to compile. You can get
+SWIG from www.swig.org.
+
+INSTALLATION
+
+First, you will need to install libical. You can get this from
+http://softwarestudio.org/libical
+
+Next, edit the Makefile.PL to refer to the lib and include directories
+where you installed libical. You should have set these with the
+"--prefix" flag given to 'configure," or it will be "/usr/local/lib"
+if you did not set it.
+
+Finally, make the perl distribution as normal.
+
+USE
+
+This release is an early alpha and is really only useful to the
+hard-core calendar hacker. You should be familiar with libical, and you
+will have to rely on the code in the test directory for documentation.
+
+Take a look at the test directory for a few examples of
+use. "examples/imi-client" also has examples of use.
+
+IMIP CLIENT
+
+In the examples/imip-client/ are several programs to demonstrate iMIP
+operations.
+
+send-imip.pl reads a libical 'cluster' file, wraps each of the
+components in it in MIME, and writes it to stdout. 
+
+Try it with something list
+
+	send-imip.pl ../../test-data/rfc2446.ics
+
+The companion program, read-imip.pl, reads a MIME encapsulated iCal
+component from stdin, decodes it, and compares it to other components
+it has read. If there are no other components with the same time
+range, it adds the component to its database. It stores these data in a libical 'calendar' directory named after the recipient of the email
+
+To try it out, run. 
+
+	send-imip.pl ../../test-data/rfc2446.ics | formail -ds ./read-imip.pl
+
+
+You should see a subdirectory named 'alice' and in that directory will
+be a file called incoming.ics. This file will ( er, should) hold all
+of the components that are in test-data/rfc2446.ics.
+
+Finally, the program 'process-incoming.pl' will examine all of the
+comonents in the incoming cluster and book them in the calendar.
+
+Before you run process-incoming, there should be components in the
+file 'alice/incoming.ics'. After running it, 'incoming.ics' should be
+empty, and there will be cluster files in the 'alice/booked' directory
