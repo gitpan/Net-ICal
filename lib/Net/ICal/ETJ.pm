@@ -8,7 +8,7 @@
 # modified under the same terms as perl itself. ( Either the Artistic
 # License or the GPL. )
 #
-# $Id: ETJ.pm,v 1.39 2001/07/24 11:29:32 srl Exp $
+# $Id: ETJ.pm,v 1.40 2001/08/04 04:59:36 srl Exp $
 #
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
 #
@@ -92,11 +92,8 @@ sub validate {
     #unless (defined $self->organizer) {
     #	push (@{$@}, "Need an organizer");
     #}
-    #unless (defined $self->dtstart) {
-    #	push (@{$self->errlog}, "Need a dtstart");
-    #}
     unless (defined $self->uid) {
-	add_validation_error ($self, "Need a uid");
+	    add_validation_error ($self, "Need a uid");
     }
     # 4.8.7.1
     if ($self->created and $self->created->as_ical_value !~ /Z$/) {
@@ -127,7 +124,7 @@ sub _init {
     # since DTSTAMP is required by the RFC, we'll create it
     # if it's not given to us. 
     unless (defined ($self->dtstamp) ) {
-	$self->dtstamp ($time);
+	    $self->dtstamp ($time);
     }
 }
 

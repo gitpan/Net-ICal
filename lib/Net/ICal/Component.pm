@@ -7,7 +7,7 @@
 # modified under the same terms as perl itself. ( Either the Artistic
 # License or the GPL. )
 #
-# $Id: Component.pm,v 1.46 2001/07/15 15:45:42 lotr Exp $
+# $Id: Component.pm,v 1.48 2001/08/04 04:59:36 srl Exp $
 #
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
 #
@@ -62,9 +62,12 @@ map C<$map> and arguments C<%args>. You never call this directly, but
 you use the specific component's new constructor instead, which in turn
 calls this.
 
-=for testing
-ok(0, "need tests here");
-
+=begin testing
+TODO: {
+    local $TODO = "write tests for the new method, please";
+    ok(0, "need tests here");
+};
+=end testing
 =cut
 
 sub _param_set {
@@ -175,9 +178,12 @@ sub validate {
 
 Returns an ICal string that represents this component
 
-=for testing
-ok(0, "need tests here");
-
+=begin testing
+TODO: {
+    local $TODO = 'write tests for as_ical';
+    ok(0, "need tests here");
+};
+=end testing
 =cut
 
 sub as_ical {
@@ -381,7 +387,7 @@ ok(not(Net::ICal::Component::_identify_component(123)), "can't identify componen
 sub _identify_component {
    my ($line) = @_;
 
-   my ($comp) = $line =~ /^BEGIN:V(\w+)$/gi;
+   my ($bogus, $comp) = $line =~ /^BEGIN:(V)?(\w+)$/gi;
 
    return uc($comp) || undef;
 }

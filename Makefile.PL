@@ -24,7 +24,7 @@ sub MY::postamble {
 # Commented out for the release of 0.14, since the script that
 # generates our BUGS list isn't working. 
 #	"\tperl -w ../tools/createBUGS.pl>BUGS\n" .
-    "\t../tools/cvs2cl -F ChangeLog.detailed\n" .
+    "\t../tools/cvs2cl -f ChangeLog.detailed\n" .
 	"\t\$(MAKE) tardist\n"
 }
 
@@ -35,9 +35,9 @@ WriteMakefile(
 		'NAME'    => 'Net::ICal', 
 		'PREREQ_PM'  => { # e.g., Module::Name => 1.1
 			'Class::MethodMapper' => 1.0,
-			'Date::ICal' => '1.20',
-			'Date::Calc' => 4.3,
-            'Test::More' => 0,
+			'Date::ICal'   => '1.27',
+			'Date::Calc'   => '4.3',
+            'Test::Simple' => '0.10',
 		},
             	dist => {
 			COMPRESS     =>'gzip',

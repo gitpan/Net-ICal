@@ -7,7 +7,7 @@
 # under the same terms as perl itself. ( Either the Artistic License or the
 # GPL. ) 
 #
-# $Id: Attendee.pm,v 1.19 2001/07/09 14:35:34 lotr Exp $
+# $Id: Attendee.pm,v 1.20 2001/08/04 04:59:36 srl Exp $
 #
 # (C) COPYRIGHT 2000, Reefknot developers, including: 
 #   Eric Busboom, http://www.softwarestudio.org
@@ -23,6 +23,7 @@ Net::ICal::Attendee -- represents an attendee or organizer of a meeting
 
 package Net::ICal::Attendee;
 use strict;
+use Net::ICal::Util qw(:all);
 
 use UNIVERSAL;
 use base qw(Net::ICal::Property);
@@ -136,7 +137,11 @@ sub validate {
 
     # TODO: write this routine! SF bug 435998
 
-    return undef unless ($self->content =~ /^mailto:.*\@/i);
+    unless ($self->content =~ /^mailto:.*\@/i) {
+        # TODO: make this work
+        #add_validation_error($self, "Attendee must begin with 'mailto:'");
+        return undef;
+    }
 
     return 1;
 }

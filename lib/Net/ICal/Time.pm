@@ -221,17 +221,18 @@ modify this time.
 $t1 = Net::ICal::Time->new( ical => '20010405T160000Z');
 $d1 = Net::ICal::Duration->new('PT15M');
 
+print $d1->as_ical_value . "\n";
 $t1->subtract($d1->as_ical_value);
-
-ok($t1->as_ical eq "20010405T154500Z", "subtracting minutes using an iCal string works");
+print "result was " . $t1->as_ical_value . "\n";
+ok($t1->as_ical_value eq "20010405T154500Z", "subtracting minutes using an iCal string works");
 
 #---------------------------------------------------
 $t1 = Net::ICal::Time->new( ical => '20010405T160000Z');
 $t1->subtract($d1);
 
-print $t1->ical . "\n";
+print $t1->as_ical_value . "\n";
 
-ok($t1->ical eq "20010405T1545500Z", "subtracting minutes using a Duration object works");
+ok($t1->as_ical_value eq "20010405T154500Z", "subtracting minutes using a Duration object works");
 
 # NOTE: Most tests of whether the arithmetic actually works should
 # be in the Date::ICal inline tests. These tests just make sure that
@@ -249,10 +250,10 @@ sub subtract {
   # be backwards-compatible for now. 
   if (UNIVERSAL::isa($param,'Net::ICal::Duration')) {
     # probably the Wrong Way, but it works for now. 
-    $duration = $param->as_ical();   
+    $duration = $param->as_ical_value();   
   };
 
-  $duration .= "-";  # negate the duration they gave, so we can subtract
+  $duration = "-" . $duration;  # negate the duration they gave, so we can subtract
 
   return $self->add($duration);
 
@@ -269,9 +270,11 @@ THIS FUNCTION IS NOT YET IMPLEMENTED. We're waiting on Date::ICal
 to provide this function.
 
 =begin testing
-# Placeholder test, designed to fail
-ok(0, "move_to_zone isn't implemented yet");
+TODO: {
+    local $TODO = "implement move_to_zone";
+    ok(0, "move_to_zone isn't implemented yet");
 
+};
 =end testing
 
 =cut

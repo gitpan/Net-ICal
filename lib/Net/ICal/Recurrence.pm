@@ -7,7 +7,7 @@
 # modified under the same terms as perl itself. ( Either the Artistic
 # License or the GPL. )
 #
-# $Id: Recurrence.pm,v 1.13 2001/07/24 11:29:32 srl Exp $
+# $Id: Recurrence.pm,v 1.14 2001/08/04 04:59:36 srl Exp $
 #
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
 #
@@ -85,8 +85,11 @@ be specified at intialization time.
 =begin testing
 
 # TODO: write tests for this module, cleaning up the API as necessary.
-ok(0, 'write tests for Net::ICal::Recurrence');
+TODO: {
+    local $TODO = 'write tests for N::I::Recurrence';
+    ok(0, 'write tests for Net::ICal::Recurrence');
 
+}
 =end testing
 =cut
 

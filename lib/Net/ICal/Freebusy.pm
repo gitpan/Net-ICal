@@ -8,7 +8,7 @@
 # modified under the same terms as perl itself. ( Either the Artistic
 # License or the GPL. )
 #
-# $Id: Freebusy.pm,v 1.15 2001/07/19 04:50:35 srl Exp $
+# $Id: Freebusy.pm,v 1.16 2001/08/04 04:59:36 srl Exp $
 #
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
 #
@@ -167,6 +167,7 @@ parameters have the following meanings:
 
 =begin testing
 
+use Net::ICal::Attendee;
 use Net::ICal::Freebusy;
 
 my $f = Net::ICal::Freebusy->new();
@@ -180,8 +181,8 @@ my $p = new Net::ICal::Period("19970101T120000","19970101T123000");
 # NOTE: this test should be compared to FreebusyItem to make sure it's sane.
 #  I'm not at all sure it is. --srl
 
-$f = new Net::ICal::Freebusy(freebusy => [$p], 
-                             organizer => 'alice@wonderland.com');
+$f = Net::ICal::Freebusy->new(freebusy => [$p], 
+                             organizer => Net::ICal::Attendee->new('mailto:alice@wonderland.com'));
 ok(defined($f), "new() with 1 fbitem and an organizer succeeds");
 
 my $f_ical = $f->as_ical;
@@ -207,12 +208,14 @@ sub new {
     #  $args{fbtype} = 'BUSY';
     #}
 
+    return undef unless (%args);
+
     my $self = &_create ($class, %args);
 
     return undef unless (defined $self);
 
     unless ($self->uid) {
-	$self->uid (Net::ICal::Util->create_uuid);
+	$self->uid (create_uuid);
     }
     return undef unless ($self->validate);
 

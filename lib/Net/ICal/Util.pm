@@ -8,7 +8,7 @@
 # modified under the same terms as perl itself. ( Either the Artistic
 # License or the GPL. )
 #
-# $Id: Util.pm,v 1.3 2001/07/26 05:51:05 srl Exp $
+# $Id: Util.pm,v 1.4 2001/08/04 04:59:36 srl Exp $
 #
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
 #
@@ -52,6 +52,15 @@ General utility functions for Net::ICal and friends
 
 Generate a globally unique ID.
 
+=begin testing
+use Net::ICal::Util;
+
+my $uuid = create_uuid;
+
+ok(defined($uuid), "create_uuid with no arguments returns a value");
+
+=end
+
 =cut
 
 my $count = 0;
@@ -77,10 +86,19 @@ sub create_uuid {
 	 . "\@$host";  # plus fqdn should be sufficiently unique
 }
 
+
 =head2 add_validation_error ($object, $string)
 
 Add a validation error containing $string to the errlog list of 
 $object
+
+=begin testing
+
+TODO: {
+    local $TODO = "write tests for add_validation_error";
+};
+
+=end testing
 
 =cut
 

@@ -8,7 +8,7 @@
 # modified under the same terms as perl itself. ( Either the Artistic
 # License or the GPL. )
 #
-# $Id: Event.pm,v 1.19 2001/07/19 03:32:32 srl Exp $
+# $Id: Event.pm,v 1.20 2001/08/04 04:59:36 srl Exp $
 #
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
 #
@@ -23,6 +23,7 @@ Net::ICal::Event -- Event class
 
 package Net::ICal::Event;
 use strict;
+use Net::ICal::Util qw(:all);
 
 use base qw(Net::ICal::ETJ);
 
@@ -179,8 +180,12 @@ sub new {
 sub validate {
     my ($self) = @_;
 
+    unless (defined $self->dtstart) {
+	    add_validation_error ($self, "You must have a dtstart in an Event");
+    }
+
     if (defined $self->dtend and $self->duration) {
-	add_validation_error ($self, "Can't have both dtend and duration in one Event");
+    	add_validation_error ($self, "Can't have both dtend and duration in one Event");
     }
 
     return $self->SUPER::validate;

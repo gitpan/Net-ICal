@@ -7,7 +7,7 @@
 # modified under the same terms as perl itself. ( Either the Artistic
 # License or the GPL. )
 #
-# $Id: Property.pm,v 1.15 2001/07/19 05:20:49 srl Exp $
+# $Id: Property.pm,v 1.16 2001/08/04 04:59:36 srl Exp $
 #
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
 #
@@ -51,9 +51,12 @@ a specific property type, which in turn calls this:
 
 =begin testing
 
-# TODO: write tests
-ok(0, 'write tests for new()');
+TODO: {
+    local $TODO = "We need to write tests here";
 
+    ok(0, 'write tests for new()');
+
+}
 =end testing
 
 =cut
@@ -83,8 +86,10 @@ sub new {
 =begin testing
 
 # TODO: write tests
-ok(0, 'write tests for _reclass_set()');
-
+TODO: {
+    local $TODO = "write tests here, please; patches welcome";
+    ok(0, 'write tests for _reclass_set()');
+}
 =end testing
 
 =cut
@@ -111,8 +116,10 @@ Creates a new Net::ICal property from a string in ICal format
 =begin testing
 
 # TODO: write tests
-ok(0, 'write tests for new_from_ical()');
-
+TODO: {
+    local $TODO = 'write tests here please';
+    ok(0, 'write tests for new_from_ical()');
+}
 =end testing
 
 =cut
@@ -187,8 +194,10 @@ returns an ICal string describing the property
 =begin testing
 
 # TODO: write tests
-ok(0, 'write tests for as_ical()');
-
+TODO: {
+    local $TODO = "write these tests";
+    ok(0, 'write tests for as_ical()');
+}
 =end testing
 
 =cut
@@ -237,6 +246,6 @@ sub as_ical {
 
 =head1 SEE ALSO
 
-L<Net::ICal>
+L<Net::ICal>, L<Class::MethodMapper>
 
 =cut

@@ -8,7 +8,7 @@
 # modified under the same terms as perl itself. ( Either the Artistic
 # License or the GPL. )
 #
-# $Id$
+# $Id: Timezone.pm,v 1.4 2001/08/04 05:43:32 srl Exp $
 #
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
 #
@@ -32,13 +32,77 @@ use Net::ICal::Util qw(:all);
 
 =head1 DESCRIPTION
 
+This module represents VTIMEZONEs, which detail important information
+about timezones. For any timezone, you need to know some important
+factors related to it, namely:
+
+=over 4
+
+=item * What UTC offset it's in now ('8 hours before GMT')
+
+=item * What UTC offset it'll be in at the next daylight/standard time shift
+
+=item * When the shifts to and from daylight savings time take place
+
+=back
+
+This object represents those concepts with arrays of Net::ICal::Standard and
+Net::ICal::Daylight objects. For more detail on why, see RFC2445 4.6.5. 
+
+If you want some real data to test this module against, see
+http://primates.ximian.com/~damon/icalendar/zoneinfo.tgz , which
+is a set of VTIMEZONE files that aims to describe every timezone 
+in the world. We'll be relying on those files in a future release
+as a master timezone database.  They're a translation of the Olsen
+timezone database found on Unix systems. 
 
 =head1 SYNOPSIS
 
-  use Net::ICal::Timezone;
+    use Net::ICal::Timezone;
 
+    # we know this works
+    my $tz = Net::ICal::Timezone->new_from_ical($ical_text);
+    
+    # we haven't tested this yet, patches welcome
+    my $tz = Net::ICal::Timezone->new(
+        tzid => 'America/New_York',
+        standards => [
+            (Net::ICal::Standard objects)                    
+        ],
+        daylights => [
+            (Net::ICal::Daylight objects)
+        ]
+        );
 =cut
 
+=head1 METHODS
+
+=head2 new(%args)
+
+Makes a new Timezone object. Permissible arguments are:
+
+=over 4
+
+=item * tzid - a unique identifier for this timezone
+
+=item * lastmod - the last date/time this timezone info was updated
+
+=item * tzurl - an URL where you can find a newer version of this infi
+
+=item * standards - an array of Net::ICal::Timezone::Standard objects.
+
+=item * daylights - an array of N::I::Timezone::Daylight objects.
+
+=back
+
+=begin testing
+TODO: {
+    local $TODO = "write tests for N::I::Timezone";
+    ok(0, "TODO: write tests for this module");
+
+};
+=end testing
+=cut
 #============================================================================
 sub new {
     my ($class, %args) = @_;
@@ -47,9 +111,6 @@ sub new {
 
     return undef unless (defined $self);
 
-    unless ($self->uid) {
-    	$self->uid (Net::ICal::Util->create_uuid);
-    }
     return undef unless ($self->validate);
 
     return $self;
@@ -62,54 +123,69 @@ Takes iCalendar text as a parameter; returns a Net::ICal::Timezone object.
 
 =cut
 
-
+# THIS IS INHERITED FROM Net::ICal::Component
 
 #==================================================================================
-# make sure that this object has the bare minimum requirements specified by the RFC,
-my $count = 0;
+# make sure that this object has the bare minimum requirements specified by the RFC
 
+=head1 INTERNAL METHODS ONLY
+
+Use these outside this module at your own peril.
+
+=head2 validate($self)
+
+This routine validates the creation arguments we were given
+to make sure that we have all the necessary elements to create
+a valid VTIMEZONE.
+=cut
 sub validate {
     my ($self) = @_;
 	
+    # TODO: fill in validation here
    
     return $self->SUPER::validate ($self);
 }
 
-# an internal function that sets up the object. 
+=head2 create($class, %args)
+
+This is an internal function that sets up the object. 
+It mainly establishes a Class::MethodMapper data map
+and hands off creation of the object to Net::ICal::Component.
+
+=cut
 sub _create {
     my ($class, %args) = @_;
 
-    print "running create\n";
     my $map = {   # RFC2445 4.6.5 describes VTIMEZONE
         tzid => { 	# RFC2445 4.8.3.1 - REQUIRED, only once
             type => 'parameter',
     	    doc => 'unique identifier for this timezone',
  	        domain => 'param',
-	        options => '',
 	        value => undef,
+            options => [],
         },
         lastmod => {  	# RFC2445 ? - optional, 1x only in VTIMEZONE
   	        type => 'parameter',
     	    doc => 'last time this item was modified',
 	        domain => 'param',
-	        options => '',
             value => undef,
+            options => [],
         },
         tzurl => {  	# RFC2445 4.8.3.5 - optional, 1x only in VTIMEZONE
   	        type => 'parameter',
 	        doc => 'a URL for finding the latest version of this VTIMEZONE',
     	    domain => 'param',
-	        options => '',
             value => undef,
+            options => [],
         },
-        standard => {	# RFC2445 4.6.5 - required >=1x in VTIMEZONE
+        standards => {	# RFC2445 4.6.5 - required >=1x in VTIMEZONE
 	        type => 'parameter',
 	        doc => 'a set of standard timezone info',
 	        value => undef,
             domain => 'ref',
             options => 'ARRAY',
    	    },
-        daylight => {	# RFC2445 4.6.5 - required >=1x in VTIMEZONE
+        daylights => {	# RFC2445 4.6.5 - required >=1x in VTIMEZONE
 	        type => 'parameter',
 	        doc => 'a set of daylight timezone info',
 	        value => undef,
@@ -124,54 +200,24 @@ sub _create {
 	        options => 'Net::ICal::Time',
 	        value => undef,
    	    },
-        tzoffsetto => {	# RFC2445 4.8.3.4 - optional in VTIMEZONE
-	        type => 'parameter',
-	        doc => 'UTC offset in use now in this timezone',
-	        domain => 'param',
-	        options => '',
-	        value => undef,
-   	    },
-        tzoffsetfrom => {	# RFC2445 4.8.3.3 - optional in VTIMEZONE
-	        type => 'parameter',
-	        doc => 'UTC offset in use prior to the current offset in this tz',
-	        domain => 'param',
-	        options => '',
-	        value => undef,
-   	    },
    	    comment => {	# RFC2445 ? - optional multiple times in VTIMEZONE
 	        type => 'parameter',
     	    doc => 'comment about this timezone',
 	        domain => 'param',
-	        options => '',
-	        value => undef,
-   	    },
-   	    rdate => {	# RFC2445 ? - optional multiple times in VTIMEZONE
-	        # TODO: this should point to another N::I data type
-            type => 'parameter',
-	        doc => 'recurrence date',
-	        domain => 'param',
-	        options => '',
-	        value => undef,
-   	    },
-   	    rrule => {	# RFC2445 ? - optional multiple times in VTIMEZONE
-	        # TODO: this should point to another N::I data type
-	        type => 'parameter',
-	        doc => 'a recurrence rule',
-	        domain => 'param',
-	        options => '',
+            options => [],
 	        value => undef,
    	    },
    	    tzname => {	# RFC2445 4.8.3.2 - optional multiple times in VTIMEZONE
 	        type => 'parameter',
 	        doc => 'a name for this timezone',
 	        domain => 'param',
-	        options => '',
-	        value => undef,
+	        options => [],
+            value => undef,
    	    },
+
         # FIXME: handle x-properties. 
     };
 
-    print "running new\n";
     my $self = $class->SUPER::new ('VTIMEZONE', $map, %args);
 
     return $self;

@@ -7,7 +7,7 @@
 # modified under the same terms as perl itself. ( Either the Artistic
 # License or the GPL. )
 #
-# $Id: ICal.pm,v 1.11 2001/07/26 05:57:09 srl Exp $
+# $Id: ICal.pm,v 1.12 2001/08/04 05:53:12 srl Exp $
 #
 # (C) COPYRIGHT 2000-2001, Reefknot developers.
 #
@@ -31,7 +31,7 @@ use Net::ICal::Todo;
 use Net::ICal::Trigger;
 use Net::ICal::Util;
 
-$VERSION = "0.14";
+$VERSION = "0.15";
 
 package Net::ICal;
 
@@ -54,7 +54,7 @@ and scheduling protocol.
 Net::ICal is a collection of Perl modules for manipulating iCalendar
 (RFC2445) calendar data.
 
-As of the 0.13 release, most of the functionality you want to 
+As of the 0.15 release, most of the functionality you want to 
 find out about is in L<Net::ICal::Calendar>. See its manpages for
 more details. 
 
@@ -128,6 +128,10 @@ Net::ICal::Recurrence
 =item *
 
 Net::ICal::Time
+
+=item *
+
+Net::ICal::Timezone (with N::I::Standard and N::I::Daylight)
 
 =item *
 
