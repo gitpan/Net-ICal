@@ -1,0 +1,5 @@
+README for Net::ICal examples
+
+You might want to also check the files in the test/ subdirectory.
+They're some sample scripts the developers use to make sure that various
+modules work.

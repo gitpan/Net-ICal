@@ -1,0 +1,8 @@
+Net::ICal ChangeLog
+
+Version 0.13
+
+* first alpha release under the auspices of the Reefknot project.
+
+* MAJOR changes; rewrote Net::ICal in pure Perl instead of as wrappers to libical.
+

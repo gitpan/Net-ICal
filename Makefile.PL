@@ -2,41 +2,28 @@
 # -*- Mode: perl -*-
 
 use ExtUtils::MakeMaker;
+
+# run this on "make dist" to build the BUGS file.
+sub MY::postamble {
+   package MY;
+   "\npredist: all\n" .
+   "\tperl -w ../tools/createBUGS.pl>BUGS\n" .
+   "\t\$(MAKE) manifest\n" .
+   "\t\$(MAKE) tardist\n"
+}
+
 WriteMakefile(
-	      'MAKEFILE'=> 'Makefile',
-	      'VERSION_FROM' => 'lib/Net/ICal.pm',
-	      'NAME'    => 'Net::ICal',  
-	      'INC'     => '-I/home/eric/proj/local/include',
-	      'LIBS'    => ['-L/home/eric/proj/local/lib -lical -licalss -lm'],
-	      'OBJECT'  => 'netical_wrap.o',  # Object files
-              dist => {
-                       COMPRESS     =>'gzip',
-                       SUFFIX       =>'gz'
-                      },
+	        'MAKEFILE'=> 'Makefile',
+	        'VERSION_FROM' => 'lib/Net/ICal.pm',
+	        'NAME'    => 'Net::ICal', 
+            'PREREQ_PM'  => { # e.g., Module::Name => 1.1
+              'Class::MethodMapper' => 1.0 
+            },
+            dist => {
+              COMPRESS     =>'gzip',
+              SUFFIX       =>'gz',
+              DIST_DEFAULT =>'predist',
+            },
 
-	     );
+	      );
 
-sub MY::top_targets
-{
-  my $self = shift;
-
-  my $old = $self->MM::top_targets;
-
-  return "all::  netical_wrap.o\n$old";
-
-}
-
-sub MY::postamble
-{
-
-  return <<EOM;
-
-netical_wrap.c: netical.i
-	swig -perl5 -package Net::ICal netical.i
-
-wrap:
-	swig -perl5 -package Net::ICal netical.i
-
-
-EOM
-}

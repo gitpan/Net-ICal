@@ -1,0 +1,66 @@
+Developers' TODO for Net::ICal
+
+$Id: TODO,v 1.9 2001/03/29 03:05:27 srl Exp $
+
+This is a no-particular-order list of things we need to make sure
+we do. It is not complete. If you'd like to work on one of these things,
+talk to the Reefknot developers' list <reefknot-devel@sourceforge.net>,
+or send your patches there. 
+
+Also: look at the Sourceforge Tracker for Reefknot 
+<http://sourceforge.net/projects/reefknot/> if you're looking for work
+to do. Also look at the sections of source code with comments containing
+"XXX", "TODO", or "FIXME". 
+
+DOCUMENTATION:  (good if you're a new developer)
+
+- Grab any module, read it, understand it, and comment what's not clear
+to you. If you don't get it, there's a good chance that other people don't
+either (yet). Try to understand, ask other developers, and document
+what you learn in the code. 
+
+- In the $map initialization in _create methods, make sure each element
+is commented clearly with a reference to RFC2445. Elaborate on what each
+element's used for. Make sure the map contains all elements that can 
+possibly be part of the object type. See Calendar.pm for a small example.
+
+
+RESEARCH:
+
+- explain iTIP, iMIP, CAP, or any other IETF calendaring-related concept
+to the reefknot-devel@sourceforge.net list. 
+
+CODING:
+
+Major components:
+
+- VCALENDAR (half-done)
+- VALARM (done? part-done?)- Alarm.pm
+- VEVENT - in progress; see Event.pm. 
+- VTODO - in progress; see Todo.pm.
+- VJOURNAL - in progress; see Journal.pm.
+- VFREEBUSY - in progress; see Freebusy.pm.
+- VTIMEZONE - NOT STARTED YET.
+
+- handle METHOD, which is a property of a VCALENDAR that specifies
+whether this calendar is a request for an event, a response to a request,
+or what. See RFC 2446 (iTIP) and Calendar.pm's method property. This
+should probably be its own object.
+
+Other pieces, smaller subtasks of the above, roughly in priority order:
+
+- ATTACH: attachments for calendar components (4.8.1.1)
+- GEO and LOCATION: where meetings take place
+- PRIORITY: implement priorities for events, and sorting.
+- RESOURCES: implement resources needed.
+- STATUS: see 4.8.1.11: enumerate possible statuses for events. 
+ handle recurrences and exceptions of events - look at Recurrence.pm for a start
+- timestamps and change management (4.8.7)
+- request statuses (4.8.8.2)
+- make it possible for properties that occur more than once to be on the
+  same line (needed for e.g. CATEGORIES, 4.8.1.2)
+- allow x-props
+- allow x-params
+- do more error checking/recovery
+
+- i18n (mostly at the app level, not at the Net::ICal level)
