@@ -62,7 +62,7 @@ extern "C" {
 
 
 /*****************************************************************************
- * $Header: /proj/cvs/free-association/Net::ICal/netical_wrap.c,v 1.5 2000/03/31 07:48:42 eric Exp $
+ * $Header: /home/beazley/SWIG/SWIG1.1b3/swig_lib/perl5/RCS/perl5ptr.swg,v 1.1 1996/12/26 22:17:29 beazley Exp beazley $
  *
  * perl5ptr.swg
  *
@@ -95,10 +95,7 @@ extern "C" {
  * can be used in a multi-module environment by redefining the symbol
  * SWIGSTATIC.
  *
- * $Log: netical_wrap.c,v $
- * Revision 1.5  2000/03/31 07:48:42  eric
- * make stow/process-incoming basically functional
- *
+ * $Log: perl5ptr.swg,v $
  * Revision 1.1  1996/12/26 22:17:29  beazley
  * Initial revision
  *
@@ -432,10 +429,6 @@ SWIGEXPORT(void,boot_Net__ICal)(CPerl *, CV *cv);
 #endif
 
 #include "ical.h"
-#include "pvl.h"
-#include "icalstore.h"
-#include "icalcluster.h"
-#include "icalcalendar.h"
 
 #include <sys/types.h> /* for size_t */
 #include <time.h>
@@ -450,6 +443,19 @@ static void _swig_setiv(CPerl *pPerl, char *name, long value) {
      SV *sv; 
      sv = perl_get_sv(name,TRUE | 0x2);
      sv_setiv(sv, (IV) value);
+     SvREADONLY_on(sv);
+}
+
+#ifndef PERL_OBJECT
+#define swig_setpv(a,b) _swig_setpv(a,b)
+static void _swig_setpv(char *name, char *value) { 
+#else
+#define swig_setpv(a,b) _swig_setpv(pPerl,a,b)
+static void _swig_setpv(CPerl *pPerl, char *name, char *value) { 
+#endif
+     SV *sv; 
+     sv = perl_get_sv(name,TRUE | 0x2);
+     sv_setpv(sv, value);
      SvREADONLY_on(sv);
 }
 
@@ -472,37 +478,548 @@ SWIGCLASS_STATIC int swig_magic_readonly(SV *sv, MAGIC *mg) {
 };
 #endif
 
-XS(_wrap_icalenum_recurrence_to_string) {
+XS(_wrap_icaltime_null_time) {
 
-    char * _result;
-    icalrecurrencetype_frequency  _arg0;
+    struct icaltimetype * _result;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icaltime_null_time();");
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icaltime_null_time();
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_is_null_time) {
+
+    int  _result;
+    struct icaltimetype * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalenum_recurrence_to_string(kind);");
-    _arg0 = (icalrecurrencetype_frequency )SvIV(ST(0));
-    _result = (char *)icalenum_recurrence_to_string(_arg0);
+        croak("Usage: icaltime_is_null_time(t);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltime_is_null_time. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (int )icaltime_is_null_time(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_normalize) {
+
+    struct icaltimetype * _result;
+    struct icaltimetype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaltime_normalize(t);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltime_normalize. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icaltime_normalize(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_day_of_year) {
+
+    short  _result;
+    struct icaltimetype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaltime_day_of_year(t);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltime_day_of_year. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (short )icaltime_day_of_year(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_from_day_of_year) {
+
+    struct icaltimetype * _result;
+    short  _arg0;
+    short  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaltime_from_day_of_year(doy,year);");
+    _arg0 = (short )SvIV(ST(0));
+    _arg1 = (short )SvIV(ST(1));
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icaltime_from_day_of_year(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_day_of_week) {
+
+    short  _result;
+    struct icaltimetype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaltime_day_of_week(t);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltime_day_of_week. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (short )icaltime_day_of_week(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_start_doy_of_week) {
+
+    short  _result;
+    struct icaltimetype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaltime_start_doy_of_week(t);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltime_start_doy_of_week. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (short )icaltime_start_doy_of_week(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_from_timet) {
+
+    struct icaltimetype * _result;
+    time_t * _arg0;
+    int  _arg1;
+    int  _arg2;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 3) || (items > 3)) 
+        croak("Usage: icaltime_from_timet(v,is_date,is_utc);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"time_tPtr")) {
+        croak("Type error in argument 1 of icaltime_from_timet. Expected time_tPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (int )SvIV(ST(1));
+    _arg2 = (int )SvIV(ST(2));
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icaltime_from_timet(*_arg0,_arg1,_arg2);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_from_string) {
+
+    struct icaltimetype * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaltime_from_string(str);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icaltime_from_string(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_as_timet) {
+
+    time_t * _result;
+    struct icaltimetype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaltime_as_timet(struct icaltimetype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltime_as_timet. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (time_t *) malloc(sizeof(time_t ));
+    *(_result) = icaltime_as_timet(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"time_tPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_as_ctime) {
+
+    char * _result;
+    struct icaltimetype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaltime_as_ctime(struct icaltimetype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltime_as_ctime. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icaltime_as_ctime(*_arg0);
     ST(argvi) = sv_newmortal();
     sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalenum_weekday_to_string) {
+XS(_wrap_icaltime_week_number) {
 
-    char * _result;
-    icalrecurrencetype_weekday  _arg0;
+    short  _result;
+    short  _arg0;
+    short  _arg1;
+    short  _arg2;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 3) || (items > 3)) 
+        croak("Usage: icaltime_week_number(day_of_month,month,year);");
+    _arg0 = (short )SvIV(ST(0));
+    _arg1 = (short )SvIV(ST(1));
+    _arg2 = (short )SvIV(ST(2));
+    _result = (short )icaltime_week_number(_arg0,_arg1,_arg2);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_from_week_number) {
+
+    struct icaltimetype * _result;
+    short  _arg0;
+    short  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaltime_from_week_number(week_number,year);");
+    _arg0 = (short )SvIV(ST(0));
+    _arg1 = (short )SvIV(ST(1));
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icaltime_from_week_number(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_compare) {
+
+    int  _result;
+    struct icaltimetype * _arg0;
+    struct icaltimetype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaltime_compare(a,b);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltime_compare. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
+        croak("Type error in argument 2 of icaltime_compare. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (int )icaltime_compare(*_arg0,*_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_days_in_month) {
+
+    short  _result;
+    short  _arg0;
+    short  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaltime_days_in_month(month,year);");
+    _arg0 = (short )SvIV(ST(0));
+    _arg1 = (short )SvIV(ST(1));
+    _result = (short )icaltime_days_in_month(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_utc_offset) {
+
+    time_t * _result;
+    struct icaltimetype * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaltime_utc_offset(tt,tzid);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltime_utc_offset. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    _result = (time_t *) malloc(sizeof(time_t ));
+    *(_result) = icaltime_utc_offset(*_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"time_tPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_local_utc_offset) {
+
+    time_t * _result;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icaltime_local_utc_offset();");
+    _result = (time_t *) malloc(sizeof(time_t ));
+    *(_result) = icaltime_local_utc_offset();
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"time_tPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_as_utc) {
+
+    struct icaltimetype * _result;
+    struct icaltimetype * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaltime_as_utc(tt,tzid);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltime_as_utc. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icaltime_as_utc(*_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_as_zone) {
+
+    struct icaltimetype * _result;
+    struct icaltimetype * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaltime_as_zone(tt,tzid);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltime_as_zone. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icaltime_as_zone(*_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaldurationtype_from_timet) {
+
+    struct icaldurationtype * _result;
+    time_t * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalenum_weekday_to_string(kind);");
-    _arg0 = (icalrecurrencetype_weekday )SvIV(ST(0));
-    _result = (char *)icalenum_weekday_to_string(_arg0);
+        croak("Usage: icaldurationtype_from_timet(t);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"time_tPtr")) {
+        croak("Type error in argument 1 of icaldurationtype_from_timet. Expected time_tPtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaldurationtype *) malloc(sizeof(struct icaldurationtype ));
+    *(_result) = icaldurationtype_from_timet(*_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    sv_setref_pv(ST(argvi++),"struct icaldurationtypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaldurationtype_from_string) {
+
+    struct icaldurationtype * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaldurationtype_from_string(char *);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (struct icaldurationtype *) malloc(sizeof(struct icaldurationtype ));
+    *(_result) = icaldurationtype_from_string(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaldurationtypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaldurationtype_as_timet) {
+
+    time_t * _result;
+    struct icaldurationtype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaldurationtype_as_timet(duration);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 1 of icaldurationtype_as_timet. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    _result = (time_t *) malloc(sizeof(time_t ));
+    *(_result) = icaldurationtype_as_timet(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"time_tPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalperiodtype_duration) {
+
+    time_t * _result;
+    struct icalperiodtype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalperiodtype_duration(period);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
+        croak("Type error in argument 1 of icalperiodtype_duration. Expected struct icalperiodtypePtr.");
+        XSRETURN(1);
+    }
+    _result = (time_t *) malloc(sizeof(time_t ));
+    *(_result) = icalperiodtype_duration(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"time_tPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalperiodtype_end) {
+
+    time_t * _result;
+    struct icalperiodtype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalperiodtype_end(period);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
+        croak("Type error in argument 1 of icalperiodtype_end. Expected struct icalperiodtypePtr.");
+        XSRETURN(1);
+    }
+    _result = (time_t *) malloc(sizeof(time_t ));
+    *(_result) = icalperiodtype_end(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"time_tPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_add) {
+
+    struct icaltimetype * _result;
+    struct icaltimetype * _arg0;
+    struct icaldurationtype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaltime_add(t,d);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltime_add. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 2 of icaltime_add. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icaltime_add(*_arg0,*_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icaltime_subtract) {
+
+    struct icaldurationtype * _result;
+    struct icaltimetype * _arg0;
+    struct icaltimetype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaltime_subtract(t1,t2);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltime_subtract. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
+        croak("Type error in argument 2 of icaltime_subtract. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaldurationtype *) malloc(sizeof(struct icaldurationtype ));
+    *(_result) = icaltime_subtract(*_arg0,*_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaldurationtypePtr", (void *) _result);
     XSRETURN(argvi);
 }
 
@@ -763,807 +1280,1725 @@ XS(_wrap_icalenum_string_to_method) {
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalcomponent_new) {
+XS(_wrap_icalenum_status_to_string) {
 
-    icalcomponent * _result;
-    icalcomponent_kind  _arg0;
+    char * _result;
+    icalproperty_status  _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_new(kind);");
-    _arg0 = (icalcomponent_kind )SvIV(ST(0));
-    _result = (icalcomponent *)icalcomponent_new(_arg0);
+        croak("Usage: icalenum_status_to_string(icalproperty_status );");
+    _arg0 = (icalproperty_status )SvIV(ST(0));
+    _result = (char *)icalenum_status_to_string(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalcomponent_new_clone) {
+XS(_wrap_icalenum_string_to_status) {
 
-    icalcomponent * _result;
-    icalcomponent * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_new_clone(component);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_new_clone. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalcomponent *)icalcomponent_new_clone(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_new_from_string) {
-
-    icalcomponent * _result;
+    icalproperty_status  _result;
     char * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_new_from_string(str);");
+        croak("Usage: icalenum_string_to_status(string);");
     _arg0 = (char *) SvPV(ST(0),na);
-    _result = (icalcomponent *)icalcomponent_new_from_string(_arg0);
+    _result = (icalproperty_status )icalenum_string_to_status(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalcomponent_free) {
+XS(_wrap_icalattachtype_new) {
 
-    icalcomponent * _arg0;
+    struct icalattachtype * _result;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icalattachtype_new();");
+    _result = (struct icalattachtype *)icalattachtype_new();
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icalattachtypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalattachtype_add_reference) {
+
+    struct icalattachtype * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_free(component);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_free. Expected icalcomponentPtr.");
+        croak("Usage: icalattachtype_add_reference(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
+        croak("Type error in argument 1 of icalattachtype_add_reference. Expected struct icalattachtypePtr.");
         XSRETURN(1);
     }
-    icalcomponent_free(_arg0);
+    icalattachtype_add_reference(_arg0);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalcomponent_as_ical_string) {
+XS(_wrap_icalattachtype_free) {
+
+    struct icalattachtype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalattachtype_free(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
+        croak("Type error in argument 1 of icalattachtype_free. Expected struct icalattachtypePtr.");
+        XSRETURN(1);
+    }
+    icalattachtype_free(_arg0);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalattachtype_set_url) {
+
+    struct icalattachtype * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalattachtype_set_url(v,url);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
+        croak("Type error in argument 1 of icalattachtype_set_url. Expected struct icalattachtypePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalattachtype_set_url(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalattachtype_get_url) {
 
     char * _result;
-    icalcomponent * _arg0;
+    struct icalattachtype * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_as_ical_string(component);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_as_ical_string. Expected icalcomponentPtr.");
+        croak("Usage: icalattachtype_get_url(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
+        croak("Type error in argument 1 of icalattachtype_get_url. Expected struct icalattachtypePtr.");
         XSRETURN(1);
     }
-    _result = (char *)icalcomponent_as_ical_string(_arg0);
+    _result = (char *)icalattachtype_get_url(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalcomponent_is_valid) {
+XS(_wrap_icalattachtype_set_base64) {
 
-    int  _result;
-    icalcomponent * _arg0;
+    struct icalattachtype * _arg0;
+    char * _arg1;
+    int  _arg2;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_is_valid(component);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_is_valid. Expected icalcomponentPtr.");
+    if ((items < 3) || (items > 3)) 
+        croak("Usage: icalattachtype_set_base64(v,base64,owns);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
+        croak("Type error in argument 1 of icalattachtype_set_base64. Expected struct icalattachtypePtr.");
         XSRETURN(1);
     }
-    _result = (int )icalcomponent_is_valid(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
+    _arg1 = (char *) SvPV(ST(1),na);
+    _arg2 = (int )SvIV(ST(2));
+    icalattachtype_set_base64(_arg0,_arg1,_arg2);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalcomponent_isa) {
-
-    icalcomponent_kind  _result;
-    icalcomponent * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_isa(component);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_isa. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalcomponent_kind )icalcomponent_isa(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_isa_component) {
-
-    int  _result;
-    void * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_isa_component(component);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_isa_component. Expected voidPtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icalcomponent_isa_component(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_add_property) {
-
-    icalcomponent * _arg0;
-    icalproperty * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcomponent_add_property(component,property);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_add_property. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"icalpropertyPtr")) {
-        croak("Type error in argument 2 of icalcomponent_add_property. Expected icalpropertyPtr.");
-        XSRETURN(1);
-    }
-    icalcomponent_add_property(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_remove_property) {
-
-    icalcomponent * _arg0;
-    icalproperty * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcomponent_remove_property(component,property);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_remove_property. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"icalpropertyPtr")) {
-        croak("Type error in argument 2 of icalcomponent_remove_property. Expected icalpropertyPtr.");
-        XSRETURN(1);
-    }
-    icalcomponent_remove_property(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_count_properties) {
-
-    int  _result;
-    icalcomponent * _arg0;
-    icalproperty_kind  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcomponent_count_properties(component,kind);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_count_properties. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (icalproperty_kind )SvIV(ST(1));
-    _result = (int )icalcomponent_count_properties(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_get_current_property) {
-
-    icalproperty * _result;
-    icalcomponent * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_get_current_property(component);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_get_current_property. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalproperty *)icalcomponent_get_current_property(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_get_first_property) {
-
-    icalproperty * _result;
-    icalcomponent * _arg0;
-    icalproperty_kind  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcomponent_get_first_property(component,kind);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_get_first_property. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (icalproperty_kind )SvIV(ST(1));
-    _result = (icalproperty *)icalcomponent_get_first_property(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_get_next_property) {
-
-    icalproperty * _result;
-    icalcomponent * _arg0;
-    icalproperty_kind  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcomponent_get_next_property(component,kind);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_get_next_property. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (icalproperty_kind )SvIV(ST(1));
-    _result = (icalproperty *)icalcomponent_get_next_property(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_get_properties) {
-
-    icalproperty ** _result;
-    icalcomponent * _arg0;
-    icalproperty_kind  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcomponent_get_properties(component,kind);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_get_properties. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (icalproperty_kind )SvIV(ST(1));
-    _result = (icalproperty **)icalcomponent_get_properties(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalpropertyPtrPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_add_component) {
-
-    icalcomponent * _arg0;
-    icalcomponent * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcomponent_add_component(parent,child);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_add_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
-        croak("Type error in argument 2 of icalcomponent_add_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    icalcomponent_add_component(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_remove_component) {
-
-    icalcomponent * _arg0;
-    icalcomponent * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcomponent_remove_component(parent,child);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_remove_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
-        croak("Type error in argument 2 of icalcomponent_remove_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    icalcomponent_remove_component(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_count_components) {
-
-    int  _result;
-    icalcomponent * _arg0;
-    icalcomponent_kind  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcomponent_count_components(component,kind);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_count_components. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (icalcomponent_kind )SvIV(ST(1));
-    _result = (int )icalcomponent_count_components(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_get_current_component) {
-
-    icalcomponent * _result;
-    icalcomponent * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_get_current_component(component);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_get_current_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalcomponent *)icalcomponent_get_current_component(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_get_first_component) {
-
-    icalcomponent * _result;
-    icalcomponent * _arg0;
-    icalcomponent_kind  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcomponent_get_first_component(component,kind);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_get_first_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (icalcomponent_kind )SvIV(ST(1));
-    _result = (icalcomponent *)icalcomponent_get_first_component(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_get_next_component) {
-
-    icalcomponent * _result;
-    icalcomponent * _arg0;
-    icalcomponent_kind  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcomponent_get_next_component(component,kind);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_get_next_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (icalcomponent_kind )SvIV(ST(1));
-    _result = (icalcomponent *)icalcomponent_get_next_component(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_get_component) {
-
-    icalproperty ** _result;
-    icalcomponent * _arg0;
-    icalproperty_kind  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcomponent_get_component(component,kind);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_get_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (icalproperty_kind )SvIV(ST(1));
-    _result = (icalproperty **)icalcomponent_get_component(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalpropertyPtrPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_count_errors) {
-
-    int  _result;
-    icalcomponent * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_count_errors(component);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_count_errors. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icalcomponent_count_errors(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_convert_errors) {
-
-    icalcomponent * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_convert_errors(component);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_convert_errors. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    icalcomponent_convert_errors(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_strip_errors) {
-
-    icalcomponent * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_strip_errors(component);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_strip_errors. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    icalcomponent_strip_errors(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_get_parent) {
-
-    icalcomponent * _result;
-    icalcomponent * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcomponent_get_parent(component);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_get_parent. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalcomponent *)icalcomponent_get_parent(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcomponent_set_parent) {
-
-    icalcomponent * _arg0;
-    icalcomponent * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcomponent_set_parent(component,parent);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcomponent_set_parent. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
-        croak("Type error in argument 2 of icalcomponent_set_parent. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    icalcomponent_set_parent(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalerror_crash_here) {
-
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 0) || (items > 0)) 
-        croak("Usage: icalerror_crash_here();");
-    icalerror_crash_here();
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalerror_stop_here) {
-
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 0) || (items > 0)) 
-        croak("Usage: icalerror_stop_here();");
-    icalerror_stop_here();
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalerror_clear_errno) {
-
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 0) || (items > 0)) 
-        croak("Usage: icalerror_clear_errno();");
-    icalerror_clear_errno();
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalerror_set_errno) {
-
-    icalerrorenum  _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalerror_set_errno(icalerrorenum );");
-    _arg0 = (icalerrorenum )SvIV(ST(0));
-    icalerror_set_errno(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalerror_strerror) {
+XS(_wrap_icalattachtype_get_base64) {
 
     char * _result;
-    icalerrorenum  _arg0;
+    struct icalattachtype * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalerror_strerror(e);");
-    _arg0 = (icalerrorenum )SvIV(ST(0));
-    _result = (char *)icalerror_strerror(_arg0);
+        croak("Usage: icalattachtype_get_base64(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
+        croak("Type error in argument 1 of icalattachtype_get_base64. Expected struct icalattachtypePtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalattachtype_get_base64(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalmemory_tmp_buffer) {
+XS(_wrap_icalattachtype_set_binary) {
+
+    struct icalattachtype * _arg0;
+    char * _arg1;
+    int  _arg2;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 3) || (items > 3)) 
+        croak("Usage: icalattachtype_set_binary(v,binary,owns);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
+        croak("Type error in argument 1 of icalattachtype_set_binary. Expected struct icalattachtypePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    _arg2 = (int )SvIV(ST(2));
+    icalattachtype_set_binary(_arg0,_arg1,_arg2);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalattachtype_get_binary) {
 
     void * _result;
-    size_t * _arg0;
+    struct icalattachtype * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalmemory_tmp_buffer(size);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"size_tPtr")) {
-        croak("Type error in argument 1 of icalmemory_tmp_buffer. Expected size_tPtr.");
+        croak("Usage: icalattachtype_get_binary(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
+        croak("Type error in argument 1 of icalattachtype_get_binary. Expected struct icalattachtypePtr.");
         XSRETURN(1);
     }
-    _result = (void *)icalmemory_tmp_buffer(*_arg0);
+    _result = (void *)icalattachtype_get_binary(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setref_pv(ST(argvi++),"voidPtr", (void *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalmemory_tmp_copy) {
+XS(_wrap_icalreqstattype_from_string) {
 
-    char * _result;
+    struct icalreqstattype * _result;
     char * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalmemory_tmp_copy(str);");
+        croak("Usage: icalreqstattype_from_string(str);");
     _arg0 = (char *) SvPV(ST(0),na);
-    _result = (char *)icalmemory_tmp_copy(_arg0);
+    _result = (struct icalreqstattype *) malloc(sizeof(struct icalreqstattype ));
+    *(_result) = icalreqstattype_from_string(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icalreqstattypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalreqstattype_as_string) {
+
+    char * _result;
+    struct icalreqstattype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalreqstattype_as_string(struct icalreqstattype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalreqstattypePtr")) {
+        croak("Type error in argument 1 of icalreqstattype_as_string. Expected struct icalreqstattypePtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalreqstattype_as_string(*_arg0);
     ST(argvi) = sv_newmortal();
     sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalmemory_add_tmp_buffer) {
+XS(_wrap_icalvalue_new) {
 
-    void * _arg0;
+    icalvalue * _result;
+    icalvalue_kind  _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalmemory_add_tmp_buffer(void *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalmemory_add_tmp_buffer. Expected voidPtr.");
-        XSRETURN(1);
-    }
-    icalmemory_add_tmp_buffer(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalmemory_free_ring) {
-
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 0) || (items > 0)) 
-        croak("Usage: icalmemory_free_ring();");
-    icalmemory_free_ring();
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalmemory_new_buffer) {
-
-    void * _result;
-    size_t * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalmemory_new_buffer(size);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"size_tPtr")) {
-        croak("Type error in argument 1 of icalmemory_new_buffer. Expected size_tPtr.");
-        XSRETURN(1);
-    }
-    _result = (void *)icalmemory_new_buffer(*_arg0);
+        croak("Usage: icalvalue_new(kind);");
+    _arg0 = (icalvalue_kind )SvIV(ST(0));
+    _result = (icalvalue *)icalvalue_new(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"voidPtr", (void *) _result);
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalmemory_resize_buffer) {
+XS(_wrap_icalvalue_new_clone) {
 
-    void * _result;
-    void * _arg0;
-    size_t * _arg1;
+    icalvalue * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_clone(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_new_clone. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (icalvalue *)icalvalue_new_clone(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_from_string) {
+
+    icalvalue * _result;
+    icalvalue_kind  _arg0;
+    char * _arg1;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 2) || (items > 2)) 
-        croak("Usage: icalmemory_resize_buffer(buf,size);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalmemory_resize_buffer. Expected voidPtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"size_tPtr")) {
-        croak("Type error in argument 2 of icalmemory_resize_buffer. Expected size_tPtr.");
-        XSRETURN(1);
-    }
-    _result = (void *)icalmemory_resize_buffer(_arg0,*_arg1);
+        croak("Usage: icalvalue_new_from_string(kind,str);");
+    _arg0 = (icalvalue_kind )SvIV(ST(0));
+    _arg1 = (char *) SvPV(ST(1),na);
+    _result = (icalvalue *)icalvalue_new_from_string(_arg0,_arg1);
     ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"voidPtr", (void *) _result);
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalmemory_free_buffer) {
+XS(_wrap_icalvalue_free) {
 
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_free(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_free. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    icalvalue_free(_arg0);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_is_valid) {
+
+    int  _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_is_valid(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_is_valid. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (int )icalvalue_is_valid(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_as_ical_string) {
+
+    char * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_as_ical_string(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_as_ical_string. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalvalue_as_ical_string(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_isa) {
+
+    icalvalue_kind  _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_isa(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_isa. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (icalvalue_kind )icalvalue_isa(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_isa_value) {
+
+    int  _result;
     void * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalmemory_free_buffer(buf);");
+        croak("Usage: icalvalue_isa_value(void *);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalmemory_free_buffer. Expected voidPtr.");
+        croak("Type error in argument 1 of icalvalue_isa_value. Expected voidPtr.");
         XSRETURN(1);
     }
-    icalmemory_free_buffer(_arg0);
+    _result = (int )icalvalue_isa_value(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalmemory_append_string) {
+XS(_wrap_icalvalue_compare) {
 
-    char ** _arg0;
-    char ** _arg1;
-    size_t * _arg2;
-    char * _arg3;
+    icalparameter_xliccomparetype  _result;
+    icalvalue * _arg0;
+    icalvalue * _arg1;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
-    if ((items < 4) || (items > 4)) 
-        croak("Usage: icalmemory_append_string(buf,pos,buf_size,string);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"charPtrPtr")) {
-        croak("Type error in argument 1 of icalmemory_append_string. Expected charPtrPtr.");
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_compare(a,b);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_compare. Expected icalvaluePtr.");
         XSRETURN(1);
     }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"charPtrPtr")) {
-        croak("Type error in argument 2 of icalmemory_append_string. Expected charPtrPtr.");
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of icalvalue_compare. Expected icalvaluePtr.");
         XSRETURN(1);
     }
-    if (SWIG_GetPtr(ST(2),(void **) &_arg2,"size_tPtr")) {
-        croak("Type error in argument 3 of icalmemory_append_string. Expected size_tPtr.");
-        XSRETURN(1);
-    }
-    _arg3 = (char *) SvPV(ST(3),na);
-    icalmemory_append_string(_arg0,_arg1,_arg2,_arg3);
+    _result = (icalparameter_xliccomparetype )icalvalue_compare(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalmemory_append_char) {
+XS(_wrap_icalvalue_new_attach) {
 
-    char ** _arg0;
-    char ** _arg1;
-    size_t * _arg2;
-    char  _arg3;
+    icalvalue * _result;
+    struct icalattachtype * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
-    if ((items < 4) || (items > 4)) 
-        croak("Usage: icalmemory_append_char(buf,pos,buf_size,ch);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"charPtrPtr")) {
-        croak("Type error in argument 1 of icalmemory_append_char. Expected charPtrPtr.");
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_attach(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
+        croak("Type error in argument 1 of icalvalue_new_attach. Expected struct icalattachtypePtr.");
         XSRETURN(1);
     }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"charPtrPtr")) {
-        croak("Type error in argument 2 of icalmemory_append_char. Expected charPtrPtr.");
+    _result = (icalvalue *)icalvalue_new_attach(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_attach) {
+
+    struct icalattachtype * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_attach(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_attach. Expected icalvaluePtr.");
         XSRETURN(1);
     }
-    if (SWIG_GetPtr(ST(2),(void **) &_arg2,"size_tPtr")) {
-        croak("Type error in argument 3 of icalmemory_append_char. Expected size_tPtr.");
+    _result = (struct icalattachtype *) malloc(sizeof(struct icalattachtype ));
+    *(_result) = icalvalue_get_attach(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icalattachtypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_attach) {
+
+    icalvalue * _arg0;
+    struct icalattachtype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_attach(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_attach. Expected icalvaluePtr.");
         XSRETURN(1);
     }
-    _arg3 = (char) *SvPV(ST(3),na);
-    icalmemory_append_char(_arg0,_arg1,_arg2,_arg3);
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icalattachtypePtr")) {
+        croak("Type error in argument 2 of icalvalue_set_attach. Expected struct icalattachtypePtr.");
+        XSRETURN(1);
+    }
+    icalvalue_set_attach(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_binary) {
+
+    icalvalue * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_binary(v);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalvalue *)icalvalue_new_binary(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_binary) {
+
+    char * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_binary(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_binary. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalvalue_get_binary(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_binary) {
+
+    icalvalue * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_binary(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_binary. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalvalue_set_binary(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_boolean) {
+
+    icalvalue * _result;
+    int  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_boolean(v);");
+    _arg0 = (int )SvIV(ST(0));
+    _result = (icalvalue *)icalvalue_new_boolean(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_boolean) {
+
+    int  _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_boolean(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_boolean. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (int )icalvalue_get_boolean(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_boolean) {
+
+    icalvalue * _arg0;
+    int  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_boolean(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_boolean. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (int )SvIV(ST(1));
+    icalvalue_set_boolean(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_caladdress) {
+
+    icalvalue * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_caladdress(v);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalvalue *)icalvalue_new_caladdress(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_caladdress) {
+
+    char * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_caladdress(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_caladdress. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalvalue_get_caladdress(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_caladdress) {
+
+    icalvalue * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_caladdress(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_caladdress. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalvalue_set_caladdress(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_date) {
+
+    icalvalue * _result;
+    struct icaltimetype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_date(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icalvalue_new_date. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (icalvalue *)icalvalue_new_date(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_date) {
+
+    struct icaltimetype * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_date(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_date. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icalvalue_get_date(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_date) {
+
+    icalvalue * _arg0;
+    struct icaltimetype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_date(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_date. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
+        croak("Type error in argument 2 of icalvalue_set_date. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    icalvalue_set_date(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_datetime) {
+
+    icalvalue * _result;
+    struct icaltimetype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_datetime(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icalvalue_new_datetime. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (icalvalue *)icalvalue_new_datetime(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_datetime) {
+
+    struct icaltimetype * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_datetime(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_datetime. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icalvalue_get_datetime(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_datetime) {
+
+    icalvalue * _arg0;
+    struct icaltimetype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_datetime(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_datetime. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
+        croak("Type error in argument 2 of icalvalue_set_datetime. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    icalvalue_set_datetime(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_datetimedate) {
+
+    icalvalue * _result;
+    struct icaltimetype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_datetimedate(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icalvalue_new_datetimedate. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (icalvalue *)icalvalue_new_datetimedate(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_datetimedate) {
+
+    struct icaltimetype * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_datetimedate(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_datetimedate. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icalvalue_get_datetimedate(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_datetimedate) {
+
+    icalvalue * _arg0;
+    struct icaltimetype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_datetimedate(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_datetimedate. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
+        croak("Type error in argument 2 of icalvalue_set_datetimedate. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    icalvalue_set_datetimedate(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_datetimeperiod) {
+
+    icalvalue * _result;
+    struct icalperiodtype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_datetimeperiod(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
+        croak("Type error in argument 1 of icalvalue_new_datetimeperiod. Expected struct icalperiodtypePtr.");
+        XSRETURN(1);
+    }
+    _result = (icalvalue *)icalvalue_new_datetimeperiod(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_datetimeperiod) {
+
+    struct icalperiodtype * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_datetimeperiod(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_datetimeperiod. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icalperiodtype *) malloc(sizeof(struct icalperiodtype ));
+    *(_result) = icalvalue_get_datetimeperiod(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icalperiodtypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_datetimeperiod) {
+
+    icalvalue * _arg0;
+    struct icalperiodtype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_datetimeperiod(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_datetimeperiod. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icalperiodtypePtr")) {
+        croak("Type error in argument 2 of icalvalue_set_datetimeperiod. Expected struct icalperiodtypePtr.");
+        XSRETURN(1);
+    }
+    icalvalue_set_datetimeperiod(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_duration) {
+
+    icalvalue * _result;
+    struct icaldurationtype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_duration(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 1 of icalvalue_new_duration. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    _result = (icalvalue *)icalvalue_new_duration(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_duration) {
+
+    struct icaldurationtype * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_duration(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_duration. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaldurationtype *) malloc(sizeof(struct icaldurationtype ));
+    *(_result) = icalvalue_get_duration(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaldurationtypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_duration) {
+
+    icalvalue * _arg0;
+    struct icaldurationtype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_duration(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_duration. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 2 of icalvalue_set_duration. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    icalvalue_set_duration(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_float) {
+
+    icalvalue * _result;
+    float  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_float(v);");
+    _arg0 = (float ) SvNV(ST(0));
+    _result = (icalvalue *)icalvalue_new_float(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_float) {
+
+    float  _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_float(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_float. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (float )icalvalue_get_float(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setnv(ST(argvi++), (double) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_float) {
+
+    icalvalue * _arg0;
+    float  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_float(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_float. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (float ) SvNV(ST(1));
+    icalvalue_set_float(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_geo) {
+
+    icalvalue * _result;
+    struct icalgeotype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_geo(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalgeotypePtr")) {
+        croak("Type error in argument 1 of icalvalue_new_geo. Expected struct icalgeotypePtr.");
+        XSRETURN(1);
+    }
+    _result = (icalvalue *)icalvalue_new_geo(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_geo) {
+
+    struct icalgeotype * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_geo(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_geo. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icalgeotype *) malloc(sizeof(struct icalgeotype ));
+    *(_result) = icalvalue_get_geo(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icalgeotypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_geo) {
+
+    icalvalue * _arg0;
+    struct icalgeotype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_geo(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_geo. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icalgeotypePtr")) {
+        croak("Type error in argument 2 of icalvalue_set_geo. Expected struct icalgeotypePtr.");
+        XSRETURN(1);
+    }
+    icalvalue_set_geo(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_integer) {
+
+    icalvalue * _result;
+    int  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_integer(v);");
+    _arg0 = (int )SvIV(ST(0));
+    _result = (icalvalue *)icalvalue_new_integer(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_integer) {
+
+    int  _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_integer(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_integer. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (int )icalvalue_get_integer(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_integer) {
+
+    icalvalue * _arg0;
+    int  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_integer(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_integer. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (int )SvIV(ST(1));
+    icalvalue_set_integer(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_method) {
+
+    icalvalue * _result;
+    icalproperty_method  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_method(v);");
+    _arg0 = (icalproperty_method )SvIV(ST(0));
+    _result = (icalvalue *)icalvalue_new_method(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_method) {
+
+    icalproperty_method  _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_method(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_method. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (icalproperty_method )icalvalue_get_method(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_method) {
+
+    icalvalue * _arg0;
+    icalproperty_method  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_method(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_method. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (icalproperty_method )SvIV(ST(1));
+    icalvalue_set_method(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_period) {
+
+    icalvalue * _result;
+    struct icalperiodtype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_period(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
+        croak("Type error in argument 1 of icalvalue_new_period. Expected struct icalperiodtypePtr.");
+        XSRETURN(1);
+    }
+    _result = (icalvalue *)icalvalue_new_period(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_period) {
+
+    struct icalperiodtype * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_period(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_period. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icalperiodtype *) malloc(sizeof(struct icalperiodtype ));
+    *(_result) = icalvalue_get_period(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icalperiodtypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_period) {
+
+    icalvalue * _arg0;
+    struct icalperiodtype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_period(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_period. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icalperiodtypePtr")) {
+        croak("Type error in argument 2 of icalvalue_set_period. Expected struct icalperiodtypePtr.");
+        XSRETURN(1);
+    }
+    icalvalue_set_period(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_string) {
+
+    icalvalue * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_string(v);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalvalue *)icalvalue_new_string(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_string) {
+
+    char * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_string(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_string. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalvalue_get_string(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_string) {
+
+    icalvalue * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_string(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_string. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalvalue_set_string(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_text) {
+
+    icalvalue * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_text(v);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalvalue *)icalvalue_new_text(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_text) {
+
+    char * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_text(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_text. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalvalue_get_text(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_text) {
+
+    icalvalue * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_text(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_text. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalvalue_set_text(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_time) {
+
+    icalvalue * _result;
+    struct icaltimetype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_time(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icalvalue_new_time. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (icalvalue *)icalvalue_new_time(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_time) {
+
+    struct icaltimetype * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_time(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_time. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icalvalue_get_time(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_time) {
+
+    icalvalue * _arg0;
+    struct icaltimetype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_time(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_time. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
+        croak("Type error in argument 2 of icalvalue_set_time. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    icalvalue_set_time(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_trigger) {
+
+    icalvalue * _result;
+    union icaltriggertype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_trigger(v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"union icaltriggertypePtr")) {
+        croak("Type error in argument 1 of icalvalue_new_trigger. Expected union icaltriggertypePtr.");
+        XSRETURN(1);
+    }
+    _result = (icalvalue *)icalvalue_new_trigger(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_trigger) {
+
+    union icaltriggertype * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_trigger(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_trigger. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (union icaltriggertype *) malloc(sizeof(union icaltriggertype ));
+    *(_result) = icalvalue_get_trigger(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"union icaltriggertypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_trigger) {
+
+    icalvalue * _arg0;
+    union icaltriggertype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_trigger(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_trigger. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"union icaltriggertypePtr")) {
+        croak("Type error in argument 2 of icalvalue_set_trigger. Expected union icaltriggertypePtr.");
+        XSRETURN(1);
+    }
+    icalvalue_set_trigger(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_uri) {
+
+    icalvalue * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_uri(v);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalvalue *)icalvalue_new_uri(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_uri) {
+
+    char * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_uri(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_uri. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalvalue_get_uri(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_uri) {
+
+    icalvalue * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_uri(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_uri. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalvalue_set_uri(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_utcoffset) {
+
+    icalvalue * _result;
+    int  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_utcoffset(v);");
+    _arg0 = (int )SvIV(ST(0));
+    _result = (icalvalue *)icalvalue_new_utcoffset(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_utcoffset) {
+
+    int  _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_utcoffset(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_utcoffset. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (int )icalvalue_get_utcoffset(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_utcoffset) {
+
+    icalvalue * _arg0;
+    int  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_utcoffset(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_utcoffset. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (int )SvIV(ST(1));
+    icalvalue_set_utcoffset(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_query) {
+
+    icalvalue * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_query(v);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalvalue *)icalvalue_new_query(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_query) {
+
+    char * _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_query(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_query. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalvalue_get_query(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_query) {
+
+    icalvalue * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_query(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_query. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalvalue_set_query(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_new_status) {
+
+    icalvalue * _result;
+    icalproperty_status  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_new_status(v);");
+    _arg0 = (icalproperty_status )SvIV(ST(0));
+    _result = (icalvalue *)icalvalue_new_status(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_get_status) {
+
+    icalproperty_status  _result;
+    icalvalue * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalvalue_get_status(value);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_get_status. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _result = (icalproperty_status )icalvalue_get_status(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalvalue_set_status) {
+
+    icalvalue * _arg0;
+    icalproperty_status  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalvalue_set_status(value,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalvalue_set_status. Expected icalvaluePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (icalproperty_status )SvIV(ST(1));
+    icalvalue_set_status(_arg0,_arg1);
     XSRETURN(argvi);
 }
 
@@ -3086,210 +4521,6 @@ XS(_wrap_icalparameter_set_xliccomparetype) {
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalparser_parse_string) {
-
-    icalcomponent * _result;
-    char * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalparser_parse_string(str);");
-    _arg0 = (char *) SvPV(ST(0),na);
-    _result = (icalcomponent *)icalparser_parse_string(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalparser_new) {
-
-    icalparser * _result;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 0) || (items > 0)) 
-        croak("Usage: icalparser_new();");
-    _result = (icalparser *)icalparser_new();
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalparserPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalparser_set_gen_data) {
-
-    icalparser * _arg0;
-    void * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalparser_set_gen_data(parser,data);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalparser_set_gen_data. Expected icalparserPtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
-        croak("Type error in argument 2 of icalparser_set_gen_data. Expected voidPtr.");
-        XSRETURN(1);
-    }
-    icalparser_set_gen_data(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalparser_add_line) {
-
-    icalcomponent * _result;
-    icalparser * _arg0;
-    char * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalparser_add_line(parser,str);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalparser_add_line. Expected icalparserPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (char *) SvPV(ST(1),na);
-    _result = (icalcomponent *)icalparser_add_line(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalparser_claim) {
-
-    icalcomponent * _result;
-    icalparser * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalparser_claim(parser);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalparser_claim. Expected icalparserPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalcomponent *)icalparser_claim(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalparser_clean) {
-
-    icalcomponent * _result;
-    icalparser * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalparser_clean(parser);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalparser_clean. Expected icalparserPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalcomponent *)icalparser_clean(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalparser_get_state) {
-
-    icalparser_state  _result;
-    icalparser * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalparser_get_state(parser);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalparser_get_state. Expected icalparserPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalparser_state )icalparser_get_state(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalparser_free) {
-
-    icalparser * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalparser_free(parser);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalparser_free. Expected icalparserPtr.");
-        XSRETURN(1);
-    }
-    icalparser_free(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalparser_parse_value) {
-
-    icalvalue * _result;
-    icalvalue_kind  _arg0;
-    char * _arg1;
-    icalcomponent ** _arg2;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 3) || (items > 3)) 
-        croak("Usage: icalparser_parse_value(kind,str,errors);");
-    _arg0 = (icalvalue_kind )SvIV(ST(0));
-    _arg1 = (char *) SvPV(ST(1),na);
-    if (SWIG_GetPtr(ST(2),(void **) &_arg2,(char *) 0 )) {
-        croak("Type error in argument 3 of icalparser_parse_value. Expected icalcomponentPtrPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalvalue *)icalparser_parse_value(_arg0,_arg1,_arg2);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_string_line_generator) {
-
-    char * _result;
-    char * _arg0;
-    size_t * _arg1;
-    void * _arg2;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 3) || (items > 3)) 
-        croak("Usage: string_line_generator(out,buf_size,d);");
-    _arg0 = (char *) SvPV(ST(0),na);
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"size_tPtr")) {
-        croak("Type error in argument 2 of string_line_generator. Expected size_tPtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(2),(void **) &_arg2,(char *) 0 )) {
-        croak("Type error in argument 3 of string_line_generator. Expected voidPtr.");
-        XSRETURN(1);
-    }
-    _result = (char *)string_line_generator(_arg0,*_arg1,_arg2);
-    ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
-    XSRETURN(argvi);
-}
-
 XS(_wrap_icalproperty_new) {
 
     icalproperty * _result;
@@ -3443,6 +4674,28 @@ XS(_wrap_icalproperty_add_parameter) {
     XSRETURN(argvi);
 }
 
+XS(_wrap_icalproperty_set_parameter) {
+
+    icalproperty * _arg0;
+    icalparameter * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalproperty_set_parameter(prop,parameter);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_set_parameter. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of icalproperty_set_parameter. Expected icalparameterPtr.");
+        XSRETURN(1);
+    }
+    icalproperty_set_parameter(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
 XS(_wrap_icalproperty_remove_parameter) {
 
     icalproperty * _arg0;
@@ -3540,7 +4793,7 @@ XS(_wrap_icalproperty_set_value) {
         croak("Type error in argument 1 of icalproperty_set_value. Expected icalpropertyPtr.");
         XSRETURN(1);
     }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"icalvaluePtr")) {
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
         croak("Type error in argument 2 of icalproperty_set_value. Expected icalvaluePtr.");
         XSRETURN(1);
     }
@@ -3660,6 +4913,62 @@ XS(_wrap_icalproperty_get_method) {
     _result = (icalproperty_method )icalproperty_get_method(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_new_xlicmimecid) {
+
+    icalproperty * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_new_xlicmimecid(v);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalproperty *)icalproperty_new_xlicmimecid(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_set_xlicmimecid) {
+
+    icalproperty * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalproperty_set_xlicmimecid(prop,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_set_xlicmimecid. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalproperty_set_xlicmimecid(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_get_xlicmimecid) {
+
+    char * _result;
+    icalproperty * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_get_xlicmimecid(prop);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_get_xlicmimecid. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalproperty_get_xlicmimecid(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
 }
 
@@ -3841,14 +5150,14 @@ XS(_wrap_icalproperty_get_prodid) {
 XS(_wrap_icalproperty_new_status) {
 
     icalproperty * _result;
-    char * _arg0;
+    icalproperty_status  _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
         croak("Usage: icalproperty_new_status(v);");
-    _arg0 = (char *) SvPV(ST(0),na);
+    _arg0 = (icalproperty_status )SvIV(ST(0));
     _result = (icalproperty *)icalproperty_new_status(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
@@ -3858,7 +5167,7 @@ XS(_wrap_icalproperty_new_status) {
 XS(_wrap_icalproperty_set_status) {
 
     icalproperty * _arg0;
-    char * _arg1;
+    icalproperty_status  _arg1;
     int argvi = 0;
     dXSARGS ;
 
@@ -3869,14 +5178,14 @@ XS(_wrap_icalproperty_set_status) {
         croak("Type error in argument 1 of icalproperty_set_status. Expected icalpropertyPtr.");
         XSRETURN(1);
     }
-    _arg1 = (char *) SvPV(ST(1),na);
+    _arg1 = (icalproperty_status )SvIV(ST(1));
     icalproperty_set_status(_arg0,_arg1);
     XSRETURN(argvi);
 }
 
 XS(_wrap_icalproperty_get_status) {
 
-    char * _result;
+    icalproperty_status  _result;
     icalproperty * _arg0;
     int argvi = 0;
     dXSARGS ;
@@ -3888,9 +5197,9 @@ XS(_wrap_icalproperty_get_status) {
         croak("Type error in argument 1 of icalproperty_get_status. Expected icalpropertyPtr.");
         XSRETURN(1);
     }
-    _result = (char *)icalproperty_get_status(_arg0);
+    _result = (icalproperty_status )icalproperty_get_status(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
@@ -4181,69 +5490,6 @@ XS(_wrap_icalproperty_get_tzoffsetfrom) {
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalproperty_new_rrule) {
-
-    icalproperty * _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalproperty_new_rrule(v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalproperty_new_rrule. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalproperty *)icalproperty_new_rrule(*_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalproperty_set_rrule) {
-
-    icalproperty * _arg0;
-    struct icalrecurrencetype * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalproperty_set_rrule(prop,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalproperty_set_rrule. Expected icalpropertyPtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 2 of icalproperty_set_rrule. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    icalproperty_set_rrule(_arg0,*_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalproperty_get_rrule) {
-
-    struct icalrecurrencetype * _result;
-    icalproperty * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalproperty_get_rrule(prop);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalproperty_get_rrule. Expected icalpropertyPtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icalrecurrencetype *) malloc(sizeof(struct icalrecurrencetype ));
-    *(_result) = icalproperty_get_rrule(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icalrecurrencetypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
 XS(_wrap_icalproperty_new_attendee) {
 
     icalproperty * _result;
@@ -4351,6 +5597,118 @@ XS(_wrap_icalproperty_get_contact) {
         XSRETURN(1);
     }
     _result = (char *)icalproperty_get_contact(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_new_xlicmimecontenttype) {
+
+    icalproperty * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_new_xlicmimecontenttype(v);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalproperty *)icalproperty_new_xlicmimecontenttype(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_set_xlicmimecontenttype) {
+
+    icalproperty * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalproperty_set_xlicmimecontenttype(prop,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_set_xlicmimecontenttype. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalproperty_set_xlicmimecontenttype(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_get_xlicmimecontenttype) {
+
+    char * _result;
+    icalproperty * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_get_xlicmimecontenttype(prop);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_get_xlicmimecontenttype. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalproperty_get_xlicmimecontenttype(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_new_xlicmimeoptinfo) {
+
+    icalproperty * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_new_xlicmimeoptinfo(v);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalproperty *)icalproperty_new_xlicmimeoptinfo(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_set_xlicmimeoptinfo) {
+
+    icalproperty * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalproperty_set_xlicmimeoptinfo(prop,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_set_xlicmimeoptinfo. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalproperty_set_xlicmimeoptinfo(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_get_xlicmimeoptinfo) {
+
+    char * _result;
+    icalproperty * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_get_xlicmimeoptinfo(prop);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_get_xlicmimeoptinfo. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalproperty_get_xlicmimeoptinfo(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
@@ -4524,6 +5882,62 @@ XS(_wrap_icalproperty_get_comment) {
     XSRETURN(argvi);
 }
 
+XS(_wrap_icalproperty_new_xlicerror) {
+
+    icalproperty * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_new_xlicerror(v);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalproperty *)icalproperty_new_xlicerror(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_set_xlicerror) {
+
+    icalproperty * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalproperty_set_xlicerror(prop,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_set_xlicerror. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalproperty_set_xlicerror(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_get_xlicerror) {
+
+    char * _result;
+    icalproperty * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_get_xlicerror(prop);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_get_xlicerror. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalproperty_get_xlicerror(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
 XS(_wrap_icalproperty_new_trigger) {
 
     icalproperty * _result;
@@ -4587,62 +6001,6 @@ XS(_wrap_icalproperty_get_trigger) {
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalproperty_new_xlicerror) {
-
-    icalproperty * _result;
-    char * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalproperty_new_xlicerror(v);");
-    _arg0 = (char *) SvPV(ST(0),na);
-    _result = (icalproperty *)icalproperty_new_xlicerror(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalproperty_set_xlicerror) {
-
-    icalproperty * _arg0;
-    char * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalproperty_set_xlicerror(prop,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalproperty_set_xlicerror. Expected icalpropertyPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (char *) SvPV(ST(1),na);
-    icalproperty_set_xlicerror(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalproperty_get_xlicerror) {
-
-    char * _result;
-    icalproperty * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalproperty_get_xlicerror(prop);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalproperty_get_xlicerror. Expected icalpropertyPtr.");
-        XSRETURN(1);
-    }
-    _result = (char *)icalproperty_get_xlicerror(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
-    XSRETURN(argvi);
-}
-
 XS(_wrap_icalproperty_new_class) {
 
     icalproperty * _result;
@@ -4694,6 +6052,62 @@ XS(_wrap_icalproperty_get_class) {
         XSRETURN(1);
     }
     _result = (char *)icalproperty_get_class(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_new_x) {
+
+    icalproperty * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_new_x(v);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalproperty *)icalproperty_new_x(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_set_x) {
+
+    icalproperty * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalproperty_set_x(prop,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_set_x. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalproperty_set_x(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_get_x) {
+
+    char * _result;
+    icalproperty * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_get_x(prop);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_get_x. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalproperty_get_x(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
@@ -4806,6 +6220,62 @@ XS(_wrap_icalproperty_get_transp) {
         XSRETURN(1);
     }
     _result = (char *)icalproperty_get_transp(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_new_xlicmimeencoding) {
+
+    icalproperty * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_new_xlicmimeencoding(v);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalproperty *)icalproperty_new_xlicmimeencoding(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_set_xlicmimeencoding) {
+
+    icalproperty * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalproperty_set_xlicmimeencoding(prop,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_set_xlicmimeencoding. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalproperty_set_xlicmimeencoding(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_get_xlicmimeencoding) {
+
+    char * _result;
+    icalproperty * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_get_xlicmimeencoding(prop);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_get_xlicmimeencoding. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalproperty_get_xlicmimeencoding(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setpv((SV*)ST(argvi++),(char *) _result);
     XSRETURN(argvi);
@@ -5749,6 +7219,62 @@ XS(_wrap_icalproperty_get_rdate) {
     XSRETURN(argvi);
 }
 
+XS(_wrap_icalproperty_new_xlicmimefilename) {
+
+    icalproperty * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_new_xlicmimefilename(v);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalproperty *)icalproperty_new_xlicmimefilename(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_set_xlicmimefilename) {
+
+    icalproperty * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalproperty_set_xlicmimefilename(prop,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_set_xlicmimefilename. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalproperty_set_xlicmimefilename(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_get_xlicmimefilename) {
+
+    char * _result;
+    icalproperty * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_get_xlicmimefilename(prop);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_get_xlicmimefilename. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalproperty_get_xlicmimefilename(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
 XS(_wrap_icalproperty_new_url) {
 
     icalproperty * _result;
@@ -5802,6 +7328,62 @@ XS(_wrap_icalproperty_get_url) {
     _result = (char *)icalproperty_get_url(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_new_xlicclustercount) {
+
+    icalproperty * _result;
+    int  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_new_xlicclustercount(v);");
+    _arg0 = (int )SvIV(ST(0));
+    _result = (icalproperty *)icalproperty_new_xlicclustercount(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_set_xlicclustercount) {
+
+    icalproperty * _arg0;
+    int  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalproperty_set_xlicclustercount(prop,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_set_xlicclustercount. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (int )SvIV(ST(1));
+    icalproperty_set_xlicclustercount(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_get_xlicclustercount) {
+
+    int  _result;
+    icalproperty * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_get_xlicclustercount(prop);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_get_xlicclustercount. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _result = (int )icalproperty_get_xlicclustercount(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
@@ -5865,125 +7447,6 @@ XS(_wrap_icalproperty_get_attach) {
     *(_result) = icalproperty_get_attach(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setref_pv(ST(argvi++),"struct icalattachtypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalproperty_new_xlicclustercount) {
-
-    icalproperty * _result;
-    int  _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalproperty_new_xlicclustercount(v);");
-    _arg0 = (int )SvIV(ST(0));
-    _result = (icalproperty *)icalproperty_new_xlicclustercount(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalproperty_set_xlicclustercount) {
-
-    icalproperty * _arg0;
-    int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalproperty_set_xlicclustercount(prop,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalproperty_set_xlicclustercount. Expected icalpropertyPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (int )SvIV(ST(1));
-    icalproperty_set_xlicclustercount(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalproperty_get_xlicclustercount) {
-
-    int  _result;
-    icalproperty * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalproperty_get_xlicclustercount(prop);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalproperty_get_xlicclustercount. Expected icalpropertyPtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icalproperty_get_xlicclustercount(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalproperty_new_exrule) {
-
-    icalproperty * _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalproperty_new_exrule(v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalproperty_new_exrule. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalproperty *)icalproperty_new_exrule(*_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalproperty_set_exrule) {
-
-    icalproperty * _arg0;
-    struct icalrecurrencetype * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalproperty_set_exrule(prop,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalproperty_set_exrule. Expected icalpropertyPtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 2 of icalproperty_set_exrule. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    icalproperty_set_exrule(_arg0,*_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalproperty_get_exrule) {
-
-    struct icalrecurrencetype * _result;
-    icalproperty * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalproperty_get_exrule(prop);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalproperty_get_exrule. Expected icalpropertyPtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icalrecurrencetype *) malloc(sizeof(struct icalrecurrencetype ));
-    *(_result) = icalproperty_get_exrule(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icalrecurrencetypePtr", (void *) _result);
     XSRETURN(argvi);
 }
 
@@ -6281,6 +7744,62 @@ XS(_wrap_icalproperty_get_geo) {
     XSRETURN(argvi);
 }
 
+XS(_wrap_icalproperty_new_xlicmimecharset) {
+
+    icalproperty * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_new_xlicmimecharset(v);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalproperty *)icalproperty_new_xlicmimecharset(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_set_xlicmimecharset) {
+
+    icalproperty * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalproperty_set_xlicmimecharset(prop,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_set_xlicmimecharset. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalproperty_set_xlicmimecharset(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalproperty_get_xlicmimecharset) {
+
+    char * _result;
+    icalproperty * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalproperty_get_xlicmimecharset(prop);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalproperty_get_xlicmimecharset. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalproperty_get_xlicmimecharset(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
 XS(_wrap_icalproperty_new_completed) {
 
     icalproperty * _result;
@@ -6526,6 +8045,2117 @@ XS(_wrap_icalproperty_get_action) {
     XSRETURN(argvi);
 }
 
+XS(_wrap_pvl_new_element) {
+
+    pvl_elem  _result;
+    void * _arg0;
+    pvl_elem  _arg1;
+    pvl_elem  _arg2;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 3) || (items > 3)) 
+        croak("Usage: pvl_new_element(d,next,prior);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_new_element. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of pvl_new_element. Expected pvl_elem.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(2),(void **) &_arg2,(char *) 0 )) {
+        croak("Type error in argument 3 of pvl_new_element. Expected pvl_elem.");
+        XSRETURN(1);
+    }
+    _result = (pvl_elem )pvl_new_element(_arg0,_arg1,_arg2);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"pvl_elem", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_newlist) {
+
+    pvl_list  _result;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: pvl_newlist();");
+    _result = (pvl_list )pvl_newlist();
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"pvl_list", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_free) {
+
+    pvl_list  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: pvl_free(pvl_list );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_free. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    pvl_free(_arg0);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_unshift) {
+
+    pvl_list  _arg0;
+    void * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: pvl_unshift(l,d);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_unshift. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of pvl_unshift. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    pvl_unshift(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_shift) {
+
+    void * _result;
+    pvl_list  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: pvl_shift(l);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_shift. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    _result = (void *)pvl_shift(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"voidPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_head) {
+
+    pvl_elem  _result;
+    pvl_list  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: pvl_head(pvl_list );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_head. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    _result = (pvl_elem )pvl_head(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"pvl_elem", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_push) {
+
+    pvl_list  _arg0;
+    void * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: pvl_push(l,d);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_push. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of pvl_push. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    pvl_push(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_pop) {
+
+    void * _result;
+    pvl_list  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: pvl_pop(l);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_pop. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    _result = (void *)pvl_pop(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"voidPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_tail) {
+
+    pvl_elem  _result;
+    pvl_list  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: pvl_tail(pvl_list );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_tail. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    _result = (pvl_elem )pvl_tail(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"pvl_elem", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_insert_ordered) {
+
+    pvl_list  _arg0;
+    pvl_comparef  _arg1;
+    void * _arg2;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 3) || (items > 3)) 
+        croak("Usage: pvl_insert_ordered(l,f,d);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_insert_ordered. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"pvl_comparef")) {
+        croak("Type error in argument 2 of pvl_insert_ordered. Expected pvl_comparef.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(2),(void **) &_arg2,(char *) 0 )) {
+        croak("Type error in argument 3 of pvl_insert_ordered. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    pvl_insert_ordered(_arg0,_arg1,_arg2);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_insert_after) {
+
+    pvl_list  _arg0;
+    pvl_elem  _arg1;
+    void * _arg2;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 3) || (items > 3)) 
+        croak("Usage: pvl_insert_after(l,e,d);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_insert_after. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of pvl_insert_after. Expected pvl_elem.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(2),(void **) &_arg2,(char *) 0 )) {
+        croak("Type error in argument 3 of pvl_insert_after. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    pvl_insert_after(_arg0,_arg1,_arg2);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_insert_before) {
+
+    pvl_list  _arg0;
+    pvl_elem  _arg1;
+    void * _arg2;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 3) || (items > 3)) 
+        croak("Usage: pvl_insert_before(l,e,d);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_insert_before. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of pvl_insert_before. Expected pvl_elem.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(2),(void **) &_arg2,(char *) 0 )) {
+        croak("Type error in argument 3 of pvl_insert_before. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    pvl_insert_before(_arg0,_arg1,_arg2);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_remove) {
+
+    void * _result;
+    pvl_list  _arg0;
+    pvl_elem  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: pvl_remove(pvl_list ,pvl_elem );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_remove. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of pvl_remove. Expected pvl_elem.");
+        XSRETURN(1);
+    }
+    _result = (void *)pvl_remove(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"voidPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_clear) {
+
+    pvl_list  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: pvl_clear(pvl_list );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_clear. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    pvl_clear(_arg0);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_count) {
+
+    int  _result;
+    pvl_list  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: pvl_count(pvl_list );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_count. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    _result = (int )pvl_count(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_next) {
+
+    pvl_elem  _result;
+    pvl_elem  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: pvl_next(e);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_next. Expected pvl_elem.");
+        XSRETURN(1);
+    }
+    _result = (pvl_elem )pvl_next(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"pvl_elem", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_prior) {
+
+    pvl_elem  _result;
+    pvl_elem  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: pvl_prior(e);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_prior. Expected pvl_elem.");
+        XSRETURN(1);
+    }
+    _result = (pvl_elem )pvl_prior(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"pvl_elem", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_data) {
+
+    void * _result;
+    pvl_elem  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: pvl_data(pvl_elem );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_data. Expected pvl_elem.");
+        XSRETURN(1);
+    }
+    _result = (void *)pvl_data(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"voidPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_find) {
+
+    pvl_elem  _result;
+    pvl_list  _arg0;
+    pvl_findf  _arg1;
+    void * _arg2;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 3) || (items > 3)) 
+        croak("Usage: pvl_find(l,f,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_find. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"pvl_findf")) {
+        croak("Type error in argument 2 of pvl_find. Expected pvl_findf.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(2),(void **) &_arg2,(char *) 0 )) {
+        croak("Type error in argument 3 of pvl_find. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    _result = (pvl_elem )pvl_find(_arg0,_arg1,_arg2);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"pvl_elem", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_find_next) {
+
+    pvl_elem  _result;
+    pvl_list  _arg0;
+    pvl_findf  _arg1;
+    void * _arg2;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 3) || (items > 3)) 
+        croak("Usage: pvl_find_next(l,f,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_find_next. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"pvl_findf")) {
+        croak("Type error in argument 2 of pvl_find_next. Expected pvl_findf.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(2),(void **) &_arg2,(char *) 0 )) {
+        croak("Type error in argument 3 of pvl_find_next. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    _result = (pvl_elem )pvl_find_next(_arg0,_arg1,_arg2);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"pvl_elem", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_pvl_apply) {
+
+    pvl_list  _arg0;
+    pvl_applyf  _arg1;
+    void * _arg2;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 3) || (items > 3)) 
+        croak("Usage: pvl_apply(l,f,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of pvl_apply. Expected pvl_list.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"pvl_applyf")) {
+        croak("Type error in argument 2 of pvl_apply. Expected pvl_applyf.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(2),(void **) &_arg2,(char *) 0 )) {
+        croak("Type error in argument 3 of pvl_apply. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    pvl_apply(_arg0,_arg1,_arg2);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_new) {
+
+    icalcomponent * _result;
+    icalcomponent_kind  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_new(kind);");
+    _arg0 = (icalcomponent_kind )SvIV(ST(0));
+    _result = (icalcomponent *)icalcomponent_new(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_new_clone) {
+
+    icalcomponent * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_new_clone(component);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_new_clone. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalcomponent *)icalcomponent_new_clone(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_new_from_string) {
+
+    icalcomponent * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_new_from_string(str);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalcomponent *)icalcomponent_new_from_string(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_free) {
+
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_free(component);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_free. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    icalcomponent_free(_arg0);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_as_ical_string) {
+
+    char * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_as_ical_string(component);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_as_ical_string. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalcomponent_as_ical_string(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_is_valid) {
+
+    int  _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_is_valid(component);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_is_valid. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (int )icalcomponent_is_valid(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_isa) {
+
+    icalcomponent_kind  _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_isa(component);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_isa. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalcomponent_kind )icalcomponent_isa(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_isa_component) {
+
+    int  _result;
+    void * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_isa_component(component);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_isa_component. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    _result = (int )icalcomponent_isa_component(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_add_property) {
+
+    icalcomponent * _arg0;
+    icalproperty * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_add_property(component,property);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_add_property. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of icalcomponent_add_property. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    icalcomponent_add_property(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_remove_property) {
+
+    icalcomponent * _arg0;
+    icalproperty * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_remove_property(component,property);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_remove_property. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of icalcomponent_remove_property. Expected icalpropertyPtr.");
+        XSRETURN(1);
+    }
+    icalcomponent_remove_property(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_count_properties) {
+
+    int  _result;
+    icalcomponent * _arg0;
+    icalproperty_kind  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_count_properties(component,kind);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_count_properties. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (icalproperty_kind )SvIV(ST(1));
+    _result = (int )icalcomponent_count_properties(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_current_property) {
+
+    icalproperty * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_current_property(component);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_current_property. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalproperty *)icalcomponent_get_current_property(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_first_property) {
+
+    icalproperty * _result;
+    icalcomponent * _arg0;
+    icalproperty_kind  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_get_first_property(component,kind);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_first_property. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (icalproperty_kind )SvIV(ST(1));
+    _result = (icalproperty *)icalcomponent_get_first_property(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_next_property) {
+
+    icalproperty * _result;
+    icalcomponent * _arg0;
+    icalproperty_kind  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_get_next_property(component,kind);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_next_property. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (icalproperty_kind )SvIV(ST(1));
+    _result = (icalproperty *)icalcomponent_get_next_property(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalpropertyPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_properties) {
+
+    icalproperty ** _result;
+    icalcomponent * _arg0;
+    icalproperty_kind  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_get_properties(component,kind);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_properties. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (icalproperty_kind )SvIV(ST(1));
+    _result = (icalproperty **)icalcomponent_get_properties(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalpropertyPtrPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_add_component) {
+
+    icalcomponent * _arg0;
+    icalcomponent * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_add_component(parent,child);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_add_component. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of icalcomponent_add_component. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    icalcomponent_add_component(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_remove_component) {
+
+    icalcomponent * _arg0;
+    icalcomponent * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_remove_component(parent,child);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_remove_component. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of icalcomponent_remove_component. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    icalcomponent_remove_component(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_count_components) {
+
+    int  _result;
+    icalcomponent * _arg0;
+    icalcomponent_kind  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_count_components(component,kind);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_count_components. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (icalcomponent_kind )SvIV(ST(1));
+    _result = (int )icalcomponent_count_components(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_end_component) {
+
+    icalcompiter * _result;
+    icalcomponent * _arg0;
+    icalcomponent_kind  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_end_component(component,kind);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_end_component. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (icalcomponent_kind )SvIV(ST(1));
+    _result = (icalcompiter *) malloc(sizeof(icalcompiter ));
+    *(_result) = icalcomponent_end_component(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcompiterPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_current_component) {
+
+    icalcomponent * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_current_component(component);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_current_component. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalcomponent *)icalcomponent_get_current_component(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_first_component) {
+
+    icalcomponent * _result;
+    icalcomponent * _arg0;
+    icalcomponent_kind  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_get_first_component(component,kind);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_first_component. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (icalcomponent_kind )SvIV(ST(1));
+    _result = (icalcomponent *)icalcomponent_get_first_component(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_next_component) {
+
+    icalcomponent * _result;
+    icalcomponent * _arg0;
+    icalcomponent_kind  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_get_next_component(component,kind);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_next_component. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (icalcomponent_kind )SvIV(ST(1));
+    _result = (icalcomponent *)icalcomponent_get_next_component(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_count_errors) {
+
+    int  _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_count_errors(component);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_count_errors. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (int )icalcomponent_count_errors(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_strip_errors) {
+
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_strip_errors(component);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_strip_errors. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    icalcomponent_strip_errors(_arg0);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_convert_errors) {
+
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_convert_errors(component);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_convert_errors. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    icalcomponent_convert_errors(_arg0);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_parent) {
+
+    icalcomponent * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_parent(component);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_parent. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalcomponent *)icalcomponent_get_parent(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_set_parent) {
+
+    icalcomponent * _arg0;
+    icalcomponent * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_set_parent(component,parent);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_set_parent. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of icalcomponent_set_parent. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    icalcomponent_set_parent(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcompiter_next) {
+
+    icalcomponent * _result;
+    icalcompiter * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcompiter_next(i);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"icalcompiterPtr")) {
+        croak("Type error in argument 1 of icalcompiter_next. Expected icalcompiterPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalcomponent *)icalcompiter_next(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcompiter_prior) {
+
+    icalcomponent * _result;
+    icalcompiter * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcompiter_prior(i);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"icalcompiterPtr")) {
+        croak("Type error in argument 1 of icalcompiter_prior. Expected icalcompiterPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalcomponent *)icalcompiter_prior(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcompiter_deref) {
+
+    icalcomponent * _result;
+    icalcompiter * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcompiter_deref(i);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"icalcompiterPtr")) {
+        croak("Type error in argument 1 of icalcompiter_deref. Expected icalcompiterPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalcomponent *)icalcompiter_deref(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_first_real_component) {
+
+    icalcomponent * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_first_real_component(c);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_first_real_component. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalcomponent *)icalcomponent_get_first_real_component(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_span) {
+
+    struct icaltime_span * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_span(comp);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_span. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltime_span *) malloc(sizeof(struct icaltime_span ));
+    *(_result) = icalcomponent_get_span(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltime_spanPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_set_dtstart) {
+
+    icalcomponent * _arg0;
+    struct icaltimetype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_set_dtstart(comp,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_set_dtstart. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
+        croak("Type error in argument 2 of icalcomponent_set_dtstart. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    icalcomponent_set_dtstart(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_dtstart) {
+
+    struct icaltimetype * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_dtstart(comp);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_dtstart. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icalcomponent_get_dtstart(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_dtend) {
+
+    struct icaltimetype * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_dtend(comp);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_dtend. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icalcomponent_get_dtend(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_set_dtend) {
+
+    icalcomponent * _arg0;
+    struct icaltimetype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_set_dtend(comp,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_set_dtend. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
+        croak("Type error in argument 2 of icalcomponent_set_dtend. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    icalcomponent_set_dtend(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_set_duration) {
+
+    icalcomponent * _arg0;
+    struct icaldurationtype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_set_duration(comp,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_set_duration. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 2 of icalcomponent_set_duration. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    icalcomponent_set_duration(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_duration) {
+
+    struct icaldurationtype * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_duration(comp);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_duration. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaldurationtype *) malloc(sizeof(struct icaldurationtype ));
+    *(_result) = icalcomponent_get_duration(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaldurationtypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_set_method) {
+
+    icalcomponent * _arg0;
+    icalproperty_method  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_set_method(comp,method);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_set_method. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (icalproperty_method )SvIV(ST(1));
+    icalcomponent_set_method(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_method) {
+
+    icalproperty_method  _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_method(comp);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_method. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalproperty_method )icalcomponent_get_method(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_dtstamp) {
+
+    struct icaltimetype * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_dtstamp(comp);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_dtstamp. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icalcomponent_get_dtstamp(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_set_dtstamp) {
+
+    icalcomponent * _arg0;
+    struct icaltimetype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_set_dtstamp(comp,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_set_dtstamp. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
+        croak("Type error in argument 2 of icalcomponent_set_dtstamp. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    icalcomponent_set_dtstamp(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_set_summary) {
+
+    icalcomponent * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_set_summary(comp,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_set_summary. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalcomponent_set_summary(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_summary) {
+
+    char * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_summary(comp);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_summary. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalcomponent_get_summary(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_set_comment) {
+
+    icalcomponent * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_set_comment(comp,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_set_comment. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalcomponent_set_comment(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_comment) {
+
+    char * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_comment(comp);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_comment. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalcomponent_get_comment(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_set_organizer) {
+
+    icalcomponent * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_set_organizer(comp,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_set_organizer. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalcomponent_set_organizer(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_organizer) {
+
+    char * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_organizer(comp);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_organizer. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalcomponent_get_organizer(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_set_uid) {
+
+    icalcomponent * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_set_uid(comp,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_set_uid. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    icalcomponent_set_uid(_arg0,_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_uid) {
+
+    char * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_uid(comp);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_uid. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)icalcomponent_get_uid(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_set_recurrenceid) {
+
+    icalcomponent * _arg0;
+    struct icaltimetype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcomponent_set_recurrenceid(comp,v);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_set_recurrenceid. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
+        croak("Type error in argument 2 of icalcomponent_set_recurrenceid. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    icalcomponent_set_recurrenceid(_arg0,*_arg1);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_get_recurrenceid) {
+
+    struct icaltimetype * _result;
+    icalcomponent * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcomponent_get_recurrenceid(comp);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalcomponent_get_recurrenceid. Expected icalcomponentPtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
+    *(_result) = icalcomponent_get_recurrenceid(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_new_vcalendar) {
+
+    icalcomponent * _result;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icalcomponent_new_vcalendar();");
+    _result = (icalcomponent *)icalcomponent_new_vcalendar();
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_new_vevent) {
+
+    icalcomponent * _result;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icalcomponent_new_vevent();");
+    _result = (icalcomponent *)icalcomponent_new_vevent();
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_new_vtodo) {
+
+    icalcomponent * _result;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icalcomponent_new_vtodo();");
+    _result = (icalcomponent *)icalcomponent_new_vtodo();
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_new_vjournal) {
+
+    icalcomponent * _result;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icalcomponent_new_vjournal();");
+    _result = (icalcomponent *)icalcomponent_new_vjournal();
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_new_vfreebusy) {
+
+    icalcomponent * _result;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icalcomponent_new_vfreebusy();");
+    _result = (icalcomponent *)icalcomponent_new_vfreebusy();
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_new_vtimezone) {
+
+    icalcomponent * _result;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icalcomponent_new_vtimezone();");
+    _result = (icalcomponent *)icalcomponent_new_vtimezone();
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_new_xstandard) {
+
+    icalcomponent * _result;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icalcomponent_new_xstandard();");
+    _result = (icalcomponent *)icalcomponent_new_xstandard();
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalcomponent_new_xdaylight) {
+
+    icalcomponent * _result;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icalcomponent_new_xdaylight();");
+    _result = (icalcomponent *)icalcomponent_new_xdaylight();
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalparser_new) {
+
+    icalparser * _result;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icalparser_new();");
+    _result = (icalparser *)icalparser_new();
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalparserPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalparser_add_line) {
+
+    icalcomponent * _result;
+    icalparser * _arg0;
+    char * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalparser_add_line(parser,str);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalparser_add_line. Expected icalparserPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (char *) SvPV(ST(1),na);
+    _result = (icalcomponent *)icalparser_add_line(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalparser_claim) {
+
+    icalcomponent * _result;
+    icalparser * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalparser_claim(parser);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalparser_claim. Expected icalparserPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalcomponent *)icalparser_claim(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalparser_clean) {
+
+    icalcomponent * _result;
+    icalparser * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalparser_clean(parser);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalparser_clean. Expected icalparserPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalcomponent *)icalparser_clean(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalparser_get_state) {
+
+    icalparser_state  _result;
+    icalparser * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalparser_get_state(parser);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalparser_get_state. Expected icalparserPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalparser_state )icalparser_get_state(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalparser_free) {
+
+    icalparser * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalparser_free(parser);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalparser_free. Expected icalparserPtr.");
+        XSRETURN(1);
+    }
+    icalparser_free(_arg0);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalparser_parse_string) {
+
+    icalcomponent * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalparser_parse_string(str);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (icalcomponent *)icalparser_parse_string(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalparser_parse_value) {
+
+    icalvalue * _result;
+    icalvalue_kind  _arg0;
+    char * _arg1;
+    icalcomponent ** _arg2;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 3) || (items > 3)) 
+        croak("Usage: icalparser_parse_value(kind,str,errors);");
+    _arg0 = (icalvalue_kind )SvIV(ST(0));
+    _arg1 = (char *) SvPV(ST(1),na);
+    if (SWIG_GetPtr(ST(2),(void **) &_arg2,(char *) 0 )) {
+        croak("Type error in argument 3 of icalparser_parse_value. Expected icalcomponentPtrPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalvalue *)icalparser_parse_value(_arg0,_arg1,_arg2);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_string_line_generator) {
+
+    char * _result;
+    char * _arg0;
+    size_t * _arg1;
+    void * _arg2;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 3) || (items > 3)) 
+        croak("Usage: string_line_generator(out,buf_size,d);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"size_tPtr")) {
+        croak("Type error in argument 2 of string_line_generator. Expected size_tPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(2),(void **) &_arg2,(char *) 0 )) {
+        croak("Type error in argument 3 of string_line_generator. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    _result = (char *)string_line_generator(_arg0,*_arg1,_arg2);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalmemory_tmp_buffer) {
+
+    void * _result;
+    size_t * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalmemory_tmp_buffer(size);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"size_tPtr")) {
+        croak("Type error in argument 1 of icalmemory_tmp_buffer. Expected size_tPtr.");
+        XSRETURN(1);
+    }
+    _result = (void *)icalmemory_tmp_buffer(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"voidPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalmemory_tmp_copy) {
+
+    char * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalmemory_tmp_copy(str);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (char *)icalmemory_tmp_copy(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalmemory_add_tmp_buffer) {
+
+    void * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalmemory_add_tmp_buffer(void *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalmemory_add_tmp_buffer. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    icalmemory_add_tmp_buffer(_arg0);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalmemory_free_ring) {
+
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icalmemory_free_ring();");
+    icalmemory_free_ring();
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalmemory_new_buffer) {
+
+    void * _result;
+    size_t * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalmemory_new_buffer(size);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"size_tPtr")) {
+        croak("Type error in argument 1 of icalmemory_new_buffer. Expected size_tPtr.");
+        XSRETURN(1);
+    }
+    _result = (void *)icalmemory_new_buffer(*_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"voidPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalmemory_resize_buffer) {
+
+    void * _result;
+    void * _arg0;
+    size_t * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalmemory_resize_buffer(buf,size);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalmemory_resize_buffer. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"size_tPtr")) {
+        croak("Type error in argument 2 of icalmemory_resize_buffer. Expected size_tPtr.");
+        XSRETURN(1);
+    }
+    _result = (void *)icalmemory_resize_buffer(_arg0,*_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"voidPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalmemory_free_buffer) {
+
+    void * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalmemory_free_buffer(buf);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
+        croak("Type error in argument 1 of icalmemory_free_buffer. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    icalmemory_free_buffer(_arg0);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalmemory_append_string) {
+
+    char ** _arg0;
+    char ** _arg1;
+    size_t * _arg2;
+    char * _arg3;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 4) || (items > 4)) 
+        croak("Usage: icalmemory_append_string(buf,pos,buf_size,string);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"charPtrPtr")) {
+        croak("Type error in argument 1 of icalmemory_append_string. Expected charPtrPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"charPtrPtr")) {
+        croak("Type error in argument 2 of icalmemory_append_string. Expected charPtrPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(2),(void **) &_arg2,"size_tPtr")) {
+        croak("Type error in argument 3 of icalmemory_append_string. Expected size_tPtr.");
+        XSRETURN(1);
+    }
+    _arg3 = (char *) SvPV(ST(3),na);
+    icalmemory_append_string(_arg0,_arg1,_arg2,_arg3);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalmemory_append_char) {
+
+    char ** _arg0;
+    char ** _arg1;
+    size_t * _arg2;
+    char  _arg3;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 4) || (items > 4)) 
+        croak("Usage: icalmemory_append_char(buf,pos,buf_size,ch);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"charPtrPtr")) {
+        croak("Type error in argument 1 of icalmemory_append_char. Expected charPtrPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"charPtrPtr")) {
+        croak("Type error in argument 2 of icalmemory_append_char. Expected charPtrPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(2),(void **) &_arg2,"size_tPtr")) {
+        croak("Type error in argument 3 of icalmemory_append_char. Expected size_tPtr.");
+        XSRETURN(1);
+    }
+    _arg3 = (char) *SvPV(ST(3),na);
+    icalmemory_append_char(_arg0,_arg1,_arg2,_arg3);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalmemory_strdup) {
+
+    char * _result;
+    char * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalmemory_strdup(s);");
+    _arg0 = (char *) SvPV(ST(0),na);
+    _result = (char *)icalmemory_strdup(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalerror_stop_here) {
+
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icalerror_stop_here();");
+    icalerror_stop_here();
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalerror_crash_here) {
+
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icalerror_crash_here();");
+    icalerror_crash_here();
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalerror_clear_errno) {
+
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 0) || (items > 0)) 
+        croak("Usage: icalerror_clear_errno();");
+    icalerror_clear_errno();
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalerror_set_errno) {
+
+    icalerrorenum  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalerror_set_errno(icalerrorenum );");
+    _arg0 = (icalerrorenum )SvIV(ST(0));
+    icalerror_set_errno(_arg0);
+    XSRETURN(argvi);
+}
+
+XS(_wrap_icalerror_strerror) {
+
+    char * _result;
+    icalerrorenum  _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalerror_strerror(e);");
+    _arg0 = (icalerrorenum )SvIV(ST(0));
+    _result = (char *)icalerror_strerror(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    XSRETURN(argvi);
+}
+
 XS(_wrap_icalrestriction_compare) {
 
     int  _result;
@@ -6540,48 +10170,6 @@ XS(_wrap_icalrestriction_compare) {
     _arg0 = (icalrestriction_kind )SvIV(ST(0));
     _arg1 = (int )SvIV(ST(1));
     _result = (int )icalrestriction_compare(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalrestriction_get_property_restriction) {
-
-    icalrestriction_kind  _result;
-    icalproperty_method  _arg0;
-    icalcomponent_kind  _arg1;
-    icalproperty_kind  _arg2;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 3) || (items > 3)) 
-        croak("Usage: icalrestriction_get_property_restriction(method,component,property);");
-    _arg0 = (icalproperty_method )SvIV(ST(0));
-    _arg1 = (icalcomponent_kind )SvIV(ST(1));
-    _arg2 = (icalproperty_kind )SvIV(ST(2));
-    _result = (icalrestriction_kind )icalrestriction_get_property_restriction(_arg0,_arg1,_arg2);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalrestriction_get_component_restriction) {
-
-    icalrestriction_kind  _result;
-    icalproperty_method  _arg0;
-    icalcomponent_kind  _arg1;
-    icalcomponent_kind  _arg2;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 3) || (items > 3)) 
-        croak("Usage: icalrestriction_get_component_restriction(method,component,subcomponent);");
-    _arg0 = (icalproperty_method )SvIV(ST(0));
-    _arg1 = (icalcomponent_kind )SvIV(ST(1));
-    _arg2 = (icalcomponent_kind )SvIV(ST(2));
-    _result = (icalrestriction_kind )icalrestriction_get_component_restriction(_arg0,_arg1,_arg2);
     ST(argvi) = sv_newmortal();
     sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
@@ -6626,2488 +10214,898 @@ XS(_wrap_icalrestriction_check) {
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalattachtype_new) {
+#define icaltime_span_start_set(_swigobj,_swigval) (_swigobj->start = *(_swigval),_swigval)
+XS(_wrap_icaltime_span_start_set) {
 
-    struct icalattachtype * _result;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 0) || (items > 0)) 
-        croak("Usage: icalattachtype_new();");
-    _result = (struct icalattachtype *)icalattachtype_new();
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icalattachtypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalattachtype_add_reference) {
-
-    struct icalattachtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalattachtype_add_reference(v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
-        croak("Type error in argument 1 of icalattachtype_add_reference. Expected struct icalattachtypePtr.");
-        XSRETURN(1);
-    }
-    icalattachtype_add_reference(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalattachtype_free) {
-
-    struct icalattachtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalattachtype_free(v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
-        croak("Type error in argument 1 of icalattachtype_free. Expected struct icalattachtypePtr.");
-        XSRETURN(1);
-    }
-    icalattachtype_free(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalattachtype_set_url) {
-
-    struct icalattachtype * _arg0;
-    char * _arg1;
+    time_t * _result;
+    struct icaltime_span * _arg0;
+    time_t * _arg1;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 2) || (items > 2)) 
-        croak("Usage: icalattachtype_set_url(v,url);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
-        croak("Type error in argument 1 of icalattachtype_set_url. Expected struct icalattachtypePtr.");
+        croak("Usage: icaltime_span_start_set(struct icaltime_span *,time_t *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltime_spanPtr")) {
+        croak("Type error in argument 1 of icaltime_span_start_set. Expected struct icaltime_spanPtr.");
         XSRETURN(1);
     }
-    _arg1 = (char *) SvPV(ST(1),na);
-    icalattachtype_set_url(_arg0,_arg1);
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"time_tPtr")) {
+        croak("Type error in argument 2 of icaltime_span_start_set. Expected time_tPtr.");
+        XSRETURN(1);
+    }
+    _result = (time_t *)icaltime_span_start_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"time_tPtr", (void *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalattachtype_get_url) {
+#define icaltime_span_start_get(_swigobj) (&_swigobj->start)
+XS(_wrap_icaltime_span_start_get) {
 
-    char * _result;
-    struct icalattachtype * _arg0;
+    time_t * _result;
+    struct icaltime_span * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalattachtype_get_url(v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
-        croak("Type error in argument 1 of icalattachtype_get_url. Expected struct icalattachtypePtr.");
+        croak("Usage: icaltime_span_start_get(struct icaltime_span *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltime_spanPtr")) {
+        croak("Type error in argument 1 of icaltime_span_start_get. Expected struct icaltime_spanPtr.");
         XSRETURN(1);
     }
-    _result = (char *)icalattachtype_get_url(_arg0);
+    _result = (time_t *)icaltime_span_start_get(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    sv_setref_pv(ST(argvi++),"time_tPtr", (void *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalattachtype_set_base64) {
+#define icaltime_span_end_set(_swigobj,_swigval) (_swigobj->end = *(_swigval),_swigval)
+XS(_wrap_icaltime_span_end_set) {
 
-    struct icalattachtype * _arg0;
-    char * _arg1;
-    int  _arg2;
+    time_t * _result;
+    struct icaltime_span * _arg0;
+    time_t * _arg1;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
-    if ((items < 3) || (items > 3)) 
-        croak("Usage: icalattachtype_set_base64(v,base64,owns);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
-        croak("Type error in argument 1 of icalattachtype_set_base64. Expected struct icalattachtypePtr.");
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaltime_span_end_set(struct icaltime_span *,time_t *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltime_spanPtr")) {
+        croak("Type error in argument 1 of icaltime_span_end_set. Expected struct icaltime_spanPtr.");
         XSRETURN(1);
     }
-    _arg1 = (char *) SvPV(ST(1),na);
-    _arg2 = (int )SvIV(ST(2));
-    icalattachtype_set_base64(_arg0,_arg1,_arg2);
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"time_tPtr")) {
+        croak("Type error in argument 2 of icaltime_span_end_set. Expected time_tPtr.");
+        XSRETURN(1);
+    }
+    _result = (time_t *)icaltime_span_end_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"time_tPtr", (void *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalattachtype_get_base64) {
+#define icaltime_span_end_get(_swigobj) (&_swigobj->end)
+XS(_wrap_icaltime_span_end_get) {
 
-    char * _result;
-    struct icalattachtype * _arg0;
+    time_t * _result;
+    struct icaltime_span * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalattachtype_get_base64(v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
-        croak("Type error in argument 1 of icalattachtype_get_base64. Expected struct icalattachtypePtr.");
+        croak("Usage: icaltime_span_end_get(struct icaltime_span *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltime_spanPtr")) {
+        croak("Type error in argument 1 of icaltime_span_end_get. Expected struct icaltime_spanPtr.");
         XSRETURN(1);
     }
-    _result = (char *)icalattachtype_get_base64(_arg0);
+    _result = (time_t *)icaltime_span_end_get(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    sv_setref_pv(ST(argvi++),"time_tPtr", (void *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalattachtype_set_binary) {
+#define icaltime_span_is_busy_set(_swigobj,_swigval) (_swigobj->is_busy = _swigval,_swigval)
+XS(_wrap_icaltime_span_is_busy_set) {
 
-    struct icalattachtype * _arg0;
-    char * _arg1;
-    int  _arg2;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 3) || (items > 3)) 
-        croak("Usage: icalattachtype_set_binary(v,binary,owns);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
-        croak("Type error in argument 1 of icalattachtype_set_binary. Expected struct icalattachtypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (char *) SvPV(ST(1),na);
-    _arg2 = (int )SvIV(ST(2));
-    icalattachtype_set_binary(_arg0,_arg1,_arg2);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalattachtype_get_binary) {
-
-    void * _result;
-    struct icalattachtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalattachtype_get_binary(v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
-        croak("Type error in argument 1 of icalattachtype_get_binary. Expected struct icalattachtypePtr.");
-        XSRETURN(1);
-    }
-    _result = (void *)icalattachtype_get_binary(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"voidPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icaltimetype_from_timet) {
-
-    struct icaltimetype * _result;
-    time_t * _arg0;
+    int  _result;
+    struct icaltime_span * _arg0;
     int  _arg1;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 2) || (items > 2)) 
-        croak("Usage: icaltimetype_from_timet(v,is_date);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"time_tPtr")) {
-        croak("Type error in argument 1 of icaltimetype_from_timet. Expected time_tPtr.");
+        croak("Usage: icaltime_span_is_busy_set(struct icaltime_span *,int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltime_spanPtr")) {
+        croak("Type error in argument 1 of icaltime_span_is_busy_set. Expected struct icaltime_spanPtr.");
         XSRETURN(1);
     }
     _arg1 = (int )SvIV(ST(1));
-    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
-    *(_result) = icaltimetype_from_timet(*_arg0,_arg1);
+    _result = (int )icaltime_span_is_busy_set(_arg0,_arg1);
     ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalrecurrencetype_clear) {
-
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_clear(r);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_clear. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    icalrecurrencetype_clear(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icaldurationtype_from_timet) {
-
-    struct icaldurationtype * _result;
-    time_t * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaldurationtype_from_timet(t);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"time_tPtr")) {
-        croak("Type error in argument 1 of icaldurationtype_from_timet. Expected time_tPtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icaldurationtype *) malloc(sizeof(struct icaldurationtype ));
-    *(_result) = icaldurationtype_from_timet(*_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaldurationtypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icaldurationtype_as_timet) {
-
-    time_t * _result;
-    struct icaldurationtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaldurationtype_as_timet(duration);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 1 of icaldurationtype_as_timet. Expected struct icaldurationtypePtr.");
-        XSRETURN(1);
-    }
-    _result = (time_t *) malloc(sizeof(time_t ));
-    *(_result) = icaldurationtype_as_timet(*_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"time_tPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalrecurrencetype_next_occurance) {
-
-    struct icaltimetype * _result;
-    struct icalrecurrencetype * _arg0;
-    struct icaltimetype * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalrecurrencetype_next_occurance(r,after);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_next_occurance. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
-        croak("Type error in argument 2 of icalrecurrencetype_next_occurance. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
-    *(_result) = icalrecurrencetype_next_occurance(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalperiodtype_duration) {
-
-    time_t * _result;
-    struct icalperiodtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalperiodtype_duration(period);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
-        croak("Type error in argument 1 of icalperiodtype_duration. Expected struct icalperiodtypePtr.");
-        XSRETURN(1);
-    }
-    _result = (time_t *) malloc(sizeof(time_t ));
-    *(_result) = icalperiodtype_duration(*_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"time_tPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalperiodtype_end) {
-
-    time_t * _result;
-    struct icalperiodtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalperiodtype_end(period);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
-        croak("Type error in argument 1 of icalperiodtype_end. Expected struct icalperiodtypePtr.");
-        XSRETURN(1);
-    }
-    _result = (time_t *) malloc(sizeof(time_t ));
-    *(_result) = icalperiodtype_end(*_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"time_tPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalreqstattype_from_string) {
-
-    struct icalreqstattype * _result;
-    char * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalreqstattype_from_string(str);");
-    _arg0 = (char *) SvPV(ST(0),na);
-    _result = (struct icalreqstattype *) malloc(sizeof(struct icalreqstattype ));
-    *(_result) = icalreqstattype_from_string(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icalreqstattypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalreqstattype_as_string) {
-
-    char * _result;
-    struct icalreqstattype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalreqstattype_as_string(struct icalreqstattype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalreqstattypePtr")) {
-        croak("Type error in argument 1 of icalreqstattype_as_string. Expected struct icalreqstattypePtr.");
-        XSRETURN(1);
-    }
-    _result = (char *)icalreqstattype_as_string(*_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new) {
-
-    icalvalue * _result;
-    icalvalue_kind  _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new(kind);");
-    _arg0 = (icalvalue_kind )SvIV(ST(0));
-    _result = (icalvalue *)icalvalue_new(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_clone) {
-
-    icalvalue * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_clone(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_new_clone. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalvalue *)icalvalue_new_clone(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_from_string) {
-
-    icalvalue * _result;
-    icalvalue_kind  _arg0;
-    char * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_new_from_string(kind,str);");
-    _arg0 = (icalvalue_kind )SvIV(ST(0));
-    _arg1 = (char *) SvPV(ST(1),na);
-    _result = (icalvalue *)icalvalue_new_from_string(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_free) {
-
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_free(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_free. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    icalvalue_free(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_is_valid) {
+#define icaltime_span_is_busy_get(_swigobj) ((int ) _swigobj->is_busy)
+XS(_wrap_icaltime_span_is_busy_get) {
 
     int  _result;
-    icalvalue * _arg0;
+    struct icaltime_span * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_is_valid(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_is_valid. Expected icalvaluePtr.");
+        croak("Usage: icaltime_span_is_busy_get(struct icaltime_span *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltime_spanPtr")) {
+        croak("Type error in argument 1 of icaltime_span_is_busy_get. Expected struct icaltime_spanPtr.");
         XSRETURN(1);
     }
-    _result = (int )icalvalue_is_valid(_arg0);
+    _result = (int )icaltime_span_is_busy_get(_arg0);
     ST(argvi) = sv_newmortal();
     sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalvalue_as_ical_string) {
-
-    char * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_as_ical_string(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_as_ical_string. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (char *)icalvalue_as_ical_string(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_isa) {
-
-    icalvalue_kind  _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_isa(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_isa. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalvalue_kind )icalvalue_isa(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_isa_value) {
+#define icaltimetype_year_set(_swigobj,_swigval) (_swigobj->year = _swigval,_swigval)
+XS(_wrap_icaltimetype_year_set) {
 
     int  _result;
-    void * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_isa_value(void *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_isa_value. Expected voidPtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icalvalue_isa_value(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_compare) {
-
-    icalparameter_xliccomparetype  _result;
-    icalvalue * _arg0;
-    icalvalue * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_compare(a,b);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_compare. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
-        croak("Type error in argument 2 of icalvalue_compare. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalparameter_xliccomparetype )icalvalue_compare(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_attach) {
-
-    icalvalue * _result;
-    struct icalattachtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_attach(v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalattachtypePtr")) {
-        croak("Type error in argument 1 of icalvalue_new_attach. Expected struct icalattachtypePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalvalue *)icalvalue_new_attach(*_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_get_attach) {
-
-    struct icalattachtype * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_attach(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_attach. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icalattachtype *) malloc(sizeof(struct icalattachtype ));
-    *(_result) = icalvalue_get_attach(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icalattachtypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_attach) {
-
-    icalvalue * _arg0;
-    struct icalattachtype * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_attach(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_attach. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icalattachtypePtr")) {
-        croak("Type error in argument 2 of icalvalue_set_attach. Expected struct icalattachtypePtr.");
-        XSRETURN(1);
-    }
-    icalvalue_set_attach(_arg0,*_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_binary) {
-
-    icalvalue * _result;
-    char * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_binary(v);");
-    _arg0 = (char *) SvPV(ST(0),na);
-    _result = (icalvalue *)icalvalue_new_binary(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_get_binary) {
-
-    char * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_binary(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_binary. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (char *)icalvalue_get_binary(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_binary) {
-
-    icalvalue * _arg0;
-    char * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_binary(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_binary. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (char *) SvPV(ST(1),na);
-    icalvalue_set_binary(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_boolean) {
-
-    icalvalue * _result;
-    int  _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_boolean(v);");
-    _arg0 = (int )SvIV(ST(0));
-    _result = (icalvalue *)icalvalue_new_boolean(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_get_boolean) {
-
-    int  _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_boolean(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_boolean. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icalvalue_get_boolean(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_boolean) {
-
-    icalvalue * _arg0;
+    struct icaltimetype * _arg0;
     int  _arg1;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_boolean(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_boolean. Expected icalvaluePtr.");
+        croak("Usage: icaltimetype_year_set(struct icaltimetype *,int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltimetype_year_set. Expected struct icaltimetypePtr.");
         XSRETURN(1);
     }
     _arg1 = (int )SvIV(ST(1));
-    icalvalue_set_boolean(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_caladdress) {
-
-    icalvalue * _result;
-    char * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_caladdress(v);");
-    _arg0 = (char *) SvPV(ST(0),na);
-    _result = (icalvalue *)icalvalue_new_caladdress(_arg0);
+    _result = (int )icaltimetype_year_set(_arg0,_arg1);
     ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalvalue_get_caladdress) {
+#define icaltimetype_year_get(_swigobj) ((int ) _swigobj->year)
+XS(_wrap_icaltimetype_year_get) {
 
-    char * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_caladdress(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_caladdress. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (char *)icalvalue_get_caladdress(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_caladdress) {
-
-    icalvalue * _arg0;
-    char * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_caladdress(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_caladdress. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (char *) SvPV(ST(1),na);
-    icalvalue_set_caladdress(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_date) {
-
-    icalvalue * _result;
+    int  _result;
     struct icaltimetype * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_date(v);");
+        croak("Usage: icaltimetype_year_get(struct icaltimetype *);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icalvalue_new_date. Expected struct icaltimetypePtr.");
+        croak("Type error in argument 1 of icaltimetype_year_get. Expected struct icaltimetypePtr.");
         XSRETURN(1);
     }
-    _result = (icalvalue *)icalvalue_new_date(*_arg0);
+    _result = (int )icaltimetype_year_get(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalvalue_get_date) {
+#define icaltimetype_month_set(_swigobj,_swigval) (_swigobj->month = _swigval,_swigval)
+XS(_wrap_icaltimetype_month_set) {
 
-    struct icaltimetype * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_date(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_date. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
-    *(_result) = icalvalue_get_date(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_date) {
-
-    icalvalue * _arg0;
-    struct icaltimetype * _arg1;
+    int  _result;
+    struct icaltimetype * _arg0;
+    int  _arg1;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_date(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_date. Expected icalvaluePtr.");
+        croak("Usage: icaltimetype_month_set(struct icaltimetype *,int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltimetype_month_set. Expected struct icaltimetypePtr.");
         XSRETURN(1);
     }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
-        croak("Type error in argument 2 of icalvalue_set_date. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    icalvalue_set_date(_arg0,*_arg1);
+    _arg1 = (int )SvIV(ST(1));
+    _result = (int )icaltimetype_month_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalvalue_new_datetime) {
+#define icaltimetype_month_get(_swigobj) ((int ) _swigobj->month)
+XS(_wrap_icaltimetype_month_get) {
 
-    icalvalue * _result;
+    int  _result;
     struct icaltimetype * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_datetime(v);");
+        croak("Usage: icaltimetype_month_get(struct icaltimetype *);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icalvalue_new_datetime. Expected struct icaltimetypePtr.");
+        croak("Type error in argument 1 of icaltimetype_month_get. Expected struct icaltimetypePtr.");
         XSRETURN(1);
     }
-    _result = (icalvalue *)icalvalue_new_datetime(*_arg0);
+    _result = (int )icaltimetype_month_get(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalvalue_get_datetime) {
+#define icaltimetype_day_set(_swigobj,_swigval) (_swigobj->day = _swigval,_swigval)
+XS(_wrap_icaltimetype_day_set) {
 
-    struct icaltimetype * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_datetime(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_datetime. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
-    *(_result) = icalvalue_get_datetime(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_datetime) {
-
-    icalvalue * _arg0;
-    struct icaltimetype * _arg1;
+    int  _result;
+    struct icaltimetype * _arg0;
+    int  _arg1;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_datetime(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_datetime. Expected icalvaluePtr.");
+        croak("Usage: icaltimetype_day_set(struct icaltimetype *,int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltimetype_day_set. Expected struct icaltimetypePtr.");
         XSRETURN(1);
     }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
-        croak("Type error in argument 2 of icalvalue_set_datetime. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    icalvalue_set_datetime(_arg0,*_arg1);
+    _arg1 = (int )SvIV(ST(1));
+    _result = (int )icaltimetype_day_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalvalue_new_datetimedate) {
+#define icaltimetype_day_get(_swigobj) ((int ) _swigobj->day)
+XS(_wrap_icaltimetype_day_get) {
 
-    icalvalue * _result;
+    int  _result;
     struct icaltimetype * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_datetimedate(v);");
+        croak("Usage: icaltimetype_day_get(struct icaltimetype *);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icalvalue_new_datetimedate. Expected struct icaltimetypePtr.");
+        croak("Type error in argument 1 of icaltimetype_day_get. Expected struct icaltimetypePtr.");
         XSRETURN(1);
     }
-    _result = (icalvalue *)icalvalue_new_datetimedate(*_arg0);
+    _result = (int )icaltimetype_day_get(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalvalue_get_datetimedate) {
+#define icaltimetype_hour_set(_swigobj,_swigval) (_swigobj->hour = _swigval,_swigval)
+XS(_wrap_icaltimetype_hour_set) {
 
-    struct icaltimetype * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_datetimedate(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_datetimedate. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
-    *(_result) = icalvalue_get_datetimedate(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_datetimedate) {
-
-    icalvalue * _arg0;
-    struct icaltimetype * _arg1;
+    int  _result;
+    struct icaltimetype * _arg0;
+    int  _arg1;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_datetimedate(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_datetimedate. Expected icalvaluePtr.");
+        croak("Usage: icaltimetype_hour_set(struct icaltimetype *,int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltimetype_hour_set. Expected struct icaltimetypePtr.");
         XSRETURN(1);
     }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
-        croak("Type error in argument 2 of icalvalue_set_datetimedate. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    icalvalue_set_datetimedate(_arg0,*_arg1);
+    _arg1 = (int )SvIV(ST(1));
+    _result = (int )icaltimetype_hour_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalvalue_new_datetimeperiod) {
+#define icaltimetype_hour_get(_swigobj) ((int ) _swigobj->hour)
+XS(_wrap_icaltimetype_hour_get) {
 
-    icalvalue * _result;
-    struct icalperiodtype * _arg0;
+    int  _result;
+    struct icaltimetype * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_datetimeperiod(v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
-        croak("Type error in argument 1 of icalvalue_new_datetimeperiod. Expected struct icalperiodtypePtr.");
+        croak("Usage: icaltimetype_hour_get(struct icaltimetype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltimetype_hour_get. Expected struct icaltimetypePtr.");
         XSRETURN(1);
     }
-    _result = (icalvalue *)icalvalue_new_datetimeperiod(*_arg0);
+    _result = (int )icaltimetype_hour_get(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalvalue_get_datetimeperiod) {
+#define icaltimetype_minute_set(_swigobj,_swigval) (_swigobj->minute = _swigval,_swigval)
+XS(_wrap_icaltimetype_minute_set) {
 
-    struct icalperiodtype * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_datetimeperiod(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_datetimeperiod. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icalperiodtype *) malloc(sizeof(struct icalperiodtype ));
-    *(_result) = icalvalue_get_datetimeperiod(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icalperiodtypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_datetimeperiod) {
-
-    icalvalue * _arg0;
-    struct icalperiodtype * _arg1;
+    int  _result;
+    struct icaltimetype * _arg0;
+    int  _arg1;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_datetimeperiod(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_datetimeperiod. Expected icalvaluePtr.");
+        croak("Usage: icaltimetype_minute_set(struct icaltimetype *,int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltimetype_minute_set. Expected struct icaltimetypePtr.");
         XSRETURN(1);
     }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icalperiodtypePtr")) {
-        croak("Type error in argument 2 of icalvalue_set_datetimeperiod. Expected struct icalperiodtypePtr.");
-        XSRETURN(1);
-    }
-    icalvalue_set_datetimeperiod(_arg0,*_arg1);
+    _arg1 = (int )SvIV(ST(1));
+    _result = (int )icaltimetype_minute_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalvalue_new_duration) {
+#define icaltimetype_minute_get(_swigobj) ((int ) _swigobj->minute)
+XS(_wrap_icaltimetype_minute_get) {
 
-    icalvalue * _result;
+    int  _result;
+    struct icaltimetype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaltimetype_minute_get(struct icaltimetype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltimetype_minute_get. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (int )icaltimetype_minute_get(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaltimetype_second_set(_swigobj,_swigval) (_swigobj->second = _swigval,_swigval)
+XS(_wrap_icaltimetype_second_set) {
+
+    int  _result;
+    struct icaltimetype * _arg0;
+    int  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaltimetype_second_set(struct icaltimetype *,int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltimetype_second_set. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (int )SvIV(ST(1));
+    _result = (int )icaltimetype_second_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaltimetype_second_get(_swigobj) ((int ) _swigobj->second)
+XS(_wrap_icaltimetype_second_get) {
+
+    int  _result;
+    struct icaltimetype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaltimetype_second_get(struct icaltimetype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltimetype_second_get. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (int )icaltimetype_second_get(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaltimetype_is_utc_set(_swigobj,_swigval) (_swigobj->is_utc = _swigval,_swigval)
+XS(_wrap_icaltimetype_is_utc_set) {
+
+    int  _result;
+    struct icaltimetype * _arg0;
+    int  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaltimetype_is_utc_set(struct icaltimetype *,int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltimetype_is_utc_set. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (int )SvIV(ST(1));
+    _result = (int )icaltimetype_is_utc_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaltimetype_is_utc_get(_swigobj) ((int ) _swigobj->is_utc)
+XS(_wrap_icaltimetype_is_utc_get) {
+
+    int  _result;
+    struct icaltimetype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaltimetype_is_utc_get(struct icaltimetype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltimetype_is_utc_get. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (int )icaltimetype_is_utc_get(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaltimetype_is_date_set(_swigobj,_swigval) (_swigobj->is_date = _swigval,_swigval)
+XS(_wrap_icaltimetype_is_date_set) {
+
+    int  _result;
+    struct icaltimetype * _arg0;
+    int  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaltimetype_is_date_set(struct icaltimetype *,int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltimetype_is_date_set. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (int )SvIV(ST(1));
+    _result = (int )icaltimetype_is_date_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaltimetype_is_date_get(_swigobj) ((int ) _swigobj->is_date)
+XS(_wrap_icaltimetype_is_date_get) {
+
+    int  _result;
+    struct icaltimetype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaltimetype_is_date_get(struct icaltimetype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
+        croak("Type error in argument 1 of icaltimetype_is_date_get. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (int )icaltimetype_is_date_get(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaldurationtype_is_neg_set(_swigobj,_swigval) (_swigobj->is_neg = _swigval,_swigval)
+XS(_wrap_icaldurationtype_is_neg_set) {
+
+    int  _result;
+    struct icaldurationtype * _arg0;
+    int  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaldurationtype_is_neg_set(struct icaldurationtype *,int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 1 of icaldurationtype_is_neg_set. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (int )SvIV(ST(1));
+    _result = (int )icaldurationtype_is_neg_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaldurationtype_is_neg_get(_swigobj) ((int ) _swigobj->is_neg)
+XS(_wrap_icaldurationtype_is_neg_get) {
+
+    int  _result;
     struct icaldurationtype * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_duration(v);");
+        croak("Usage: icaldurationtype_is_neg_get(struct icaldurationtype *);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 1 of icalvalue_new_duration. Expected struct icaldurationtypePtr.");
+        croak("Type error in argument 1 of icaldurationtype_is_neg_get. Expected struct icaldurationtypePtr.");
         XSRETURN(1);
     }
-    _result = (icalvalue *)icalvalue_new_duration(*_arg0);
+    _result = (int )icaldurationtype_is_neg_get(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalvalue_get_duration) {
+#define icaldurationtype_days_set(_swigobj,_swigval) (_swigobj->days = _swigval,_swigval)
+XS(_wrap_icaldurationtype_days_set) {
 
-    struct icaldurationtype * _result;
-    icalvalue * _arg0;
+    unsigned int  _result;
+    struct icaldurationtype * _arg0;
+    unsigned int  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaldurationtype_days_set(struct icaldurationtype *,unsigned int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 1 of icaldurationtype_days_set. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (unsigned int )SvIV(ST(1));
+    _result = (unsigned int )icaldurationtype_days_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaldurationtype_days_get(_swigobj) ((unsigned int ) _swigobj->days)
+XS(_wrap_icaldurationtype_days_get) {
+
+    unsigned int  _result;
+    struct icaldurationtype * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_duration(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_duration. Expected icalvaluePtr.");
+        croak("Usage: icaldurationtype_days_get(struct icaldurationtype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 1 of icaldurationtype_days_get. Expected struct icaldurationtypePtr.");
         XSRETURN(1);
     }
-    _result = (struct icaldurationtype *) malloc(sizeof(struct icaldurationtype ));
-    *(_result) = icalvalue_get_duration(_arg0);
+    _result = (unsigned int )icaldurationtype_days_get(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaldurationtypePtr", (void *) _result);
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalvalue_set_duration) {
+#define icaldurationtype_weeks_set(_swigobj,_swigval) (_swigobj->weeks = _swigval,_swigval)
+XS(_wrap_icaldurationtype_weeks_set) {
 
-    icalvalue * _arg0;
+    unsigned int  _result;
+    struct icaldurationtype * _arg0;
+    unsigned int  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaldurationtype_weeks_set(struct icaldurationtype *,unsigned int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 1 of icaldurationtype_weeks_set. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (unsigned int )SvIV(ST(1));
+    _result = (unsigned int )icaldurationtype_weeks_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaldurationtype_weeks_get(_swigobj) ((unsigned int ) _swigobj->weeks)
+XS(_wrap_icaldurationtype_weeks_get) {
+
+    unsigned int  _result;
+    struct icaldurationtype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaldurationtype_weeks_get(struct icaldurationtype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 1 of icaldurationtype_weeks_get. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    _result = (unsigned int )icaldurationtype_weeks_get(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaldurationtype_hours_set(_swigobj,_swigval) (_swigobj->hours = _swigval,_swigval)
+XS(_wrap_icaldurationtype_hours_set) {
+
+    unsigned int  _result;
+    struct icaldurationtype * _arg0;
+    unsigned int  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaldurationtype_hours_set(struct icaldurationtype *,unsigned int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 1 of icaldurationtype_hours_set. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (unsigned int )SvIV(ST(1));
+    _result = (unsigned int )icaldurationtype_hours_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaldurationtype_hours_get(_swigobj) ((unsigned int ) _swigobj->hours)
+XS(_wrap_icaldurationtype_hours_get) {
+
+    unsigned int  _result;
+    struct icaldurationtype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaldurationtype_hours_get(struct icaldurationtype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 1 of icaldurationtype_hours_get. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    _result = (unsigned int )icaldurationtype_hours_get(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaldurationtype_minutes_set(_swigobj,_swigval) (_swigobj->minutes = _swigval,_swigval)
+XS(_wrap_icaldurationtype_minutes_set) {
+
+    unsigned int  _result;
+    struct icaldurationtype * _arg0;
+    unsigned int  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaldurationtype_minutes_set(struct icaldurationtype *,unsigned int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 1 of icaldurationtype_minutes_set. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (unsigned int )SvIV(ST(1));
+    _result = (unsigned int )icaldurationtype_minutes_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaldurationtype_minutes_get(_swigobj) ((unsigned int ) _swigobj->minutes)
+XS(_wrap_icaldurationtype_minutes_get) {
+
+    unsigned int  _result;
+    struct icaldurationtype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaldurationtype_minutes_get(struct icaldurationtype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 1 of icaldurationtype_minutes_get. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    _result = (unsigned int )icaldurationtype_minutes_get(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaldurationtype_seconds_set(_swigobj,_swigval) (_swigobj->seconds = _swigval,_swigval)
+XS(_wrap_icaldurationtype_seconds_set) {
+
+    unsigned int  _result;
+    struct icaldurationtype * _arg0;
+    unsigned int  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icaldurationtype_seconds_set(struct icaldurationtype *,unsigned int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 1 of icaldurationtype_seconds_set. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (unsigned int )SvIV(ST(1));
+    _result = (unsigned int )icaldurationtype_seconds_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icaldurationtype_seconds_get(_swigobj) ((unsigned int ) _swigobj->seconds)
+XS(_wrap_icaldurationtype_seconds_get) {
+
+    unsigned int  _result;
+    struct icaldurationtype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icaldurationtype_seconds_get(struct icaldurationtype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
+        croak("Type error in argument 1 of icaldurationtype_seconds_get. Expected struct icaldurationtypePtr.");
+        XSRETURN(1);
+    }
+    _result = (unsigned int )icaldurationtype_seconds_get(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icalperiodtype_start_set(_swigobj,_swigval) (_swigobj->start = *(_swigval),_swigval)
+XS(_wrap_icalperiodtype_start_set) {
+
+    struct icaltimetype * _result;
+    struct icalperiodtype * _arg0;
+    struct icaltimetype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalperiodtype_start_set(struct icalperiodtype *,struct icaltimetype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
+        croak("Type error in argument 1 of icalperiodtype_start_set. Expected struct icalperiodtypePtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
+        croak("Type error in argument 2 of icalperiodtype_start_set. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltimetype *)icalperiodtype_start_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+#define icalperiodtype_start_get(_swigobj) (&_swigobj->start)
+XS(_wrap_icalperiodtype_start_get) {
+
+    struct icaltimetype * _result;
+    struct icalperiodtype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalperiodtype_start_get(struct icalperiodtype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
+        croak("Type error in argument 1 of icalperiodtype_start_get. Expected struct icalperiodtypePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltimetype *)icalperiodtype_start_get(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+#define icalperiodtype_end_set(_swigobj,_swigval) (_swigobj->end = *(_swigval),_swigval)
+XS(_wrap_icalperiodtype_end_set) {
+
+    struct icaltimetype * _result;
+    struct icalperiodtype * _arg0;
+    struct icaltimetype * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalperiodtype_end_set(struct icalperiodtype *,struct icaltimetype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
+        croak("Type error in argument 1 of icalperiodtype_end_set. Expected struct icalperiodtypePtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
+        croak("Type error in argument 2 of icalperiodtype_end_set. Expected struct icaltimetypePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltimetype *)icalperiodtype_end_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+#define icalperiodtype_end_get(_swigobj) (&_swigobj->end)
+XS(_wrap_icalperiodtype_end_get) {
+
+    struct icaltimetype * _result;
+    struct icalperiodtype * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalperiodtype_end_get(struct icalperiodtype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
+        croak("Type error in argument 1 of icalperiodtype_end_get. Expected struct icalperiodtypePtr.");
+        XSRETURN(1);
+    }
+    _result = (struct icaltimetype *)icalperiodtype_end_get(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+#define icalperiodtype_duration_set(_swigobj,_swigval) (_swigobj->duration = *(_swigval),_swigval)
+XS(_wrap_icalperiodtype_duration_set) {
+
+    struct icaldurationtype * _result;
+    struct icalperiodtype * _arg0;
     struct icaldurationtype * _arg1;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_duration(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_duration. Expected icalvaluePtr.");
+        croak("Usage: icalperiodtype_duration_set(struct icalperiodtype *,struct icaldurationtype *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
+        croak("Type error in argument 1 of icalperiodtype_duration_set. Expected struct icalperiodtypePtr.");
         XSRETURN(1);
     }
     if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 2 of icalvalue_set_duration. Expected struct icaldurationtypePtr.");
+        croak("Type error in argument 2 of icalperiodtype_duration_set. Expected struct icaldurationtypePtr.");
         XSRETURN(1);
     }
-    icalvalue_set_duration(_arg0,*_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_float) {
-
-    icalvalue * _result;
-    float  _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_float(v);");
-    _arg0 = (float ) SvNV(ST(0));
-    _result = (icalvalue *)icalvalue_new_float(_arg0);
+    _result = (struct icaldurationtype *)icalperiodtype_duration_set(_arg0,_arg1);
     ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
+    sv_setref_pv(ST(argvi++),"struct icaldurationtypePtr", (void *) _result);
     XSRETURN(argvi);
 }
 
-XS(_wrap_icalvalue_get_float) {
+#define icalperiodtype_duration_get(_swigobj) (&_swigobj->duration)
+XS(_wrap_icalperiodtype_duration_get) {
 
-    float  _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_float(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_float. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (float )icalvalue_get_float(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setnv(ST(argvi++), (double) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_float) {
-
-    icalvalue * _arg0;
-    float  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_float(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_float. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (float ) SvNV(ST(1));
-    icalvalue_set_float(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_geo) {
-
-    icalvalue * _result;
-    struct icalgeotype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_geo(v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalgeotypePtr")) {
-        croak("Type error in argument 1 of icalvalue_new_geo. Expected struct icalgeotypePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalvalue *)icalvalue_new_geo(*_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_get_geo) {
-
-    struct icalgeotype * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_geo(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_geo. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icalgeotype *) malloc(sizeof(struct icalgeotype ));
-    *(_result) = icalvalue_get_geo(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icalgeotypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_geo) {
-
-    icalvalue * _arg0;
-    struct icalgeotype * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_geo(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_geo. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icalgeotypePtr")) {
-        croak("Type error in argument 2 of icalvalue_set_geo. Expected struct icalgeotypePtr.");
-        XSRETURN(1);
-    }
-    icalvalue_set_geo(_arg0,*_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_integer) {
-
-    icalvalue * _result;
-    int  _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_integer(v);");
-    _arg0 = (int )SvIV(ST(0));
-    _result = (icalvalue *)icalvalue_new_integer(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_get_integer) {
-
-    int  _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_integer(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_integer. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icalvalue_get_integer(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_integer) {
-
-    icalvalue * _arg0;
-    int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_integer(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_integer. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (int )SvIV(ST(1));
-    icalvalue_set_integer(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_method) {
-
-    icalvalue * _result;
-    icalproperty_method  _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_method(v);");
-    _arg0 = (icalproperty_method )SvIV(ST(0));
-    _result = (icalvalue *)icalvalue_new_method(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_get_method) {
-
-    icalproperty_method  _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_method(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_method. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalproperty_method )icalvalue_get_method(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_method) {
-
-    icalvalue * _arg0;
-    icalproperty_method  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_method(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_method. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (icalproperty_method )SvIV(ST(1));
-    icalvalue_set_method(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_period) {
-
-    icalvalue * _result;
+    struct icaldurationtype * _result;
     struct icalperiodtype * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_period(v);");
+        croak("Usage: icalperiodtype_duration_get(struct icalperiodtype *);");
     if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
-        croak("Type error in argument 1 of icalvalue_new_period. Expected struct icalperiodtypePtr.");
+        croak("Type error in argument 1 of icalperiodtype_duration_get. Expected struct icalperiodtypePtr.");
         XSRETURN(1);
     }
-    _result = (icalvalue *)icalvalue_new_period(*_arg0);
+    _result = (struct icaldurationtype *)icalperiodtype_duration_get(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_get_period) {
-
-    struct icalperiodtype * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_period(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_period. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icalperiodtype *) malloc(sizeof(struct icalperiodtype ));
-    *(_result) = icalvalue_get_period(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icalperiodtypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_period) {
-
-    icalvalue * _arg0;
-    struct icalperiodtype * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_period(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_period. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icalperiodtypePtr")) {
-        croak("Type error in argument 2 of icalvalue_set_period. Expected struct icalperiodtypePtr.");
-        XSRETURN(1);
-    }
-    icalvalue_set_period(_arg0,*_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_recur) {
-
-    icalvalue * _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_recur(v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalvalue_new_recur. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalvalue *)icalvalue_new_recur(*_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_get_recur) {
-
-    struct icalrecurrencetype * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_recur(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_recur. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icalrecurrencetype *) malloc(sizeof(struct icalrecurrencetype ));
-    *(_result) = icalvalue_get_recur(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icalrecurrencetypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_recur) {
-
-    icalvalue * _arg0;
-    struct icalrecurrencetype * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_recur(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_recur. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 2 of icalvalue_set_recur. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    icalvalue_set_recur(_arg0,*_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_text) {
-
-    icalvalue * _result;
-    char * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_text(v);");
-    _arg0 = (char *) SvPV(ST(0),na);
-    _result = (icalvalue *)icalvalue_new_text(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_get_text) {
-
-    char * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_text(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_text. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (char *)icalvalue_get_text(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_text) {
-
-    icalvalue * _arg0;
-    char * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_text(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_text. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (char *) SvPV(ST(1),na);
-    icalvalue_set_text(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_time) {
-
-    icalvalue * _result;
-    struct icaltimetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_time(v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icalvalue_new_time. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalvalue *)icalvalue_new_time(*_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_get_time) {
-
-    struct icaltimetype * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_time(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_time. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icaltimetype *) malloc(sizeof(struct icaltimetype ));
-    *(_result) = icalvalue_get_time(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_time) {
-
-    icalvalue * _arg0;
-    struct icaltimetype * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_time(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_time. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
-        croak("Type error in argument 2 of icalvalue_set_time. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    icalvalue_set_time(_arg0,*_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_trigger) {
-
-    icalvalue * _result;
-    union icaltriggertype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_trigger(v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"union icaltriggertypePtr")) {
-        croak("Type error in argument 1 of icalvalue_new_trigger. Expected union icaltriggertypePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalvalue *)icalvalue_new_trigger(*_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_get_trigger) {
-
-    union icaltriggertype * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_trigger(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_trigger. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (union icaltriggertype *) malloc(sizeof(union icaltriggertype ));
-    *(_result) = icalvalue_get_trigger(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"union icaltriggertypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_trigger) {
-
-    icalvalue * _arg0;
-    union icaltriggertype * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_trigger(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_trigger. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"union icaltriggertypePtr")) {
-        croak("Type error in argument 2 of icalvalue_set_trigger. Expected union icaltriggertypePtr.");
-        XSRETURN(1);
-    }
-    icalvalue_set_trigger(_arg0,*_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_uri) {
-
-    icalvalue * _result;
-    char * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_uri(v);");
-    _arg0 = (char *) SvPV(ST(0),na);
-    _result = (icalvalue *)icalvalue_new_uri(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_get_uri) {
-
-    char * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_uri(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_uri. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (char *)icalvalue_get_uri(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_uri) {
-
-    icalvalue * _arg0;
-    char * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_uri(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_uri. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (char *) SvPV(ST(1),na);
-    icalvalue_set_uri(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_utcoffset) {
-
-    icalvalue * _result;
-    int  _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_utcoffset(v);");
-    _arg0 = (int )SvIV(ST(0));
-    _result = (icalvalue *)icalvalue_new_utcoffset(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_get_utcoffset) {
-
-    int  _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_utcoffset(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_utcoffset. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icalvalue_get_utcoffset(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_utcoffset) {
-
-    icalvalue * _arg0;
-    int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_utcoffset(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_utcoffset. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (int )SvIV(ST(1));
-    icalvalue_set_utcoffset(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_new_query) {
-
-    icalvalue * _result;
-    char * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_new_query(v);");
-    _arg0 = (char *) SvPV(ST(0),na);
-    _result = (icalvalue *)icalvalue_new_query(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalvaluePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_get_query) {
-
-    char * _result;
-    icalvalue * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalvalue_get_query(value);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_get_query. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _result = (char *)icalvalue_get_query(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalvalue_set_query) {
-
-    icalvalue * _arg0;
-    char * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalvalue_set_query(value,v);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalvalue_set_query. Expected icalvaluePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (char *) SvPV(ST(1),na);
-    icalvalue_set_query(_arg0,_arg1);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcalendar_new) {
-
-    icalcalendar * _result;
-    char * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcalendar_new(dir);");
-    _arg0 = (char *) SvPV(ST(0),na);
-    _result = (icalcalendar *)icalcalendar_new(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcalendarPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcalendar_free) {
-
-    icalcalendar * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcalendar_free(calendar);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcalendar_free. Expected icalcalendarPtr.");
-        XSRETURN(1);
-    }
-    icalcalendar_free(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcalendar_lock) {
-
-    int  _result;
-    icalcalendar * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcalendar_lock(calendar);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcalendar_lock. Expected icalcalendarPtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icalcalendar_lock(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcalendar_unlock) {
-
-    int  _result;
-    icalcalendar * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcalendar_unlock(calendar);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcalendar_unlock. Expected icalcalendarPtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icalcalendar_unlock(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcalendar_islocked) {
-
-    int  _result;
-    icalcalendar * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcalendar_islocked(calendar);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcalendar_islocked. Expected icalcalendarPtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icalcalendar_islocked(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcalendar_ownlock) {
-
-    int  _result;
-    icalcalendar * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcalendar_ownlock(calendar);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcalendar_ownlock. Expected icalcalendarPtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icalcalendar_ownlock(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcalendar_get_booked) {
-
-    icalstore * _result;
-    icalcalendar * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcalendar_get_booked(calendar);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcalendar_get_booked. Expected icalcalendarPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalstore *)icalcalendar_get_booked(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalstorePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcalendar_get_incoming) {
-
-    icalcluster * _result;
-    icalcalendar * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcalendar_get_incoming(calendar);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcalendar_get_incoming. Expected icalcalendarPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalcluster *)icalcalendar_get_incoming(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalclusterPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcalendar_get_properties) {
-
-    icalcluster * _result;
-    icalcalendar * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcalendar_get_properties(calendar);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcalendar_get_properties. Expected icalcalendarPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalcluster *)icalcalendar_get_properties(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalclusterPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcalendar_get_freebusy) {
-
-    icalcluster * _result;
-    icalcalendar * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcalendar_get_freebusy(calendar);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcalendar_get_freebusy. Expected icalcalendarPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalcluster *)icalcalendar_get_freebusy(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalclusterPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcluster_new) {
-
-    icalcluster * _result;
-    char * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcluster_new(path);");
-    _arg0 = (char *) SvPV(ST(0),na);
-    _result = (icalcluster *)icalcluster_new(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalclusterPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcluster_free) {
-
-    icalcluster * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcluster_free(cluster);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcluster_free. Expected icalclusterPtr.");
-        XSRETURN(1);
-    }
-    icalcluster_free(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcluster_path) {
-
-    char * _result;
-    icalcluster * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcluster_path(cluster);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcluster_path. Expected icalclusterPtr.");
-        XSRETURN(1);
-    }
-    _result = (char *)icalcluster_path(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcluster_get_component) {
-
-    icalcomponent * _result;
-    icalcluster * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcluster_get_component(cluster);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcluster_get_component. Expected icalclusterPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalcomponent *)icalcluster_get_component(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcluster_mark) {
-
-    icalcluster * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcluster_mark(cluster);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcluster_mark. Expected icalclusterPtr.");
-        XSRETURN(1);
-    }
-    icalcluster_mark(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcluster_commit) {
-
-    icalerrorenum  _result;
-    icalcluster * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcluster_commit(cluster);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcluster_commit. Expected icalclusterPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalerrorenum )icalcluster_commit(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcluster_add_component) {
-
-    icalerrorenum  _result;
-    icalcomponent * _arg0;
-    icalcomponent * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcluster_add_component(parent,child);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcluster_add_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
-        croak("Type error in argument 2 of icalcluster_add_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalerrorenum )icalcluster_add_component(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcluster_remove_component) {
-
-    icalerrorenum  _result;
-    icalcomponent * _arg0;
-    icalcomponent * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcluster_remove_component(parent,child);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcluster_remove_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
-        croak("Type error in argument 2 of icalcluster_remove_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalerrorenum )icalcluster_remove_component(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcluster_count_components) {
-
-    int  _result;
-    icalcomponent * _arg0;
-    icalcomponent_kind  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcluster_count_components(component,kind);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcluster_count_components. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (icalcomponent_kind )SvIV(ST(1));
-    _result = (int )icalcluster_count_components(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcluster_get_current_component) {
-
-    icalcomponent * _result;
-    icalcomponent * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalcluster_get_current_component(component);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcluster_get_current_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalcomponent *)icalcluster_get_current_component(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcluster_get_first_component) {
-
-    icalcomponent * _result;
-    icalcomponent * _arg0;
-    icalcomponent_kind  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcluster_get_first_component(component,kind);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcluster_get_first_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (icalcomponent_kind )SvIV(ST(1));
-    _result = (icalcomponent *)icalcluster_get_first_component(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalcluster_get_next_component) {
-
-    icalcomponent * _result;
-    icalcomponent * _arg0;
-    icalcomponent_kind  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalcluster_get_next_component(component,kind);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalcluster_get_next_component. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (icalcomponent_kind )SvIV(ST(1));
-    _result = (icalcomponent *)icalcluster_get_next_component(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalstore_new) {
-
-    icalstore * _result;
-    char * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalstore_new(dir);");
-    _arg0 = (char *) SvPV(ST(0),na);
-    _result = (icalstore *)icalstore_new(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalstorePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalstore_free) {
-
-    icalstore * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalstore_free(store);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalstore_free. Expected icalstorePtr.");
-        XSRETURN(1);
-    }
-    icalstore_free(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalstore_add_component) {
-
-    icalerrorenum  _result;
-    icalstore * _arg0;
-    icalstore * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalstore_add_component(store,comp);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalstore_add_component. Expected icalstorePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
-        croak("Type error in argument 2 of icalstore_add_component. Expected icalstorePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalerrorenum )icalstore_add_component(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalstore_remove_component) {
-
-    icalerrorenum  _result;
-    icalstore * _arg0;
-    icalstore * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalstore_remove_component(store,comp);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalstore_remove_component. Expected icalstorePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
-        croak("Type error in argument 2 of icalstore_remove_component. Expected icalstorePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalerrorenum )icalstore_remove_component(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalstore_select) {
-
-    icalerrorenum  _result;
-    icalstore * _arg0;
-    icalcomponent * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalstore_select(store,gauge);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalstore_select. Expected icalstorePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
-        croak("Type error in argument 2 of icalstore_select. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _result = (icalerrorenum )icalstore_select(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalstore_test) {
-
-    int  _result;
-    icalcomponent * _arg0;
-    icalcomponent * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalstore_test(comp,gauge);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalstore_test. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
-        croak("Type error in argument 2 of icalstore_test. Expected icalcomponentPtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icalstore_test(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalstore_clear) {
-
-    icalstore * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalstore_clear(store);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalstore_clear. Expected icalstorePtr.");
-        XSRETURN(1);
-    }
-    icalstore_clear(_arg0);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalstore_fetch) {
-
-    icalcomponent * _result;
-    icalstore * _arg0;
-    char * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalstore_fetch(store,uid);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalstore_fetch. Expected icalstorePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (char *) SvPV(ST(1),na);
-    _result = (icalcomponent *)icalstore_fetch(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalstore_has_uid) {
-
-    int  _result;
-    icalstore * _arg0;
-    char * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalstore_has_uid(store,uid);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalstore_has_uid. Expected icalstorePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (char *) SvPV(ST(1),na);
-    _result = (int )icalstore_has_uid(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalstore_get_first_component) {
-
-    icalcomponent * _result;
-    icalstore * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalstore_get_first_component(store);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalstore_get_first_component. Expected icalstorePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalcomponent *)icalstore_get_first_component(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalstore_get_next_component) {
-
-    icalcomponent * _result;
-    icalstore * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalstore_get_next_component(store);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalstore_get_next_component. Expected icalstorePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalcomponent *)icalstore_get_next_component(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"icalcomponentPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-XS(_wrap_icalstore_next_uid_number) {
-
-    int  _result;
-    icalstore * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalstore_next_uid_number(store);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,(char *) 0 )) {
-        croak("Type error in argument 1 of icalstore_next_uid_number. Expected icalstorePtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icalstore_next_uid_number(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
+    sv_setref_pv(ST(argvi++),"struct icaldurationtypePtr", (void *) _result);
     XSRETURN(argvi);
 }
 
@@ -9476,1131 +11474,6 @@ XS(_wrap_icalgeotype_lon_get) {
     XSRETURN(argvi);
 }
 
-#define icaltimetype_year_set(_swigobj,_swigval) (_swigobj->year = _swigval,_swigval)
-XS(_wrap_icaltimetype_year_set) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icaltimetype_year_set(struct icaltimetype *,int );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_year_set. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (int )SvIV(ST(1));
-    _result = (int )icaltimetype_year_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_year_get(_swigobj) ((int ) _swigobj->year)
-XS(_wrap_icaltimetype_year_get) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaltimetype_year_get(struct icaltimetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_year_get. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icaltimetype_year_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_month_set(_swigobj,_swigval) (_swigobj->month = _swigval,_swigval)
-XS(_wrap_icaltimetype_month_set) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icaltimetype_month_set(struct icaltimetype *,int );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_month_set. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (int )SvIV(ST(1));
-    _result = (int )icaltimetype_month_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_month_get(_swigobj) ((int ) _swigobj->month)
-XS(_wrap_icaltimetype_month_get) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaltimetype_month_get(struct icaltimetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_month_get. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icaltimetype_month_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_day_set(_swigobj,_swigval) (_swigobj->day = _swigval,_swigval)
-XS(_wrap_icaltimetype_day_set) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icaltimetype_day_set(struct icaltimetype *,int );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_day_set. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (int )SvIV(ST(1));
-    _result = (int )icaltimetype_day_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_day_get(_swigobj) ((int ) _swigobj->day)
-XS(_wrap_icaltimetype_day_get) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaltimetype_day_get(struct icaltimetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_day_get. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icaltimetype_day_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_hour_set(_swigobj,_swigval) (_swigobj->hour = _swigval,_swigval)
-XS(_wrap_icaltimetype_hour_set) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icaltimetype_hour_set(struct icaltimetype *,int );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_hour_set. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (int )SvIV(ST(1));
-    _result = (int )icaltimetype_hour_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_hour_get(_swigobj) ((int ) _swigobj->hour)
-XS(_wrap_icaltimetype_hour_get) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaltimetype_hour_get(struct icaltimetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_hour_get. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icaltimetype_hour_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_minute_set(_swigobj,_swigval) (_swigobj->minute = _swigval,_swigval)
-XS(_wrap_icaltimetype_minute_set) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icaltimetype_minute_set(struct icaltimetype *,int );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_minute_set. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (int )SvIV(ST(1));
-    _result = (int )icaltimetype_minute_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_minute_get(_swigobj) ((int ) _swigobj->minute)
-XS(_wrap_icaltimetype_minute_get) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaltimetype_minute_get(struct icaltimetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_minute_get. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icaltimetype_minute_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_second_set(_swigobj,_swigval) (_swigobj->second = _swigval,_swigval)
-XS(_wrap_icaltimetype_second_set) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icaltimetype_second_set(struct icaltimetype *,int );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_second_set. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (int )SvIV(ST(1));
-    _result = (int )icaltimetype_second_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_second_get(_swigobj) ((int ) _swigobj->second)
-XS(_wrap_icaltimetype_second_get) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaltimetype_second_get(struct icaltimetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_second_get. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icaltimetype_second_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_is_utc_set(_swigobj,_swigval) (_swigobj->is_utc = _swigval,_swigval)
-XS(_wrap_icaltimetype_is_utc_set) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icaltimetype_is_utc_set(struct icaltimetype *,int );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_is_utc_set. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (int )SvIV(ST(1));
-    _result = (int )icaltimetype_is_utc_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_is_utc_get(_swigobj) ((int ) _swigobj->is_utc)
-XS(_wrap_icaltimetype_is_utc_get) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaltimetype_is_utc_get(struct icaltimetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_is_utc_get. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icaltimetype_is_utc_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_is_date_set(_swigobj,_swigval) (_swigobj->is_date = _swigval,_swigval)
-XS(_wrap_icaltimetype_is_date_set) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icaltimetype_is_date_set(struct icaltimetype *,int );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_is_date_set. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (int )SvIV(ST(1));
-    _result = (int )icaltimetype_is_date_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaltimetype_is_date_get(_swigobj) ((int ) _swigobj->is_date)
-XS(_wrap_icaltimetype_is_date_get) {
-
-    int  _result;
-    struct icaltimetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaltimetype_is_date_get(struct icaltimetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaltimetypePtr")) {
-        croak("Type error in argument 1 of icaltimetype_is_date_get. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icaltimetype_is_date_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_freq_set(_swigobj,_swigval) (_swigobj->freq = _swigval,_swigval)
-XS(_wrap_icalrecurrencetype_freq_set) {
-
-    icalrecurrencetype_frequency  _result;
-    struct icalrecurrencetype * _arg0;
-    icalrecurrencetype_frequency  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalrecurrencetype_freq_set(struct icalrecurrencetype *,icalrecurrencetype_frequency );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_freq_set. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (icalrecurrencetype_frequency )SvIV(ST(1));
-    _result = (icalrecurrencetype_frequency )icalrecurrencetype_freq_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_freq_get(_swigobj) ((icalrecurrencetype_frequency ) _swigobj->freq)
-XS(_wrap_icalrecurrencetype_freq_get) {
-
-    icalrecurrencetype_frequency  _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_freq_get(struct icalrecurrencetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_freq_get. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalrecurrencetype_frequency )icalrecurrencetype_freq_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_until_set(_swigobj,_swigval) (_swigobj->until = *(_swigval),_swigval)
-XS(_wrap_icalrecurrencetype_until_set) {
-
-    struct icaltimetype * _result;
-    struct icalrecurrencetype * _arg0;
-    struct icaltimetype * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalrecurrencetype_until_set(struct icalrecurrencetype *,struct icaltimetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_until_set. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
-        croak("Type error in argument 2 of icalrecurrencetype_until_set. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icaltimetype *)icalrecurrencetype_until_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_until_get(_swigobj) (&_swigobj->until)
-XS(_wrap_icalrecurrencetype_until_get) {
-
-    struct icaltimetype * _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_until_get(struct icalrecurrencetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_until_get. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icaltimetype *)icalrecurrencetype_until_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_count_set(_swigobj,_swigval) (_swigobj->count = _swigval,_swigval)
-XS(_wrap_icalrecurrencetype_count_set) {
-
-    int  _result;
-    struct icalrecurrencetype * _arg0;
-    int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalrecurrencetype_count_set(struct icalrecurrencetype *,int );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_count_set. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (int )SvIV(ST(1));
-    _result = (int )icalrecurrencetype_count_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_count_get(_swigobj) ((int ) _swigobj->count)
-XS(_wrap_icalrecurrencetype_count_get) {
-
-    int  _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_count_get(struct icalrecurrencetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_count_get. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (int )icalrecurrencetype_count_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_interval_set(_swigobj,_swigval) (_swigobj->interval = _swigval,_swigval)
-XS(_wrap_icalrecurrencetype_interval_set) {
-
-    short  _result;
-    struct icalrecurrencetype * _arg0;
-    short  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalrecurrencetype_interval_set(struct icalrecurrencetype *,short );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_interval_set. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (short )SvIV(ST(1));
-    _result = (short )icalrecurrencetype_interval_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_interval_get(_swigobj) ((short ) _swigobj->interval)
-XS(_wrap_icalrecurrencetype_interval_get) {
-
-    short  _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_interval_get(struct icalrecurrencetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_interval_get. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (short )icalrecurrencetype_interval_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_week_start_set(_swigobj,_swigval) (_swigobj->week_start = _swigval,_swigval)
-XS(_wrap_icalrecurrencetype_week_start_set) {
-
-    icalrecurrencetype_weekday  _result;
-    struct icalrecurrencetype * _arg0;
-    icalrecurrencetype_weekday  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalrecurrencetype_week_start_set(struct icalrecurrencetype *,icalrecurrencetype_weekday );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_week_start_set. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (icalrecurrencetype_weekday )SvIV(ST(1));
-    _result = (icalrecurrencetype_weekday )icalrecurrencetype_week_start_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_week_start_get(_swigobj) ((icalrecurrencetype_weekday ) _swigobj->week_start)
-XS(_wrap_icalrecurrencetype_week_start_get) {
-
-    icalrecurrencetype_weekday  _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_week_start_get(struct icalrecurrencetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_week_start_get. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (icalrecurrencetype_weekday )icalrecurrencetype_week_start_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_by_second_get(_swigobj) ((short *) _swigobj->by_second)
-XS(_wrap_icalrecurrencetype_by_second_get) {
-
-    short * _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_by_second_get(struct icalrecurrencetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_by_second_get. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (short *)icalrecurrencetype_by_second_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"shortPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_by_minute_get(_swigobj) ((short *) _swigobj->by_minute)
-XS(_wrap_icalrecurrencetype_by_minute_get) {
-
-    short * _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_by_minute_get(struct icalrecurrencetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_by_minute_get. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (short *)icalrecurrencetype_by_minute_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"shortPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_by_hour_get(_swigobj) ((short *) _swigobj->by_hour)
-XS(_wrap_icalrecurrencetype_by_hour_get) {
-
-    short * _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_by_hour_get(struct icalrecurrencetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_by_hour_get. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (short *)icalrecurrencetype_by_hour_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"shortPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_by_day_get(_swigobj) ((short *) _swigobj->by_day)
-XS(_wrap_icalrecurrencetype_by_day_get) {
-
-    short * _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_by_day_get(struct icalrecurrencetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_by_day_get. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (short *)icalrecurrencetype_by_day_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"shortPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_by_month_day_get(_swigobj) ((short *) _swigobj->by_month_day)
-XS(_wrap_icalrecurrencetype_by_month_day_get) {
-
-    short * _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_by_month_day_get(struct icalrecurrencetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_by_month_day_get. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (short *)icalrecurrencetype_by_month_day_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"shortPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_by_year_day_get(_swigobj) ((short *) _swigobj->by_year_day)
-XS(_wrap_icalrecurrencetype_by_year_day_get) {
-
-    short * _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_by_year_day_get(struct icalrecurrencetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_by_year_day_get. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (short *)icalrecurrencetype_by_year_day_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"shortPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_by_week_no_get(_swigobj) ((short *) _swigobj->by_week_no)
-XS(_wrap_icalrecurrencetype_by_week_no_get) {
-
-    short * _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_by_week_no_get(struct icalrecurrencetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_by_week_no_get. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (short *)icalrecurrencetype_by_week_no_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"shortPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_by_month_get(_swigobj) ((short *) _swigobj->by_month)
-XS(_wrap_icalrecurrencetype_by_month_get) {
-
-    short * _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_by_month_get(struct icalrecurrencetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_by_month_get. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (short *)icalrecurrencetype_by_month_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"shortPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalrecurrencetype_by_set_pos_get(_swigobj) ((short *) _swigobj->by_set_pos)
-XS(_wrap_icalrecurrencetype_by_set_pos_get) {
-
-    short * _result;
-    struct icalrecurrencetype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalrecurrencetype_by_set_pos_get(struct icalrecurrencetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalrecurrencetypePtr")) {
-        croak("Type error in argument 1 of icalrecurrencetype_by_set_pos_get. Expected struct icalrecurrencetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (short *)icalrecurrencetype_by_set_pos_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"shortPtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icaldurationtype_days_set(_swigobj,_swigval) (_swigobj->days = _swigval,_swigval)
-XS(_wrap_icaldurationtype_days_set) {
-
-    unsigned int  _result;
-    struct icaldurationtype * _arg0;
-    unsigned int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icaldurationtype_days_set(struct icaldurationtype *,unsigned int );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 1 of icaldurationtype_days_set. Expected struct icaldurationtypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (unsigned int )SvIV(ST(1));
-    _result = (unsigned int )icaldurationtype_days_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaldurationtype_days_get(_swigobj) ((unsigned int ) _swigobj->days)
-XS(_wrap_icaldurationtype_days_get) {
-
-    unsigned int  _result;
-    struct icaldurationtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaldurationtype_days_get(struct icaldurationtype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 1 of icaldurationtype_days_get. Expected struct icaldurationtypePtr.");
-        XSRETURN(1);
-    }
-    _result = (unsigned int )icaldurationtype_days_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaldurationtype_weeks_set(_swigobj,_swigval) (_swigobj->weeks = _swigval,_swigval)
-XS(_wrap_icaldurationtype_weeks_set) {
-
-    unsigned int  _result;
-    struct icaldurationtype * _arg0;
-    unsigned int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icaldurationtype_weeks_set(struct icaldurationtype *,unsigned int );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 1 of icaldurationtype_weeks_set. Expected struct icaldurationtypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (unsigned int )SvIV(ST(1));
-    _result = (unsigned int )icaldurationtype_weeks_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaldurationtype_weeks_get(_swigobj) ((unsigned int ) _swigobj->weeks)
-XS(_wrap_icaldurationtype_weeks_get) {
-
-    unsigned int  _result;
-    struct icaldurationtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaldurationtype_weeks_get(struct icaldurationtype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 1 of icaldurationtype_weeks_get. Expected struct icaldurationtypePtr.");
-        XSRETURN(1);
-    }
-    _result = (unsigned int )icaldurationtype_weeks_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaldurationtype_hours_set(_swigobj,_swigval) (_swigobj->hours = _swigval,_swigval)
-XS(_wrap_icaldurationtype_hours_set) {
-
-    unsigned int  _result;
-    struct icaldurationtype * _arg0;
-    unsigned int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icaldurationtype_hours_set(struct icaldurationtype *,unsigned int );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 1 of icaldurationtype_hours_set. Expected struct icaldurationtypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (unsigned int )SvIV(ST(1));
-    _result = (unsigned int )icaldurationtype_hours_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaldurationtype_hours_get(_swigobj) ((unsigned int ) _swigobj->hours)
-XS(_wrap_icaldurationtype_hours_get) {
-
-    unsigned int  _result;
-    struct icaldurationtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaldurationtype_hours_get(struct icaldurationtype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 1 of icaldurationtype_hours_get. Expected struct icaldurationtypePtr.");
-        XSRETURN(1);
-    }
-    _result = (unsigned int )icaldurationtype_hours_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaldurationtype_minutes_set(_swigobj,_swigval) (_swigobj->minutes = _swigval,_swigval)
-XS(_wrap_icaldurationtype_minutes_set) {
-
-    unsigned int  _result;
-    struct icaldurationtype * _arg0;
-    unsigned int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icaldurationtype_minutes_set(struct icaldurationtype *,unsigned int );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 1 of icaldurationtype_minutes_set. Expected struct icaldurationtypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (unsigned int )SvIV(ST(1));
-    _result = (unsigned int )icaldurationtype_minutes_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaldurationtype_minutes_get(_swigobj) ((unsigned int ) _swigobj->minutes)
-XS(_wrap_icaldurationtype_minutes_get) {
-
-    unsigned int  _result;
-    struct icaldurationtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaldurationtype_minutes_get(struct icaldurationtype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 1 of icaldurationtype_minutes_get. Expected struct icaldurationtypePtr.");
-        XSRETURN(1);
-    }
-    _result = (unsigned int )icaldurationtype_minutes_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaldurationtype_seconds_set(_swigobj,_swigval) (_swigobj->seconds = _swigval,_swigval)
-XS(_wrap_icaldurationtype_seconds_set) {
-
-    unsigned int  _result;
-    struct icaldurationtype * _arg0;
-    unsigned int  _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icaldurationtype_seconds_set(struct icaldurationtype *,unsigned int );");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 1 of icaldurationtype_seconds_set. Expected struct icaldurationtypePtr.");
-        XSRETURN(1);
-    }
-    _arg1 = (unsigned int )SvIV(ST(1));
-    _result = (unsigned int )icaldurationtype_seconds_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icaldurationtype_seconds_get(_swigobj) ((unsigned int ) _swigobj->seconds)
-XS(_wrap_icaldurationtype_seconds_get) {
-
-    unsigned int  _result;
-    struct icaldurationtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icaldurationtype_seconds_get(struct icaldurationtype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 1 of icaldurationtype_seconds_get. Expected struct icaldurationtypePtr.");
-        XSRETURN(1);
-    }
-    _result = (unsigned int )icaldurationtype_seconds_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setiv(ST(argvi++),(IV) _result);
-    XSRETURN(argvi);
-}
-
-#define icalperiodtype_start_set(_swigobj,_swigval) (_swigobj->start = *(_swigval),_swigval)
-XS(_wrap_icalperiodtype_start_set) {
-
-    struct icaltimetype * _result;
-    struct icalperiodtype * _arg0;
-    struct icaltimetype * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalperiodtype_start_set(struct icalperiodtype *,struct icaltimetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
-        croak("Type error in argument 1 of icalperiodtype_start_set. Expected struct icalperiodtypePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
-        croak("Type error in argument 2 of icalperiodtype_start_set. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icaltimetype *)icalperiodtype_start_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalperiodtype_start_get(_swigobj) (&_swigobj->start)
-XS(_wrap_icalperiodtype_start_get) {
-
-    struct icaltimetype * _result;
-    struct icalperiodtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalperiodtype_start_get(struct icalperiodtype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
-        croak("Type error in argument 1 of icalperiodtype_start_get. Expected struct icalperiodtypePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icaltimetype *)icalperiodtype_start_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalperiodtype_end_set(_swigobj,_swigval) (_swigobj->end = *(_swigval),_swigval)
-XS(_wrap_icalperiodtype_end_set) {
-
-    struct icaltimetype * _result;
-    struct icalperiodtype * _arg0;
-    struct icaltimetype * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalperiodtype_end_set(struct icalperiodtype *,struct icaltimetype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
-        croak("Type error in argument 1 of icalperiodtype_end_set. Expected struct icalperiodtypePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaltimetypePtr")) {
-        croak("Type error in argument 2 of icalperiodtype_end_set. Expected struct icaltimetypePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icaltimetype *)icalperiodtype_end_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalperiodtype_end_get(_swigobj) (&_swigobj->end)
-XS(_wrap_icalperiodtype_end_get) {
-
-    struct icaltimetype * _result;
-    struct icalperiodtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalperiodtype_end_get(struct icalperiodtype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
-        croak("Type error in argument 1 of icalperiodtype_end_get. Expected struct icalperiodtypePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icaltimetype *)icalperiodtype_end_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaltimetypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalperiodtype_duration_set(_swigobj,_swigval) (_swigobj->duration = *(_swigval),_swigval)
-XS(_wrap_icalperiodtype_duration_set) {
-
-    struct icaldurationtype * _result;
-    struct icalperiodtype * _arg0;
-    struct icaldurationtype * _arg1;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 2) || (items > 2)) 
-        croak("Usage: icalperiodtype_duration_set(struct icalperiodtype *,struct icaldurationtype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
-        croak("Type error in argument 1 of icalperiodtype_duration_set. Expected struct icalperiodtypePtr.");
-        XSRETURN(1);
-    }
-    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct icaldurationtypePtr")) {
-        croak("Type error in argument 2 of icalperiodtype_duration_set. Expected struct icaldurationtypePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icaldurationtype *)icalperiodtype_duration_set(_arg0,_arg1);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaldurationtypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
-#define icalperiodtype_duration_get(_swigobj) (&_swigobj->duration)
-XS(_wrap_icalperiodtype_duration_get) {
-
-    struct icaldurationtype * _result;
-    struct icalperiodtype * _arg0;
-    int argvi = 0;
-    dXSARGS ;
-
-    cv = cv;
-    if ((items < 1) || (items > 1)) 
-        croak("Usage: icalperiodtype_duration_get(struct icalperiodtype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalperiodtypePtr")) {
-        croak("Type error in argument 1 of icalperiodtype_duration_get. Expected struct icalperiodtypePtr.");
-        XSRETURN(1);
-    }
-    _result = (struct icaldurationtype *)icalperiodtype_duration_get(_arg0);
-    ST(argvi) = sv_newmortal();
-    sv_setref_pv(ST(argvi++),"struct icaldurationtypePtr", (void *) _result);
-    XSRETURN(argvi);
-}
-
 #define icaltriggertype_time_set(_swigobj,_swigval) (_swigobj->time = *(_swigval),_swigval)
 XS(_wrap_icaltriggertype_time_set) {
 
@@ -10739,101 +11612,279 @@ XS(_wrap_icalreqstattype_code_get) {
     XSRETURN(argvi);
 }
 
-static char * icalreqstattype_desc_set(struct icalreqstattype *obj, char *val) {
-    if (obj->desc) free(obj->desc);
-    obj->desc = (char *) malloc(strlen(val)+1);
-    strcpy(obj->desc,val);
-    return val;
-}
-XS(_wrap_icalreqstattype_desc_set) {
+#define pvl_elem_t_MAGIC_set(_swigobj,_swigval) (_swigobj->MAGIC = _swigval,_swigval)
+XS(_wrap_pvl_elem_t_MAGIC_set) {
 
-    char * _result;
-    struct icalreqstattype * _arg0;
-    char * _arg1;
+    int  _result;
+    pvl_elem_t * _arg0;
+    int  _arg1;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 2) || (items > 2)) 
-        croak("Usage: icalreqstattype_desc_set(struct icalreqstattype *,char *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalreqstattypePtr")) {
-        croak("Type error in argument 1 of icalreqstattype_desc_set. Expected struct icalreqstattypePtr.");
+        croak("Usage: pvl_elem_t_MAGIC_set(pvl_elem_t *,int );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"pvl_elem_tPtr")) {
+        croak("Type error in argument 1 of pvl_elem_t_MAGIC_set. Expected pvl_elem_tPtr.");
         XSRETURN(1);
     }
-    _arg1 = (char *) SvPV(ST(1),na);
-    _result = (char *)icalreqstattype_desc_set(_arg0,_arg1);
+    _arg1 = (int )SvIV(ST(1));
+    _result = (int )pvl_elem_t_MAGIC_set(_arg0,_arg1);
     ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-#define icalreqstattype_desc_get(_swigobj) ((char *) _swigobj->desc)
-XS(_wrap_icalreqstattype_desc_get) {
+#define pvl_elem_t_MAGIC_get(_swigobj) ((int ) _swigobj->MAGIC)
+XS(_wrap_pvl_elem_t_MAGIC_get) {
 
-    char * _result;
-    struct icalreqstattype * _arg0;
+    int  _result;
+    pvl_elem_t * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalreqstattype_desc_get(struct icalreqstattype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalreqstattypePtr")) {
-        croak("Type error in argument 1 of icalreqstattype_desc_get. Expected struct icalreqstattypePtr.");
+        croak("Usage: pvl_elem_t_MAGIC_get(pvl_elem_t *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"pvl_elem_tPtr")) {
+        croak("Type error in argument 1 of pvl_elem_t_MAGIC_get. Expected pvl_elem_tPtr.");
         XSRETURN(1);
     }
-    _result = (char *)icalreqstattype_desc_get(_arg0);
+    _result = (int )pvl_elem_t_MAGIC_get(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    sv_setiv(ST(argvi++),(IV) _result);
     XSRETURN(argvi);
 }
 
-static char * icalreqstattype_debug_set(struct icalreqstattype *obj, char *val) {
-    if (obj->debug) free(obj->debug);
-    obj->debug = (char *) malloc(strlen(val)+1);
-    strcpy(obj->debug,val);
-    return val;
-}
-XS(_wrap_icalreqstattype_debug_set) {
+#define pvl_elem_t_d_set(_swigobj,_swigval) (_swigobj->d = _swigval,_swigval)
+XS(_wrap_pvl_elem_t_d_set) {
 
-    char * _result;
-    struct icalreqstattype * _arg0;
-    char * _arg1;
+    void * _result;
+    pvl_elem_t * _arg0;
+    void * _arg1;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 2) || (items > 2)) 
-        croak("Usage: icalreqstattype_debug_set(struct icalreqstattype *,char *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalreqstattypePtr")) {
-        croak("Type error in argument 1 of icalreqstattype_debug_set. Expected struct icalreqstattypePtr.");
+        croak("Usage: pvl_elem_t_d_set(pvl_elem_t *,void *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"pvl_elem_tPtr")) {
+        croak("Type error in argument 1 of pvl_elem_t_d_set. Expected pvl_elem_tPtr.");
         XSRETURN(1);
     }
-    _arg1 = (char *) SvPV(ST(1),na);
-    _result = (char *)icalreqstattype_debug_set(_arg0,_arg1);
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of pvl_elem_t_d_set. Expected voidPtr.");
+        XSRETURN(1);
+    }
+    _result = (void *)pvl_elem_t_d_set(_arg0,_arg1);
     ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    sv_setref_pv(ST(argvi++),"voidPtr", (void *) _result);
     XSRETURN(argvi);
 }
 
-#define icalreqstattype_debug_get(_swigobj) ((char *) _swigobj->debug)
-XS(_wrap_icalreqstattype_debug_get) {
+#define pvl_elem_t_d_get(_swigobj) ((void *) _swigobj->d)
+XS(_wrap_pvl_elem_t_d_get) {
 
-    char * _result;
-    struct icalreqstattype * _arg0;
+    void * _result;
+    pvl_elem_t * _arg0;
     int argvi = 0;
     dXSARGS ;
 
     cv = cv;
     if ((items < 1) || (items > 1)) 
-        croak("Usage: icalreqstattype_debug_get(struct icalreqstattype *);");
-    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"struct icalreqstattypePtr")) {
-        croak("Type error in argument 1 of icalreqstattype_debug_get. Expected struct icalreqstattypePtr.");
+        croak("Usage: pvl_elem_t_d_get(pvl_elem_t *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"pvl_elem_tPtr")) {
+        croak("Type error in argument 1 of pvl_elem_t_d_get. Expected pvl_elem_tPtr.");
         XSRETURN(1);
     }
-    _result = (char *)icalreqstattype_debug_get(_arg0);
+    _result = (void *)pvl_elem_t_d_get(_arg0);
     ST(argvi) = sv_newmortal();
-    sv_setpv((SV*)ST(argvi++),(char *) _result);
+    sv_setref_pv(ST(argvi++),"voidPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+#define pvl_elem_t_next_set(_swigobj,_swigval) (_swigobj->next = _swigval,_swigval)
+XS(_wrap_pvl_elem_t_next_set) {
+
+    struct pvl_elem_t * _result;
+    pvl_elem_t * _arg0;
+    struct pvl_elem_t * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: pvl_elem_t_next_set(pvl_elem_t *,struct pvl_elem_t *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"pvl_elem_tPtr")) {
+        croak("Type error in argument 1 of pvl_elem_t_next_set. Expected pvl_elem_tPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct pvl_elem_tPtr")) {
+        croak("Type error in argument 2 of pvl_elem_t_next_set. Expected struct pvl_elem_tPtr.");
+        XSRETURN(1);
+    }
+    _result = (struct pvl_elem_t *)pvl_elem_t_next_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct pvl_elem_tPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+#define pvl_elem_t_next_get(_swigobj) ((struct pvl_elem_t *) _swigobj->next)
+XS(_wrap_pvl_elem_t_next_get) {
+
+    struct pvl_elem_t * _result;
+    pvl_elem_t * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: pvl_elem_t_next_get(pvl_elem_t *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"pvl_elem_tPtr")) {
+        croak("Type error in argument 1 of pvl_elem_t_next_get. Expected pvl_elem_tPtr.");
+        XSRETURN(1);
+    }
+    _result = (struct pvl_elem_t *)pvl_elem_t_next_get(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct pvl_elem_tPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+#define pvl_elem_t_prior_set(_swigobj,_swigval) (_swigobj->prior = _swigval,_swigval)
+XS(_wrap_pvl_elem_t_prior_set) {
+
+    struct pvl_elem_t * _result;
+    pvl_elem_t * _arg0;
+    struct pvl_elem_t * _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: pvl_elem_t_prior_set(pvl_elem_t *,struct pvl_elem_t *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"pvl_elem_tPtr")) {
+        croak("Type error in argument 1 of pvl_elem_t_prior_set. Expected pvl_elem_tPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,"struct pvl_elem_tPtr")) {
+        croak("Type error in argument 2 of pvl_elem_t_prior_set. Expected struct pvl_elem_tPtr.");
+        XSRETURN(1);
+    }
+    _result = (struct pvl_elem_t *)pvl_elem_t_prior_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct pvl_elem_tPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+#define pvl_elem_t_prior_get(_swigobj) ((struct pvl_elem_t *) _swigobj->prior)
+XS(_wrap_pvl_elem_t_prior_get) {
+
+    struct pvl_elem_t * _result;
+    pvl_elem_t * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: pvl_elem_t_prior_get(pvl_elem_t *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"pvl_elem_tPtr")) {
+        croak("Type error in argument 1 of pvl_elem_t_prior_get. Expected pvl_elem_tPtr.");
+        XSRETURN(1);
+    }
+    _result = (struct pvl_elem_t *)pvl_elem_t_prior_get(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"struct pvl_elem_tPtr", (void *) _result);
+    XSRETURN(argvi);
+}
+
+#define icalcompiter_kind_set(_swigobj,_swigval) (_swigobj->kind = _swigval,_swigval)
+XS(_wrap_icalcompiter_kind_set) {
+
+    icalcomponent_kind  _result;
+    icalcompiter * _arg0;
+    icalcomponent_kind  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcompiter_kind_set(icalcompiter *,icalcomponent_kind );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"icalcompiterPtr")) {
+        croak("Type error in argument 1 of icalcompiter_kind_set. Expected icalcompiterPtr.");
+        XSRETURN(1);
+    }
+    _arg1 = (icalcomponent_kind )SvIV(ST(1));
+    _result = (icalcomponent_kind )icalcompiter_kind_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icalcompiter_kind_get(_swigobj) ((icalcomponent_kind ) _swigobj->kind)
+XS(_wrap_icalcompiter_kind_get) {
+
+    icalcomponent_kind  _result;
+    icalcompiter * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcompiter_kind_get(icalcompiter *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"icalcompiterPtr")) {
+        croak("Type error in argument 1 of icalcompiter_kind_get. Expected icalcompiterPtr.");
+        XSRETURN(1);
+    }
+    _result = (icalcomponent_kind )icalcompiter_kind_get(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setiv(ST(argvi++),(IV) _result);
+    XSRETURN(argvi);
+}
+
+#define icalcompiter_iter_set(_swigobj,_swigval) (_swigobj->iter = _swigval,_swigval)
+XS(_wrap_icalcompiter_iter_set) {
+
+    pvl_elem  _result;
+    icalcompiter * _arg0;
+    pvl_elem  _arg1;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 2) || (items > 2)) 
+        croak("Usage: icalcompiter_iter_set(icalcompiter *,pvl_elem );");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"icalcompiterPtr")) {
+        croak("Type error in argument 1 of icalcompiter_iter_set. Expected icalcompiterPtr.");
+        XSRETURN(1);
+    }
+    if (SWIG_GetPtr(ST(1),(void **) &_arg1,(char *) 0 )) {
+        croak("Type error in argument 2 of icalcompiter_iter_set. Expected pvl_elem.");
+        XSRETURN(1);
+    }
+    _result = (pvl_elem )icalcompiter_iter_set(_arg0,_arg1);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"pvl_elem", (void *) _result);
+    XSRETURN(argvi);
+}
+
+#define icalcompiter_iter_get(_swigobj) ((pvl_elem ) _swigobj->iter)
+XS(_wrap_icalcompiter_iter_get) {
+
+    pvl_elem  _result;
+    icalcompiter * _arg0;
+    int argvi = 0;
+    dXSARGS ;
+
+    cv = cv;
+    if ((items < 1) || (items > 1)) 
+        croak("Usage: icalcompiter_iter_get(icalcompiter *);");
+    if (SWIG_GetPtr(ST(0),(void **) &_arg0,"icalcompiterPtr")) {
+        croak("Type error in argument 1 of icalcompiter_iter_get. Expected icalcompiterPtr.");
+        XSRETURN(1);
+    }
+    _result = (pvl_elem )icalcompiter_iter_get(_arg0);
+    ST(argvi) = sv_newmortal();
+    sv_setref_pv(ST(argvi++),"pvl_elem", (void *) _result);
     XSRETURN(argvi);
 }
 
@@ -10921,6 +11972,12 @@ XS(_wrap_perl5_Net__ICal_var_init) {
     swig_setiv("ICAL_TARGET_PROPERTY", (long) ICAL_TARGET_PROPERTY);
     swig_setiv("ICAL_XLICERROR_PROPERTY", (long) ICAL_XLICERROR_PROPERTY);
     swig_setiv("ICAL_XLICCLUSTERCOUNT_PROPERTY", (long) ICAL_XLICCLUSTERCOUNT_PROPERTY);
+    swig_setiv("ICAL_XLICMIMECONTENTTYPE_PROPERTY", (long) ICAL_XLICMIMECONTENTTYPE_PROPERTY);
+    swig_setiv("ICAL_XLICMIMEENCODING_PROPERTY", (long) ICAL_XLICMIMEENCODING_PROPERTY);
+    swig_setiv("ICAL_XLICMIMECID_PROPERTY", (long) ICAL_XLICMIMECID_PROPERTY);
+    swig_setiv("ICAL_XLICMIMEFILENAME_PROPERTY", (long) ICAL_XLICMIMEFILENAME_PROPERTY);
+    swig_setiv("ICAL_XLICMIMECHARSET_PROPERTY", (long) ICAL_XLICMIMECHARSET_PROPERTY);
+    swig_setiv("ICAL_XLICMIMEOPTINFO_PROPERTY", (long) ICAL_XLICMIMEOPTINFO_PROPERTY);
     swig_setiv("ICAL_NO_PROPERTY", (long) ICAL_NO_PROPERTY);
     swig_setiv("ICAL_METHOD_PUBLISH", (long) ICAL_METHOD_PUBLISH);
     swig_setiv("ICAL_METHOD_REQUEST", (long) ICAL_METHOD_REQUEST);
@@ -10945,6 +12002,7 @@ XS(_wrap_perl5_Net__ICal_var_init) {
     swig_setiv("ICAL_CLASS_PRIVATE", (long) ICAL_CLASS_PRIVATE);
     swig_setiv("ICAL_CLASS_CONFIDENTIAL", (long) ICAL_CLASS_CONFIDENTIAL);
     swig_setiv("ICAL_CLASS_XNAME", (long) ICAL_CLASS_XNAME);
+    swig_setiv("ICAL_STATUS_NONE", (long) ICAL_STATUS_NONE);
     swig_setiv("ICAL_STATUS_TENTATIVE", (long) ICAL_STATUS_TENTATIVE);
     swig_setiv("ICAL_STATUS_CONFIRMED", (long) ICAL_STATUS_CONFIRMED);
     swig_setiv("ICAL_STATUS_CANCELLED", (long) ICAL_STATUS_CANCELLED);
@@ -10972,6 +12030,7 @@ XS(_wrap_perl5_Net__ICal_var_init) {
     swig_setiv("ICAL_GEO_VALUE", (long) ICAL_GEO_VALUE);
     swig_setiv("ICAL_INTEGER_VALUE", (long) ICAL_INTEGER_VALUE);
     swig_setiv("ICAL_METHOD_VALUE", (long) ICAL_METHOD_VALUE);
+    swig_setiv("ICAL_STATUS_VALUE", (long) ICAL_STATUS_VALUE);
     swig_setiv("ICAL_PERIOD_VALUE", (long) ICAL_PERIOD_VALUE);
     swig_setiv("ICAL_RECUR_VALUE", (long) ICAL_RECUR_VALUE);
     swig_setiv("ICAL_STRING_VALUE", (long) ICAL_STRING_VALUE);
@@ -11029,6 +12088,7 @@ XS(_wrap_perl5_Net__ICal_var_init) {
     swig_setiv("ICAL_PARTSTAT_COMPLETED", (long) ICAL_PARTSTAT_COMPLETED);
     swig_setiv("ICAL_PARTSTAT_INPROCESS", (long) ICAL_PARTSTAT_INPROCESS);
     swig_setiv("ICAL_PARTSTAT_XNAME", (long) ICAL_PARTSTAT_XNAME);
+    swig_setiv("ICAL_PARTSTAT_NONE", (long) ICAL_PARTSTAT_NONE);
     swig_setiv("ICAL_RANGE_THISANDPRIOR", (long) ICAL_RANGE_THISANDPRIOR);
     swig_setiv("ICAL_RANGE_THISANDFUTURE", (long) ICAL_RANGE_THISANDFUTURE);
     swig_setiv("ICAL_RELATED_START", (long) ICAL_RELATED_START);
@@ -11043,11 +12103,13 @@ XS(_wrap_perl5_Net__ICal_var_init) {
     swig_setiv("ICAL_ROLE_NONPARTICIPANT", (long) ICAL_ROLE_NONPARTICIPANT);
     swig_setiv("ICAL_ROLE_XNAME", (long) ICAL_ROLE_XNAME);
     swig_setiv("ICAL_XLICERRORTYPE_COMPONENTPARSEERROR", (long) ICAL_XLICERRORTYPE_COMPONENTPARSEERROR);
-    swig_setiv("ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR", (long) ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
     swig_setiv("ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR", (long) ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR);
+    swig_setiv("ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR", (long) ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR);
     swig_setiv("ICAL_XLICERRORTYPE_PROPERTYPARSEERROR", (long) ICAL_XLICERRORTYPE_PROPERTYPARSEERROR);
     swig_setiv("ICAL_XLICERRORTYPE_VALUEPARSEERROR", (long) ICAL_XLICERRORTYPE_VALUEPARSEERROR);
+    swig_setiv("ICAL_XLICERRORTYPE_UNKVCALPROP", (long) ICAL_XLICERRORTYPE_UNKVCALPROP);
     swig_setiv("ICAL_XLICERRORTYPE_INVALIDITIP", (long) ICAL_XLICERRORTYPE_INVALIDITIP);
+    swig_setiv("ICAL_XLICERRORTYPE_MIMEPARSEERROR", (long) ICAL_XLICERRORTYPE_MIMEPARSEERROR);
     swig_setiv("ICAL_XLICCOMPARETYPE_EQUAL", (long) ICAL_XLICCOMPARETYPE_EQUAL);
     swig_setiv("ICAL_XLICCOMPARETYPE_LESS", (long) ICAL_XLICCOMPARETYPE_LESS);
     swig_setiv("ICAL_XLICCOMPARETYPE_LESSEQUAL", (long) ICAL_XLICCOMPARETYPE_LESSEQUAL);
@@ -11071,24 +12133,6 @@ XS(_wrap_perl5_Net__ICal_var_init) {
     swig_setiv("ICAL_VALUE_UTCOFFSET", (long) ICAL_VALUE_UTCOFFSET);
     swig_setiv("ICAL_VALUE_URI", (long) ICAL_VALUE_URI);
     swig_setiv("ICAL_VALUE_ERROR", (long) ICAL_VALUE_ERROR);
-    swig_setiv("ICAL_NO_RECURRENCE", (long) ICAL_NO_RECURRENCE);
-    swig_setiv("ICAL_SECONDLY_RECURRENCE", (long) ICAL_SECONDLY_RECURRENCE);
-    swig_setiv("ICAL_MINUTELY_RECURRENCE", (long) ICAL_MINUTELY_RECURRENCE);
-    swig_setiv("ICAL_HOURLY_RECURRENCE", (long) ICAL_HOURLY_RECURRENCE);
-    swig_setiv("ICAL_DAILY_RECURRENCE", (long) ICAL_DAILY_RECURRENCE);
-    swig_setiv("ICAL_WEEKLY_RECURRENCE", (long) ICAL_WEEKLY_RECURRENCE);
-    swig_setiv("ICAL_MONTHLY_RECURRENCE", (long) ICAL_MONTHLY_RECURRENCE);
-    swig_setiv("ICAL_YEARLY_RECURRENCE", (long) ICAL_YEARLY_RECURRENCE);
-    swig_setiv("ICAL_NO_WEEKDAY", (long) ICAL_NO_WEEKDAY);
-    swig_setiv("ICAL_SUNDAY_WEEKDAY", (long) ICAL_SUNDAY_WEEKDAY);
-    swig_setiv("ICAL_MONDAY_WEEKDAY", (long) ICAL_MONDAY_WEEKDAY);
-    swig_setiv("ICAL_TUESDAY_WEEKDAY", (long) ICAL_TUESDAY_WEEKDAY);
-    swig_setiv("ICAL_WEDNESDAY_WEEKDAY", (long) ICAL_WEDNESDAY_WEEKDAY);
-    swig_setiv("ICAL_THURSDAY_WEEKDAY", (long) ICAL_THURSDAY_WEEKDAY);
-    swig_setiv("ICAL_FRIDAY_WEEKDAY", (long) ICAL_FRIDAY_WEEKDAY);
-    swig_setiv("ICAL_SATURDAY_WEEKDAY", (long) ICAL_SATURDAY_WEEKDAY);
-    swig_setiv("ICAL_RECURRENCE_ARRAY_MAX", (long) ICAL_RECURRENCE_ARRAY_MAX);
-    swig_setiv("ICAL_RECURRENCE_ARRAY_MAX_BYTE", (long) ICAL_RECURRENCE_ARRAY_MAX_BYTE);
     swig_setiv("ICAL_UNKNOWN_STATUS", (long) ICAL_UNKNOWN_STATUS);
     swig_setiv("ICAL_2_0_SUCCESS_STATUS", (long) ICAL_2_0_SUCCESS_STATUS);
     swig_setiv("ICAL_2_1_FALLBACK_STATUS", (long) ICAL_2_1_FALLBACK_STATUS);
@@ -11122,6 +12166,11 @@ XS(_wrap_perl5_Net__ICal_var_init) {
     swig_setiv("ICAL_5_1_UNAVAIL_STATUS", (long) ICAL_5_1_UNAVAIL_STATUS);
     swig_setiv("ICAL_5_2_NOSERVICE_STATUS", (long) ICAL_5_2_NOSERVICE_STATUS);
     swig_setiv("ICAL_5_3_NOSCHED_STATUS", (long) ICAL_5_3_NOSCHED_STATUS);
+    swig_setiv("ICALPARSER_ERROR", (long) ICALPARSER_ERROR);
+    swig_setiv("ICALPARSER_SUCCESS", (long) ICALPARSER_SUCCESS);
+    swig_setiv("ICALPARSER_BEGIN_COMP", (long) ICALPARSER_BEGIN_COMP);
+    swig_setiv("ICALPARSER_END_COMP", (long) ICALPARSER_END_COMP);
+    swig_setiv("ICALPARSER_IN_PROGRESS", (long) ICALPARSER_IN_PROGRESS);
     swig_setiv("ICAL_BADARG_ERROR", (long) ICAL_BADARG_ERROR);
     swig_setiv("ICAL_NEWFAILED_ERROR", (long) ICAL_NEWFAILED_ERROR);
     swig_setiv("ICAL_MALFORMEDDATA_ERROR", (long) ICAL_MALFORMEDDATA_ERROR);
@@ -11132,12 +12181,8 @@ XS(_wrap_perl5_Net__ICal_var_init) {
     swig_setiv("ICAL_USAGE_ERROR", (long) ICAL_USAGE_ERROR);
     swig_setiv("ICAL_NO_ERROR", (long) ICAL_NO_ERROR);
     swig_setiv("ICAL_MULTIPLEINCLUSION_ERROR", (long) ICAL_MULTIPLEINCLUSION_ERROR);
+    swig_setiv("ICAL_TIMEDOUT_ERROR", (long) ICAL_TIMEDOUT_ERROR);
     swig_setiv("ICAL_UNKNOWN_ERROR", (long) ICAL_UNKNOWN_ERROR);
-    swig_setiv("ICALPARSER_ERROR", (long) ICALPARSER_ERROR);
-    swig_setiv("ICALPARSER_SUCCESS", (long) ICALPARSER_SUCCESS);
-    swig_setiv("ICALPARSER_BEGIN_COMP", (long) ICALPARSER_BEGIN_COMP);
-    swig_setiv("ICALPARSER_END_COMP", (long) ICALPARSER_END_COMP);
-    swig_setiv("ICALPARSER_IN_PROGRESS", (long) ICALPARSER_IN_PROGRESS);
     swig_setiv("ICAL_RESTRICTION_NONE", (long) ICAL_RESTRICTION_NONE);
     swig_setiv("ICAL_RESTRICTION_ZERO", (long) ICAL_RESTRICTION_ZERO);
     swig_setiv("ICAL_RESTRICTION_ONE", (long) ICAL_RESTRICTION_ONE);
@@ -11147,6 +12192,10 @@ XS(_wrap_perl5_Net__ICal_var_init) {
     swig_setiv("ICAL_RESTRICTION_ONEEXCLUSIVE", (long) ICAL_RESTRICTION_ONEEXCLUSIVE);
     swig_setiv("ICAL_RESTRICTION_ONEMUTUAL", (long) ICAL_RESTRICTION_ONEMUTUAL);
     swig_setiv("ICAL_RESTRICTION_UNKNOWN", (long) ICAL_RESTRICTION_UNKNOWN);
+    swig_setiv("ICAL_RECURRENCE_ARRAY_MAX", (long) ICAL_RECURRENCE_ARRAY_MAX);
+    swig_setiv("ICAL_RECURRENCE_ARRAY_MAX_BYTE", (long) ICAL_RECURRENCE_ARRAY_MAX_BYTE);
+    swig_setpv("icalreqstattype_desc", "icalreqstattype::desc");
+    swig_setpv("icalreqstattype_debug", "icalreqstattype::debug");
     XSRETURN(1);
 }
 #ifdef __cplusplus
@@ -11157,8 +12206,32 @@ XS(boot_Net__ICal) {
 	 char *file = __FILE__;
 	 cv = cv; items = items;
 	 newXS("Net::ICal::var_Net__ICal_init", _wrap_perl5_Net__ICal_var_init, file);
-	 newXS("Net::ICal::icalenum_recurrence_to_string", _wrap_icalenum_recurrence_to_string, file);
-	 newXS("Net::ICal::icalenum_weekday_to_string", _wrap_icalenum_weekday_to_string, file);
+	 newXS("Net::ICal::icaltime_null_time", _wrap_icaltime_null_time, file);
+	 newXS("Net::ICal::icaltime_is_null_time", _wrap_icaltime_is_null_time, file);
+	 newXS("Net::ICal::icaltime_normalize", _wrap_icaltime_normalize, file);
+	 newXS("Net::ICal::icaltime_day_of_year", _wrap_icaltime_day_of_year, file);
+	 newXS("Net::ICal::icaltime_from_day_of_year", _wrap_icaltime_from_day_of_year, file);
+	 newXS("Net::ICal::icaltime_day_of_week", _wrap_icaltime_day_of_week, file);
+	 newXS("Net::ICal::icaltime_start_doy_of_week", _wrap_icaltime_start_doy_of_week, file);
+	 newXS("Net::ICal::icaltime_from_timet", _wrap_icaltime_from_timet, file);
+	 newXS("Net::ICal::icaltime_from_string", _wrap_icaltime_from_string, file);
+	 newXS("Net::ICal::icaltime_as_timet", _wrap_icaltime_as_timet, file);
+	 newXS("Net::ICal::icaltime_as_ctime", _wrap_icaltime_as_ctime, file);
+	 newXS("Net::ICal::icaltime_week_number", _wrap_icaltime_week_number, file);
+	 newXS("Net::ICal::icaltime_from_week_number", _wrap_icaltime_from_week_number, file);
+	 newXS("Net::ICal::icaltime_compare", _wrap_icaltime_compare, file);
+	 newXS("Net::ICal::icaltime_days_in_month", _wrap_icaltime_days_in_month, file);
+	 newXS("Net::ICal::icaltime_utc_offset", _wrap_icaltime_utc_offset, file);
+	 newXS("Net::ICal::icaltime_local_utc_offset", _wrap_icaltime_local_utc_offset, file);
+	 newXS("Net::ICal::icaltime_as_utc", _wrap_icaltime_as_utc, file);
+	 newXS("Net::ICal::icaltime_as_zone", _wrap_icaltime_as_zone, file);
+	 newXS("Net::ICal::icaldurationtype_from_timet", _wrap_icaldurationtype_from_timet, file);
+	 newXS("Net::ICal::icaldurationtype_from_string", _wrap_icaldurationtype_from_string, file);
+	 newXS("Net::ICal::icaldurationtype_as_timet", _wrap_icaldurationtype_as_timet, file);
+	 newXS("Net::ICal::icalperiodtype_duration", _wrap_icalperiodtype_duration, file);
+	 newXS("Net::ICal::icalperiodtype_end", _wrap_icalperiodtype_end, file);
+	 newXS("Net::ICal::icaltime_add", _wrap_icaltime_add, file);
+	 newXS("Net::ICal::icaltime_subtract", _wrap_icaltime_subtract, file);
 	 newXS("Net::ICal::icalenum_reqstat_desc", _wrap_icalenum_reqstat_desc, file);
 	 newXS("Net::ICal::icalenum_reqstat_major", _wrap_icalenum_reqstat_major, file);
 	 newXS("Net::ICal::icalenum_reqstat_minor", _wrap_icalenum_reqstat_minor, file);
@@ -11174,47 +12247,94 @@ XS(boot_Net__ICal) {
 	 newXS("Net::ICal::icalenum_property_kind_to_value_kind", _wrap_icalenum_property_kind_to_value_kind, file);
 	 newXS("Net::ICal::icalenum_method_to_string", _wrap_icalenum_method_to_string, file);
 	 newXS("Net::ICal::icalenum_string_to_method", _wrap_icalenum_string_to_method, file);
-	 newXS("Net::ICal::icalcomponent_new", _wrap_icalcomponent_new, file);
-	 newXS("Net::ICal::icalcomponent_new_clone", _wrap_icalcomponent_new_clone, file);
-	 newXS("Net::ICal::icalcomponent_new_from_string", _wrap_icalcomponent_new_from_string, file);
-	 newXS("Net::ICal::icalcomponent_free", _wrap_icalcomponent_free, file);
-	 newXS("Net::ICal::icalcomponent_as_ical_string", _wrap_icalcomponent_as_ical_string, file);
-	 newXS("Net::ICal::icalcomponent_is_valid", _wrap_icalcomponent_is_valid, file);
-	 newXS("Net::ICal::icalcomponent_isa", _wrap_icalcomponent_isa, file);
-	 newXS("Net::ICal::icalcomponent_isa_component", _wrap_icalcomponent_isa_component, file);
-	 newXS("Net::ICal::icalcomponent_add_property", _wrap_icalcomponent_add_property, file);
-	 newXS("Net::ICal::icalcomponent_remove_property", _wrap_icalcomponent_remove_property, file);
-	 newXS("Net::ICal::icalcomponent_count_properties", _wrap_icalcomponent_count_properties, file);
-	 newXS("Net::ICal::icalcomponent_get_current_property", _wrap_icalcomponent_get_current_property, file);
-	 newXS("Net::ICal::icalcomponent_get_first_property", _wrap_icalcomponent_get_first_property, file);
-	 newXS("Net::ICal::icalcomponent_get_next_property", _wrap_icalcomponent_get_next_property, file);
-	 newXS("Net::ICal::icalcomponent_get_properties", _wrap_icalcomponent_get_properties, file);
-	 newXS("Net::ICal::icalcomponent_add_component", _wrap_icalcomponent_add_component, file);
-	 newXS("Net::ICal::icalcomponent_remove_component", _wrap_icalcomponent_remove_component, file);
-	 newXS("Net::ICal::icalcomponent_count_components", _wrap_icalcomponent_count_components, file);
-	 newXS("Net::ICal::icalcomponent_get_current_component", _wrap_icalcomponent_get_current_component, file);
-	 newXS("Net::ICal::icalcomponent_get_first_component", _wrap_icalcomponent_get_first_component, file);
-	 newXS("Net::ICal::icalcomponent_get_next_component", _wrap_icalcomponent_get_next_component, file);
-	 newXS("Net::ICal::icalcomponent_get_component", _wrap_icalcomponent_get_component, file);
-	 newXS("Net::ICal::icalcomponent_count_errors", _wrap_icalcomponent_count_errors, file);
-	 newXS("Net::ICal::icalcomponent_convert_errors", _wrap_icalcomponent_convert_errors, file);
-	 newXS("Net::ICal::icalcomponent_strip_errors", _wrap_icalcomponent_strip_errors, file);
-	 newXS("Net::ICal::icalcomponent_get_parent", _wrap_icalcomponent_get_parent, file);
-	 newXS("Net::ICal::icalcomponent_set_parent", _wrap_icalcomponent_set_parent, file);
-	 newXS("Net::ICal::icalerror_crash_here", _wrap_icalerror_crash_here, file);
-	 newXS("Net::ICal::icalerror_stop_here", _wrap_icalerror_stop_here, file);
-	 newXS("Net::ICal::icalerror_clear_errno", _wrap_icalerror_clear_errno, file);
-	 newXS("Net::ICal::icalerror_set_errno", _wrap_icalerror_set_errno, file);
-	 newXS("Net::ICal::icalerror_strerror", _wrap_icalerror_strerror, file);
-	 newXS("Net::ICal::icalmemory_tmp_buffer", _wrap_icalmemory_tmp_buffer, file);
-	 newXS("Net::ICal::icalmemory_tmp_copy", _wrap_icalmemory_tmp_copy, file);
-	 newXS("Net::ICal::icalmemory_add_tmp_buffer", _wrap_icalmemory_add_tmp_buffer, file);
-	 newXS("Net::ICal::icalmemory_free_ring", _wrap_icalmemory_free_ring, file);
-	 newXS("Net::ICal::icalmemory_new_buffer", _wrap_icalmemory_new_buffer, file);
-	 newXS("Net::ICal::icalmemory_resize_buffer", _wrap_icalmemory_resize_buffer, file);
-	 newXS("Net::ICal::icalmemory_free_buffer", _wrap_icalmemory_free_buffer, file);
-	 newXS("Net::ICal::icalmemory_append_string", _wrap_icalmemory_append_string, file);
-	 newXS("Net::ICal::icalmemory_append_char", _wrap_icalmemory_append_char, file);
+	 newXS("Net::ICal::icalenum_status_to_string", _wrap_icalenum_status_to_string, file);
+	 newXS("Net::ICal::icalenum_string_to_status", _wrap_icalenum_string_to_status, file);
+	 newXS("Net::ICal::icalattachtype_new", _wrap_icalattachtype_new, file);
+	 newXS("Net::ICal::icalattachtype_add_reference", _wrap_icalattachtype_add_reference, file);
+	 newXS("Net::ICal::icalattachtype_free", _wrap_icalattachtype_free, file);
+	 newXS("Net::ICal::icalattachtype_set_url", _wrap_icalattachtype_set_url, file);
+	 newXS("Net::ICal::icalattachtype_get_url", _wrap_icalattachtype_get_url, file);
+	 newXS("Net::ICal::icalattachtype_set_base64", _wrap_icalattachtype_set_base64, file);
+	 newXS("Net::ICal::icalattachtype_get_base64", _wrap_icalattachtype_get_base64, file);
+	 newXS("Net::ICal::icalattachtype_set_binary", _wrap_icalattachtype_set_binary, file);
+	 newXS("Net::ICal::icalattachtype_get_binary", _wrap_icalattachtype_get_binary, file);
+	 newXS("Net::ICal::icalreqstattype_from_string", _wrap_icalreqstattype_from_string, file);
+	 newXS("Net::ICal::icalreqstattype_as_string", _wrap_icalreqstattype_as_string, file);
+	 newXS("Net::ICal::icalvalue_new", _wrap_icalvalue_new, file);
+	 newXS("Net::ICal::icalvalue_new_clone", _wrap_icalvalue_new_clone, file);
+	 newXS("Net::ICal::icalvalue_new_from_string", _wrap_icalvalue_new_from_string, file);
+	 newXS("Net::ICal::icalvalue_free", _wrap_icalvalue_free, file);
+	 newXS("Net::ICal::icalvalue_is_valid", _wrap_icalvalue_is_valid, file);
+	 newXS("Net::ICal::icalvalue_as_ical_string", _wrap_icalvalue_as_ical_string, file);
+	 newXS("Net::ICal::icalvalue_isa", _wrap_icalvalue_isa, file);
+	 newXS("Net::ICal::icalvalue_isa_value", _wrap_icalvalue_isa_value, file);
+	 newXS("Net::ICal::icalvalue_compare", _wrap_icalvalue_compare, file);
+	 newXS("Net::ICal::icalvalue_new_attach", _wrap_icalvalue_new_attach, file);
+	 newXS("Net::ICal::icalvalue_get_attach", _wrap_icalvalue_get_attach, file);
+	 newXS("Net::ICal::icalvalue_set_attach", _wrap_icalvalue_set_attach, file);
+	 newXS("Net::ICal::icalvalue_new_binary", _wrap_icalvalue_new_binary, file);
+	 newXS("Net::ICal::icalvalue_get_binary", _wrap_icalvalue_get_binary, file);
+	 newXS("Net::ICal::icalvalue_set_binary", _wrap_icalvalue_set_binary, file);
+	 newXS("Net::ICal::icalvalue_new_boolean", _wrap_icalvalue_new_boolean, file);
+	 newXS("Net::ICal::icalvalue_get_boolean", _wrap_icalvalue_get_boolean, file);
+	 newXS("Net::ICal::icalvalue_set_boolean", _wrap_icalvalue_set_boolean, file);
+	 newXS("Net::ICal::icalvalue_new_caladdress", _wrap_icalvalue_new_caladdress, file);
+	 newXS("Net::ICal::icalvalue_get_caladdress", _wrap_icalvalue_get_caladdress, file);
+	 newXS("Net::ICal::icalvalue_set_caladdress", _wrap_icalvalue_set_caladdress, file);
+	 newXS("Net::ICal::icalvalue_new_date", _wrap_icalvalue_new_date, file);
+	 newXS("Net::ICal::icalvalue_get_date", _wrap_icalvalue_get_date, file);
+	 newXS("Net::ICal::icalvalue_set_date", _wrap_icalvalue_set_date, file);
+	 newXS("Net::ICal::icalvalue_new_datetime", _wrap_icalvalue_new_datetime, file);
+	 newXS("Net::ICal::icalvalue_get_datetime", _wrap_icalvalue_get_datetime, file);
+	 newXS("Net::ICal::icalvalue_set_datetime", _wrap_icalvalue_set_datetime, file);
+	 newXS("Net::ICal::icalvalue_new_datetimedate", _wrap_icalvalue_new_datetimedate, file);
+	 newXS("Net::ICal::icalvalue_get_datetimedate", _wrap_icalvalue_get_datetimedate, file);
+	 newXS("Net::ICal::icalvalue_set_datetimedate", _wrap_icalvalue_set_datetimedate, file);
+	 newXS("Net::ICal::icalvalue_new_datetimeperiod", _wrap_icalvalue_new_datetimeperiod, file);
+	 newXS("Net::ICal::icalvalue_get_datetimeperiod", _wrap_icalvalue_get_datetimeperiod, file);
+	 newXS("Net::ICal::icalvalue_set_datetimeperiod", _wrap_icalvalue_set_datetimeperiod, file);
+	 newXS("Net::ICal::icalvalue_new_duration", _wrap_icalvalue_new_duration, file);
+	 newXS("Net::ICal::icalvalue_get_duration", _wrap_icalvalue_get_duration, file);
+	 newXS("Net::ICal::icalvalue_set_duration", _wrap_icalvalue_set_duration, file);
+	 newXS("Net::ICal::icalvalue_new_float", _wrap_icalvalue_new_float, file);
+	 newXS("Net::ICal::icalvalue_get_float", _wrap_icalvalue_get_float, file);
+	 newXS("Net::ICal::icalvalue_set_float", _wrap_icalvalue_set_float, file);
+	 newXS("Net::ICal::icalvalue_new_geo", _wrap_icalvalue_new_geo, file);
+	 newXS("Net::ICal::icalvalue_get_geo", _wrap_icalvalue_get_geo, file);
+	 newXS("Net::ICal::icalvalue_set_geo", _wrap_icalvalue_set_geo, file);
+	 newXS("Net::ICal::icalvalue_new_integer", _wrap_icalvalue_new_integer, file);
+	 newXS("Net::ICal::icalvalue_get_integer", _wrap_icalvalue_get_integer, file);
+	 newXS("Net::ICal::icalvalue_set_integer", _wrap_icalvalue_set_integer, file);
+	 newXS("Net::ICal::icalvalue_new_method", _wrap_icalvalue_new_method, file);
+	 newXS("Net::ICal::icalvalue_get_method", _wrap_icalvalue_get_method, file);
+	 newXS("Net::ICal::icalvalue_set_method", _wrap_icalvalue_set_method, file);
+	 newXS("Net::ICal::icalvalue_new_period", _wrap_icalvalue_new_period, file);
+	 newXS("Net::ICal::icalvalue_get_period", _wrap_icalvalue_get_period, file);
+	 newXS("Net::ICal::icalvalue_set_period", _wrap_icalvalue_set_period, file);
+	 newXS("Net::ICal::icalvalue_new_string", _wrap_icalvalue_new_string, file);
+	 newXS("Net::ICal::icalvalue_get_string", _wrap_icalvalue_get_string, file);
+	 newXS("Net::ICal::icalvalue_set_string", _wrap_icalvalue_set_string, file);
+	 newXS("Net::ICal::icalvalue_new_text", _wrap_icalvalue_new_text, file);
+	 newXS("Net::ICal::icalvalue_get_text", _wrap_icalvalue_get_text, file);
+	 newXS("Net::ICal::icalvalue_set_text", _wrap_icalvalue_set_text, file);
+	 newXS("Net::ICal::icalvalue_new_time", _wrap_icalvalue_new_time, file);
+	 newXS("Net::ICal::icalvalue_get_time", _wrap_icalvalue_get_time, file);
+	 newXS("Net::ICal::icalvalue_set_time", _wrap_icalvalue_set_time, file);
+	 newXS("Net::ICal::icalvalue_new_trigger", _wrap_icalvalue_new_trigger, file);
+	 newXS("Net::ICal::icalvalue_get_trigger", _wrap_icalvalue_get_trigger, file);
+	 newXS("Net::ICal::icalvalue_set_trigger", _wrap_icalvalue_set_trigger, file);
+	 newXS("Net::ICal::icalvalue_new_uri", _wrap_icalvalue_new_uri, file);
+	 newXS("Net::ICal::icalvalue_get_uri", _wrap_icalvalue_get_uri, file);
+	 newXS("Net::ICal::icalvalue_set_uri", _wrap_icalvalue_set_uri, file);
+	 newXS("Net::ICal::icalvalue_new_utcoffset", _wrap_icalvalue_new_utcoffset, file);
+	 newXS("Net::ICal::icalvalue_get_utcoffset", _wrap_icalvalue_get_utcoffset, file);
+	 newXS("Net::ICal::icalvalue_set_utcoffset", _wrap_icalvalue_set_utcoffset, file);
+	 newXS("Net::ICal::icalvalue_new_query", _wrap_icalvalue_new_query, file);
+	 newXS("Net::ICal::icalvalue_get_query", _wrap_icalvalue_get_query, file);
+	 newXS("Net::ICal::icalvalue_set_query", _wrap_icalvalue_set_query, file);
+	 newXS("Net::ICal::icalvalue_new_status", _wrap_icalvalue_new_status, file);
+	 newXS("Net::ICal::icalvalue_get_status", _wrap_icalvalue_get_status, file);
+	 newXS("Net::ICal::icalvalue_set_status", _wrap_icalvalue_set_status, file);
 	 newXS("Net::ICal::icalparameter_new", _wrap_icalparameter_new, file);
 	 newXS("Net::ICal::icalparameter_new_clone", _wrap_icalparameter_new_clone, file);
 	 newXS("Net::ICal::icalparameter_new_from_string", _wrap_icalparameter_new_from_string, file);
@@ -11296,16 +12416,6 @@ XS(boot_Net__ICal) {
 	 newXS("Net::ICal::icalparameter_new_xliccomparetype", _wrap_icalparameter_new_xliccomparetype, file);
 	 newXS("Net::ICal::icalparameter_get_xliccomparetype", _wrap_icalparameter_get_xliccomparetype, file);
 	 newXS("Net::ICal::icalparameter_set_xliccomparetype", _wrap_icalparameter_set_xliccomparetype, file);
-	 newXS("Net::ICal::icalparser_parse_string", _wrap_icalparser_parse_string, file);
-	 newXS("Net::ICal::icalparser_new", _wrap_icalparser_new, file);
-	 newXS("Net::ICal::icalparser_set_gen_data", _wrap_icalparser_set_gen_data, file);
-	 newXS("Net::ICal::icalparser_add_line", _wrap_icalparser_add_line, file);
-	 newXS("Net::ICal::icalparser_claim", _wrap_icalparser_claim, file);
-	 newXS("Net::ICal::icalparser_clean", _wrap_icalparser_clean, file);
-	 newXS("Net::ICal::icalparser_get_state", _wrap_icalparser_get_state, file);
-	 newXS("Net::ICal::icalparser_free", _wrap_icalparser_free, file);
-	 newXS("Net::ICal::icalparser_parse_value", _wrap_icalparser_parse_value, file);
-	 newXS("Net::ICal::string_line_generator", _wrap_string_line_generator, file);
 	 newXS("Net::ICal::icalproperty_new", _wrap_icalproperty_new, file);
 	 newXS("Net::ICal::icalproperty_new_clone", _wrap_icalproperty_new_clone, file);
 	 newXS("Net::ICal::icalproperty_new_from_string", _wrap_icalproperty_new_from_string, file);
@@ -11314,6 +12424,7 @@ XS(boot_Net__ICal) {
 	 newXS("Net::ICal::icalproperty_isa", _wrap_icalproperty_isa, file);
 	 newXS("Net::ICal::icalproperty_isa_property", _wrap_icalproperty_isa_property, file);
 	 newXS("Net::ICal::icalproperty_add_parameter", _wrap_icalproperty_add_parameter, file);
+	 newXS("Net::ICal::icalproperty_set_parameter", _wrap_icalproperty_set_parameter, file);
 	 newXS("Net::ICal::icalproperty_remove_parameter", _wrap_icalproperty_remove_parameter, file);
 	 newXS("Net::ICal::icalproperty_count_parameters", _wrap_icalproperty_count_parameters, file);
 	 newXS("Net::ICal::icalproperty_get_first_parameter", _wrap_icalproperty_get_first_parameter, file);
@@ -11325,6 +12436,9 @@ XS(boot_Net__ICal) {
 	 newXS("Net::ICal::icalproperty_new_method", _wrap_icalproperty_new_method, file);
 	 newXS("Net::ICal::icalproperty_set_method", _wrap_icalproperty_set_method, file);
 	 newXS("Net::ICal::icalproperty_get_method", _wrap_icalproperty_get_method, file);
+	 newXS("Net::ICal::icalproperty_new_xlicmimecid", _wrap_icalproperty_new_xlicmimecid, file);
+	 newXS("Net::ICal::icalproperty_set_xlicmimecid", _wrap_icalproperty_set_xlicmimecid, file);
+	 newXS("Net::ICal::icalproperty_get_xlicmimecid", _wrap_icalproperty_get_xlicmimecid, file);
 	 newXS("Net::ICal::icalproperty_new_lastmodified", _wrap_icalproperty_new_lastmodified, file);
 	 newXS("Net::ICal::icalproperty_set_lastmodified", _wrap_icalproperty_set_lastmodified, file);
 	 newXS("Net::ICal::icalproperty_get_lastmodified", _wrap_icalproperty_get_lastmodified, file);
@@ -11352,15 +12466,18 @@ XS(boot_Net__ICal) {
 	 newXS("Net::ICal::icalproperty_new_tzoffsetfrom", _wrap_icalproperty_new_tzoffsetfrom, file);
 	 newXS("Net::ICal::icalproperty_set_tzoffsetfrom", _wrap_icalproperty_set_tzoffsetfrom, file);
 	 newXS("Net::ICal::icalproperty_get_tzoffsetfrom", _wrap_icalproperty_get_tzoffsetfrom, file);
-	 newXS("Net::ICal::icalproperty_new_rrule", _wrap_icalproperty_new_rrule, file);
-	 newXS("Net::ICal::icalproperty_set_rrule", _wrap_icalproperty_set_rrule, file);
-	 newXS("Net::ICal::icalproperty_get_rrule", _wrap_icalproperty_get_rrule, file);
 	 newXS("Net::ICal::icalproperty_new_attendee", _wrap_icalproperty_new_attendee, file);
 	 newXS("Net::ICal::icalproperty_set_attendee", _wrap_icalproperty_set_attendee, file);
 	 newXS("Net::ICal::icalproperty_get_attendee", _wrap_icalproperty_get_attendee, file);
 	 newXS("Net::ICal::icalproperty_new_contact", _wrap_icalproperty_new_contact, file);
 	 newXS("Net::ICal::icalproperty_set_contact", _wrap_icalproperty_set_contact, file);
 	 newXS("Net::ICal::icalproperty_get_contact", _wrap_icalproperty_get_contact, file);
+	 newXS("Net::ICal::icalproperty_new_xlicmimecontenttype", _wrap_icalproperty_new_xlicmimecontenttype, file);
+	 newXS("Net::ICal::icalproperty_set_xlicmimecontenttype", _wrap_icalproperty_set_xlicmimecontenttype, file);
+	 newXS("Net::ICal::icalproperty_get_xlicmimecontenttype", _wrap_icalproperty_get_xlicmimecontenttype, file);
+	 newXS("Net::ICal::icalproperty_new_xlicmimeoptinfo", _wrap_icalproperty_new_xlicmimeoptinfo, file);
+	 newXS("Net::ICal::icalproperty_set_xlicmimeoptinfo", _wrap_icalproperty_set_xlicmimeoptinfo, file);
+	 newXS("Net::ICal::icalproperty_get_xlicmimeoptinfo", _wrap_icalproperty_get_xlicmimeoptinfo, file);
 	 newXS("Net::ICal::icalproperty_new_relatedto", _wrap_icalproperty_new_relatedto, file);
 	 newXS("Net::ICal::icalproperty_set_relatedto", _wrap_icalproperty_set_relatedto, file);
 	 newXS("Net::ICal::icalproperty_get_relatedto", _wrap_icalproperty_get_relatedto, file);
@@ -11370,21 +12487,27 @@ XS(boot_Net__ICal) {
 	 newXS("Net::ICal::icalproperty_new_comment", _wrap_icalproperty_new_comment, file);
 	 newXS("Net::ICal::icalproperty_set_comment", _wrap_icalproperty_set_comment, file);
 	 newXS("Net::ICal::icalproperty_get_comment", _wrap_icalproperty_get_comment, file);
-	 newXS("Net::ICal::icalproperty_new_trigger", _wrap_icalproperty_new_trigger, file);
-	 newXS("Net::ICal::icalproperty_set_trigger", _wrap_icalproperty_set_trigger, file);
-	 newXS("Net::ICal::icalproperty_get_trigger", _wrap_icalproperty_get_trigger, file);
 	 newXS("Net::ICal::icalproperty_new_xlicerror", _wrap_icalproperty_new_xlicerror, file);
 	 newXS("Net::ICal::icalproperty_set_xlicerror", _wrap_icalproperty_set_xlicerror, file);
 	 newXS("Net::ICal::icalproperty_get_xlicerror", _wrap_icalproperty_get_xlicerror, file);
+	 newXS("Net::ICal::icalproperty_new_trigger", _wrap_icalproperty_new_trigger, file);
+	 newXS("Net::ICal::icalproperty_set_trigger", _wrap_icalproperty_set_trigger, file);
+	 newXS("Net::ICal::icalproperty_get_trigger", _wrap_icalproperty_get_trigger, file);
 	 newXS("Net::ICal::icalproperty_new_class", _wrap_icalproperty_new_class, file);
 	 newXS("Net::ICal::icalproperty_set_class", _wrap_icalproperty_set_class, file);
 	 newXS("Net::ICal::icalproperty_get_class", _wrap_icalproperty_get_class, file);
+	 newXS("Net::ICal::icalproperty_new_x", _wrap_icalproperty_new_x, file);
+	 newXS("Net::ICal::icalproperty_set_x", _wrap_icalproperty_set_x, file);
+	 newXS("Net::ICal::icalproperty_get_x", _wrap_icalproperty_get_x, file);
 	 newXS("Net::ICal::icalproperty_new_tzoffsetto", _wrap_icalproperty_new_tzoffsetto, file);
 	 newXS("Net::ICal::icalproperty_set_tzoffsetto", _wrap_icalproperty_set_tzoffsetto, file);
 	 newXS("Net::ICal::icalproperty_get_tzoffsetto", _wrap_icalproperty_get_tzoffsetto, file);
 	 newXS("Net::ICal::icalproperty_new_transp", _wrap_icalproperty_new_transp, file);
 	 newXS("Net::ICal::icalproperty_set_transp", _wrap_icalproperty_set_transp, file);
 	 newXS("Net::ICal::icalproperty_get_transp", _wrap_icalproperty_get_transp, file);
+	 newXS("Net::ICal::icalproperty_new_xlicmimeencoding", _wrap_icalproperty_new_xlicmimeencoding, file);
+	 newXS("Net::ICal::icalproperty_set_xlicmimeencoding", _wrap_icalproperty_set_xlicmimeencoding, file);
+	 newXS("Net::ICal::icalproperty_get_xlicmimeencoding", _wrap_icalproperty_get_xlicmimeencoding, file);
 	 newXS("Net::ICal::icalproperty_new_sequence", _wrap_icalproperty_new_sequence, file);
 	 newXS("Net::ICal::icalproperty_set_sequence", _wrap_icalproperty_set_sequence, file);
 	 newXS("Net::ICal::icalproperty_get_sequence", _wrap_icalproperty_get_sequence, file);
@@ -11433,18 +12556,18 @@ XS(boot_Net__ICal) {
 	 newXS("Net::ICal::icalproperty_new_rdate", _wrap_icalproperty_new_rdate, file);
 	 newXS("Net::ICal::icalproperty_set_rdate", _wrap_icalproperty_set_rdate, file);
 	 newXS("Net::ICal::icalproperty_get_rdate", _wrap_icalproperty_get_rdate, file);
+	 newXS("Net::ICal::icalproperty_new_xlicmimefilename", _wrap_icalproperty_new_xlicmimefilename, file);
+	 newXS("Net::ICal::icalproperty_set_xlicmimefilename", _wrap_icalproperty_set_xlicmimefilename, file);
+	 newXS("Net::ICal::icalproperty_get_xlicmimefilename", _wrap_icalproperty_get_xlicmimefilename, file);
 	 newXS("Net::ICal::icalproperty_new_url", _wrap_icalproperty_new_url, file);
 	 newXS("Net::ICal::icalproperty_set_url", _wrap_icalproperty_set_url, file);
 	 newXS("Net::ICal::icalproperty_get_url", _wrap_icalproperty_get_url, file);
-	 newXS("Net::ICal::icalproperty_new_attach", _wrap_icalproperty_new_attach, file);
-	 newXS("Net::ICal::icalproperty_set_attach", _wrap_icalproperty_set_attach, file);
-	 newXS("Net::ICal::icalproperty_get_attach", _wrap_icalproperty_get_attach, file);
 	 newXS("Net::ICal::icalproperty_new_xlicclustercount", _wrap_icalproperty_new_xlicclustercount, file);
 	 newXS("Net::ICal::icalproperty_set_xlicclustercount", _wrap_icalproperty_set_xlicclustercount, file);
 	 newXS("Net::ICal::icalproperty_get_xlicclustercount", _wrap_icalproperty_get_xlicclustercount, file);
-	 newXS("Net::ICal::icalproperty_new_exrule", _wrap_icalproperty_new_exrule, file);
-	 newXS("Net::ICal::icalproperty_set_exrule", _wrap_icalproperty_set_exrule, file);
-	 newXS("Net::ICal::icalproperty_get_exrule", _wrap_icalproperty_get_exrule, file);
+	 newXS("Net::ICal::icalproperty_new_attach", _wrap_icalproperty_new_attach, file);
+	 newXS("Net::ICal::icalproperty_set_attach", _wrap_icalproperty_set_attach, file);
+	 newXS("Net::ICal::icalproperty_get_attach", _wrap_icalproperty_get_attach, file);
 	 newXS("Net::ICal::icalproperty_new_query", _wrap_icalproperty_new_query, file);
 	 newXS("Net::ICal::icalproperty_set_query", _wrap_icalproperty_set_query, file);
 	 newXS("Net::ICal::icalproperty_get_query", _wrap_icalproperty_get_query, file);
@@ -11460,6 +12583,9 @@ XS(boot_Net__ICal) {
 	 newXS("Net::ICal::icalproperty_new_geo", _wrap_icalproperty_new_geo, file);
 	 newXS("Net::ICal::icalproperty_set_geo", _wrap_icalproperty_set_geo, file);
 	 newXS("Net::ICal::icalproperty_get_geo", _wrap_icalproperty_get_geo, file);
+	 newXS("Net::ICal::icalproperty_new_xlicmimecharset", _wrap_icalproperty_new_xlicmimecharset, file);
+	 newXS("Net::ICal::icalproperty_set_xlicmimecharset", _wrap_icalproperty_set_xlicmimecharset, file);
+	 newXS("Net::ICal::icalproperty_get_xlicmimecharset", _wrap_icalproperty_get_xlicmimecharset, file);
 	 newXS("Net::ICal::icalproperty_new_completed", _wrap_icalproperty_new_completed, file);
 	 newXS("Net::ICal::icalproperty_set_completed", _wrap_icalproperty_set_completed, file);
 	 newXS("Net::ICal::icalproperty_get_completed", _wrap_icalproperty_get_completed, file);
@@ -11472,151 +12598,120 @@ XS(boot_Net__ICal) {
 	 newXS("Net::ICal::icalproperty_new_action", _wrap_icalproperty_new_action, file);
 	 newXS("Net::ICal::icalproperty_set_action", _wrap_icalproperty_set_action, file);
 	 newXS("Net::ICal::icalproperty_get_action", _wrap_icalproperty_get_action, file);
+	 newXS("Net::ICal::pvl_new_element", _wrap_pvl_new_element, file);
+	 newXS("Net::ICal::pvl_newlist", _wrap_pvl_newlist, file);
+	 newXS("Net::ICal::pvl_free", _wrap_pvl_free, file);
+	 newXS("Net::ICal::pvl_unshift", _wrap_pvl_unshift, file);
+	 newXS("Net::ICal::pvl_shift", _wrap_pvl_shift, file);
+	 newXS("Net::ICal::pvl_head", _wrap_pvl_head, file);
+	 newXS("Net::ICal::pvl_push", _wrap_pvl_push, file);
+	 newXS("Net::ICal::pvl_pop", _wrap_pvl_pop, file);
+	 newXS("Net::ICal::pvl_tail", _wrap_pvl_tail, file);
+	 newXS("Net::ICal::pvl_insert_ordered", _wrap_pvl_insert_ordered, file);
+	 newXS("Net::ICal::pvl_insert_after", _wrap_pvl_insert_after, file);
+	 newXS("Net::ICal::pvl_insert_before", _wrap_pvl_insert_before, file);
+	 newXS("Net::ICal::pvl_remove", _wrap_pvl_remove, file);
+	 newXS("Net::ICal::pvl_clear", _wrap_pvl_clear, file);
+	 newXS("Net::ICal::pvl_count", _wrap_pvl_count, file);
+	 newXS("Net::ICal::pvl_next", _wrap_pvl_next, file);
+	 newXS("Net::ICal::pvl_prior", _wrap_pvl_prior, file);
+	 newXS("Net::ICal::pvl_data", _wrap_pvl_data, file);
+	 newXS("Net::ICal::pvl_find", _wrap_pvl_find, file);
+	 newXS("Net::ICal::pvl_find_next", _wrap_pvl_find_next, file);
+	 newXS("Net::ICal::pvl_apply", _wrap_pvl_apply, file);
+	 newXS("Net::ICal::icalcomponent_new", _wrap_icalcomponent_new, file);
+	 newXS("Net::ICal::icalcomponent_new_clone", _wrap_icalcomponent_new_clone, file);
+	 newXS("Net::ICal::icalcomponent_new_from_string", _wrap_icalcomponent_new_from_string, file);
+	 newXS("Net::ICal::icalcomponent_free", _wrap_icalcomponent_free, file);
+	 newXS("Net::ICal::icalcomponent_as_ical_string", _wrap_icalcomponent_as_ical_string, file);
+	 newXS("Net::ICal::icalcomponent_is_valid", _wrap_icalcomponent_is_valid, file);
+	 newXS("Net::ICal::icalcomponent_isa", _wrap_icalcomponent_isa, file);
+	 newXS("Net::ICal::icalcomponent_isa_component", _wrap_icalcomponent_isa_component, file);
+	 newXS("Net::ICal::icalcomponent_add_property", _wrap_icalcomponent_add_property, file);
+	 newXS("Net::ICal::icalcomponent_remove_property", _wrap_icalcomponent_remove_property, file);
+	 newXS("Net::ICal::icalcomponent_count_properties", _wrap_icalcomponent_count_properties, file);
+	 newXS("Net::ICal::icalcomponent_get_current_property", _wrap_icalcomponent_get_current_property, file);
+	 newXS("Net::ICal::icalcomponent_get_first_property", _wrap_icalcomponent_get_first_property, file);
+	 newXS("Net::ICal::icalcomponent_get_next_property", _wrap_icalcomponent_get_next_property, file);
+	 newXS("Net::ICal::icalcomponent_get_properties", _wrap_icalcomponent_get_properties, file);
+	 newXS("Net::ICal::icalcomponent_add_component", _wrap_icalcomponent_add_component, file);
+	 newXS("Net::ICal::icalcomponent_remove_component", _wrap_icalcomponent_remove_component, file);
+	 newXS("Net::ICal::icalcomponent_count_components", _wrap_icalcomponent_count_components, file);
+	 newXS("Net::ICal::icalcomponent_end_component", _wrap_icalcomponent_end_component, file);
+	 newXS("Net::ICal::icalcomponent_get_current_component", _wrap_icalcomponent_get_current_component, file);
+	 newXS("Net::ICal::icalcomponent_get_first_component", _wrap_icalcomponent_get_first_component, file);
+	 newXS("Net::ICal::icalcomponent_get_next_component", _wrap_icalcomponent_get_next_component, file);
+	 newXS("Net::ICal::icalcomponent_count_errors", _wrap_icalcomponent_count_errors, file);
+	 newXS("Net::ICal::icalcomponent_strip_errors", _wrap_icalcomponent_strip_errors, file);
+	 newXS("Net::ICal::icalcomponent_convert_errors", _wrap_icalcomponent_convert_errors, file);
+	 newXS("Net::ICal::icalcomponent_get_parent", _wrap_icalcomponent_get_parent, file);
+	 newXS("Net::ICal::icalcomponent_set_parent", _wrap_icalcomponent_set_parent, file);
+	 newXS("Net::ICal::icalcompiter_next", _wrap_icalcompiter_next, file);
+	 newXS("Net::ICal::icalcompiter_prior", _wrap_icalcompiter_prior, file);
+	 newXS("Net::ICal::icalcompiter_deref", _wrap_icalcompiter_deref, file);
+	 newXS("Net::ICal::icalcomponent_get_first_real_component", _wrap_icalcomponent_get_first_real_component, file);
+	 newXS("Net::ICal::icalcomponent_get_span", _wrap_icalcomponent_get_span, file);
+	 newXS("Net::ICal::icalcomponent_set_dtstart", _wrap_icalcomponent_set_dtstart, file);
+	 newXS("Net::ICal::icalcomponent_get_dtstart", _wrap_icalcomponent_get_dtstart, file);
+	 newXS("Net::ICal::icalcomponent_get_dtend", _wrap_icalcomponent_get_dtend, file);
+	 newXS("Net::ICal::icalcomponent_set_dtend", _wrap_icalcomponent_set_dtend, file);
+	 newXS("Net::ICal::icalcomponent_set_duration", _wrap_icalcomponent_set_duration, file);
+	 newXS("Net::ICal::icalcomponent_get_duration", _wrap_icalcomponent_get_duration, file);
+	 newXS("Net::ICal::icalcomponent_set_method", _wrap_icalcomponent_set_method, file);
+	 newXS("Net::ICal::icalcomponent_get_method", _wrap_icalcomponent_get_method, file);
+	 newXS("Net::ICal::icalcomponent_get_dtstamp", _wrap_icalcomponent_get_dtstamp, file);
+	 newXS("Net::ICal::icalcomponent_set_dtstamp", _wrap_icalcomponent_set_dtstamp, file);
+	 newXS("Net::ICal::icalcomponent_set_summary", _wrap_icalcomponent_set_summary, file);
+	 newXS("Net::ICal::icalcomponent_get_summary", _wrap_icalcomponent_get_summary, file);
+	 newXS("Net::ICal::icalcomponent_set_comment", _wrap_icalcomponent_set_comment, file);
+	 newXS("Net::ICal::icalcomponent_get_comment", _wrap_icalcomponent_get_comment, file);
+	 newXS("Net::ICal::icalcomponent_set_organizer", _wrap_icalcomponent_set_organizer, file);
+	 newXS("Net::ICal::icalcomponent_get_organizer", _wrap_icalcomponent_get_organizer, file);
+	 newXS("Net::ICal::icalcomponent_set_uid", _wrap_icalcomponent_set_uid, file);
+	 newXS("Net::ICal::icalcomponent_get_uid", _wrap_icalcomponent_get_uid, file);
+	 newXS("Net::ICal::icalcomponent_set_recurrenceid", _wrap_icalcomponent_set_recurrenceid, file);
+	 newXS("Net::ICal::icalcomponent_get_recurrenceid", _wrap_icalcomponent_get_recurrenceid, file);
+	 newXS("Net::ICal::icalcomponent_new_vcalendar", _wrap_icalcomponent_new_vcalendar, file);
+	 newXS("Net::ICal::icalcomponent_new_vevent", _wrap_icalcomponent_new_vevent, file);
+	 newXS("Net::ICal::icalcomponent_new_vtodo", _wrap_icalcomponent_new_vtodo, file);
+	 newXS("Net::ICal::icalcomponent_new_vjournal", _wrap_icalcomponent_new_vjournal, file);
+	 newXS("Net::ICal::icalcomponent_new_vfreebusy", _wrap_icalcomponent_new_vfreebusy, file);
+	 newXS("Net::ICal::icalcomponent_new_vtimezone", _wrap_icalcomponent_new_vtimezone, file);
+	 newXS("Net::ICal::icalcomponent_new_xstandard", _wrap_icalcomponent_new_xstandard, file);
+	 newXS("Net::ICal::icalcomponent_new_xdaylight", _wrap_icalcomponent_new_xdaylight, file);
+	 newXS("Net::ICal::icalparser_new", _wrap_icalparser_new, file);
+	 newXS("Net::ICal::icalparser_add_line", _wrap_icalparser_add_line, file);
+	 newXS("Net::ICal::icalparser_claim", _wrap_icalparser_claim, file);
+	 newXS("Net::ICal::icalparser_clean", _wrap_icalparser_clean, file);
+	 newXS("Net::ICal::icalparser_get_state", _wrap_icalparser_get_state, file);
+	 newXS("Net::ICal::icalparser_free", _wrap_icalparser_free, file);
+	 newXS("Net::ICal::icalparser_parse_string", _wrap_icalparser_parse_string, file);
+	 newXS("Net::ICal::icalparser_parse_value", _wrap_icalparser_parse_value, file);
+	 newXS("Net::ICal::string_line_generator", _wrap_string_line_generator, file);
+	 newXS("Net::ICal::icalmemory_tmp_buffer", _wrap_icalmemory_tmp_buffer, file);
+	 newXS("Net::ICal::icalmemory_tmp_copy", _wrap_icalmemory_tmp_copy, file);
+	 newXS("Net::ICal::icalmemory_add_tmp_buffer", _wrap_icalmemory_add_tmp_buffer, file);
+	 newXS("Net::ICal::icalmemory_free_ring", _wrap_icalmemory_free_ring, file);
+	 newXS("Net::ICal::icalmemory_new_buffer", _wrap_icalmemory_new_buffer, file);
+	 newXS("Net::ICal::icalmemory_resize_buffer", _wrap_icalmemory_resize_buffer, file);
+	 newXS("Net::ICal::icalmemory_free_buffer", _wrap_icalmemory_free_buffer, file);
+	 newXS("Net::ICal::icalmemory_append_string", _wrap_icalmemory_append_string, file);
+	 newXS("Net::ICal::icalmemory_append_char", _wrap_icalmemory_append_char, file);
+	 newXS("Net::ICal::icalmemory_strdup", _wrap_icalmemory_strdup, file);
+	 newXS("Net::ICal::icalerror_stop_here", _wrap_icalerror_stop_here, file);
+	 newXS("Net::ICal::icalerror_crash_here", _wrap_icalerror_crash_here, file);
+	 newXS("Net::ICal::icalerror_clear_errno", _wrap_icalerror_clear_errno, file);
+	 newXS("Net::ICal::icalerror_set_errno", _wrap_icalerror_set_errno, file);
+	 newXS("Net::ICal::icalerror_strerror", _wrap_icalerror_strerror, file);
 	 newXS("Net::ICal::icalrestriction_compare", _wrap_icalrestriction_compare, file);
-	 newXS("Net::ICal::icalrestriction_get_property_restriction", _wrap_icalrestriction_get_property_restriction, file);
-	 newXS("Net::ICal::icalrestriction_get_component_restriction", _wrap_icalrestriction_get_component_restriction, file);
 	 newXS("Net::ICal::icalrestriction_is_parameter_allowed", _wrap_icalrestriction_is_parameter_allowed, file);
 	 newXS("Net::ICal::icalrestriction_check", _wrap_icalrestriction_check, file);
-	 newXS("Net::ICal::icalattachtype_new", _wrap_icalattachtype_new, file);
-	 newXS("Net::ICal::icalattachtype_add_reference", _wrap_icalattachtype_add_reference, file);
-	 newXS("Net::ICal::icalattachtype_free", _wrap_icalattachtype_free, file);
-	 newXS("Net::ICal::icalattachtype_set_url", _wrap_icalattachtype_set_url, file);
-	 newXS("Net::ICal::icalattachtype_get_url", _wrap_icalattachtype_get_url, file);
-	 newXS("Net::ICal::icalattachtype_set_base64", _wrap_icalattachtype_set_base64, file);
-	 newXS("Net::ICal::icalattachtype_get_base64", _wrap_icalattachtype_get_base64, file);
-	 newXS("Net::ICal::icalattachtype_set_binary", _wrap_icalattachtype_set_binary, file);
-	 newXS("Net::ICal::icalattachtype_get_binary", _wrap_icalattachtype_get_binary, file);
-	 newXS("Net::ICal::icaltimetype_from_timet", _wrap_icaltimetype_from_timet, file);
-	 newXS("Net::ICal::icalrecurrencetype_clear", _wrap_icalrecurrencetype_clear, file);
-	 newXS("Net::ICal::icaldurationtype_from_timet", _wrap_icaldurationtype_from_timet, file);
-	 newXS("Net::ICal::icaldurationtype_as_timet", _wrap_icaldurationtype_as_timet, file);
-	 newXS("Net::ICal::icalrecurrencetype_next_occurance", _wrap_icalrecurrencetype_next_occurance, file);
-	 newXS("Net::ICal::icalperiodtype_duration", _wrap_icalperiodtype_duration, file);
-	 newXS("Net::ICal::icalperiodtype_end", _wrap_icalperiodtype_end, file);
-	 newXS("Net::ICal::icalreqstattype_from_string", _wrap_icalreqstattype_from_string, file);
-	 newXS("Net::ICal::icalreqstattype_as_string", _wrap_icalreqstattype_as_string, file);
-	 newXS("Net::ICal::icalvalue_new", _wrap_icalvalue_new, file);
-	 newXS("Net::ICal::icalvalue_new_clone", _wrap_icalvalue_new_clone, file);
-	 newXS("Net::ICal::icalvalue_new_from_string", _wrap_icalvalue_new_from_string, file);
-	 newXS("Net::ICal::icalvalue_free", _wrap_icalvalue_free, file);
-	 newXS("Net::ICal::icalvalue_is_valid", _wrap_icalvalue_is_valid, file);
-	 newXS("Net::ICal::icalvalue_as_ical_string", _wrap_icalvalue_as_ical_string, file);
-	 newXS("Net::ICal::icalvalue_isa", _wrap_icalvalue_isa, file);
-	 newXS("Net::ICal::icalvalue_isa_value", _wrap_icalvalue_isa_value, file);
-	 newXS("Net::ICal::icalvalue_compare", _wrap_icalvalue_compare, file);
-	 newXS("Net::ICal::icalvalue_new_attach", _wrap_icalvalue_new_attach, file);
-	 newXS("Net::ICal::icalvalue_get_attach", _wrap_icalvalue_get_attach, file);
-	 newXS("Net::ICal::icalvalue_set_attach", _wrap_icalvalue_set_attach, file);
-	 newXS("Net::ICal::icalvalue_new_binary", _wrap_icalvalue_new_binary, file);
-	 newXS("Net::ICal::icalvalue_get_binary", _wrap_icalvalue_get_binary, file);
-	 newXS("Net::ICal::icalvalue_set_binary", _wrap_icalvalue_set_binary, file);
-	 newXS("Net::ICal::icalvalue_new_boolean", _wrap_icalvalue_new_boolean, file);
-	 newXS("Net::ICal::icalvalue_get_boolean", _wrap_icalvalue_get_boolean, file);
-	 newXS("Net::ICal::icalvalue_set_boolean", _wrap_icalvalue_set_boolean, file);
-	 newXS("Net::ICal::icalvalue_new_caladdress", _wrap_icalvalue_new_caladdress, file);
-	 newXS("Net::ICal::icalvalue_get_caladdress", _wrap_icalvalue_get_caladdress, file);
-	 newXS("Net::ICal::icalvalue_set_caladdress", _wrap_icalvalue_set_caladdress, file);
-	 newXS("Net::ICal::icalvalue_new_date", _wrap_icalvalue_new_date, file);
-	 newXS("Net::ICal::icalvalue_get_date", _wrap_icalvalue_get_date, file);
-	 newXS("Net::ICal::icalvalue_set_date", _wrap_icalvalue_set_date, file);
-	 newXS("Net::ICal::icalvalue_new_datetime", _wrap_icalvalue_new_datetime, file);
-	 newXS("Net::ICal::icalvalue_get_datetime", _wrap_icalvalue_get_datetime, file);
-	 newXS("Net::ICal::icalvalue_set_datetime", _wrap_icalvalue_set_datetime, file);
-	 newXS("Net::ICal::icalvalue_new_datetimedate", _wrap_icalvalue_new_datetimedate, file);
-	 newXS("Net::ICal::icalvalue_get_datetimedate", _wrap_icalvalue_get_datetimedate, file);
-	 newXS("Net::ICal::icalvalue_set_datetimedate", _wrap_icalvalue_set_datetimedate, file);
-	 newXS("Net::ICal::icalvalue_new_datetimeperiod", _wrap_icalvalue_new_datetimeperiod, file);
-	 newXS("Net::ICal::icalvalue_get_datetimeperiod", _wrap_icalvalue_get_datetimeperiod, file);
-	 newXS("Net::ICal::icalvalue_set_datetimeperiod", _wrap_icalvalue_set_datetimeperiod, file);
-	 newXS("Net::ICal::icalvalue_new_duration", _wrap_icalvalue_new_duration, file);
-	 newXS("Net::ICal::icalvalue_get_duration", _wrap_icalvalue_get_duration, file);
-	 newXS("Net::ICal::icalvalue_set_duration", _wrap_icalvalue_set_duration, file);
-	 newXS("Net::ICal::icalvalue_new_float", _wrap_icalvalue_new_float, file);
-	 newXS("Net::ICal::icalvalue_get_float", _wrap_icalvalue_get_float, file);
-	 newXS("Net::ICal::icalvalue_set_float", _wrap_icalvalue_set_float, file);
-	 newXS("Net::ICal::icalvalue_new_geo", _wrap_icalvalue_new_geo, file);
-	 newXS("Net::ICal::icalvalue_get_geo", _wrap_icalvalue_get_geo, file);
-	 newXS("Net::ICal::icalvalue_set_geo", _wrap_icalvalue_set_geo, file);
-	 newXS("Net::ICal::icalvalue_new_integer", _wrap_icalvalue_new_integer, file);
-	 newXS("Net::ICal::icalvalue_get_integer", _wrap_icalvalue_get_integer, file);
-	 newXS("Net::ICal::icalvalue_set_integer", _wrap_icalvalue_set_integer, file);
-	 newXS("Net::ICal::icalvalue_new_method", _wrap_icalvalue_new_method, file);
-	 newXS("Net::ICal::icalvalue_get_method", _wrap_icalvalue_get_method, file);
-	 newXS("Net::ICal::icalvalue_set_method", _wrap_icalvalue_set_method, file);
-	 newXS("Net::ICal::icalvalue_new_period", _wrap_icalvalue_new_period, file);
-	 newXS("Net::ICal::icalvalue_get_period", _wrap_icalvalue_get_period, file);
-	 newXS("Net::ICal::icalvalue_set_period", _wrap_icalvalue_set_period, file);
-	 newXS("Net::ICal::icalvalue_new_recur", _wrap_icalvalue_new_recur, file);
-	 newXS("Net::ICal::icalvalue_get_recur", _wrap_icalvalue_get_recur, file);
-	 newXS("Net::ICal::icalvalue_set_recur", _wrap_icalvalue_set_recur, file);
-	 newXS("Net::ICal::icalvalue_new_text", _wrap_icalvalue_new_text, file);
-	 newXS("Net::ICal::icalvalue_get_text", _wrap_icalvalue_get_text, file);
-	 newXS("Net::ICal::icalvalue_set_text", _wrap_icalvalue_set_text, file);
-	 newXS("Net::ICal::icalvalue_new_time", _wrap_icalvalue_new_time, file);
-	 newXS("Net::ICal::icalvalue_get_time", _wrap_icalvalue_get_time, file);
-	 newXS("Net::ICal::icalvalue_set_time", _wrap_icalvalue_set_time, file);
-	 newXS("Net::ICal::icalvalue_new_trigger", _wrap_icalvalue_new_trigger, file);
-	 newXS("Net::ICal::icalvalue_get_trigger", _wrap_icalvalue_get_trigger, file);
-	 newXS("Net::ICal::icalvalue_set_trigger", _wrap_icalvalue_set_trigger, file);
-	 newXS("Net::ICal::icalvalue_new_uri", _wrap_icalvalue_new_uri, file);
-	 newXS("Net::ICal::icalvalue_get_uri", _wrap_icalvalue_get_uri, file);
-	 newXS("Net::ICal::icalvalue_set_uri", _wrap_icalvalue_set_uri, file);
-	 newXS("Net::ICal::icalvalue_new_utcoffset", _wrap_icalvalue_new_utcoffset, file);
-	 newXS("Net::ICal::icalvalue_get_utcoffset", _wrap_icalvalue_get_utcoffset, file);
-	 newXS("Net::ICal::icalvalue_set_utcoffset", _wrap_icalvalue_set_utcoffset, file);
-	 newXS("Net::ICal::icalvalue_new_query", _wrap_icalvalue_new_query, file);
-	 newXS("Net::ICal::icalvalue_get_query", _wrap_icalvalue_get_query, file);
-	 newXS("Net::ICal::icalvalue_set_query", _wrap_icalvalue_set_query, file);
-	 newXS("Net::ICal::icalcalendar_new", _wrap_icalcalendar_new, file);
-	 newXS("Net::ICal::icalcalendar_free", _wrap_icalcalendar_free, file);
-	 newXS("Net::ICal::icalcalendar_lock", _wrap_icalcalendar_lock, file);
-	 newXS("Net::ICal::icalcalendar_unlock", _wrap_icalcalendar_unlock, file);
-	 newXS("Net::ICal::icalcalendar_islocked", _wrap_icalcalendar_islocked, file);
-	 newXS("Net::ICal::icalcalendar_ownlock", _wrap_icalcalendar_ownlock, file);
-	 newXS("Net::ICal::icalcalendar_get_booked", _wrap_icalcalendar_get_booked, file);
-	 newXS("Net::ICal::icalcalendar_get_incoming", _wrap_icalcalendar_get_incoming, file);
-	 newXS("Net::ICal::icalcalendar_get_properties", _wrap_icalcalendar_get_properties, file);
-	 newXS("Net::ICal::icalcalendar_get_freebusy", _wrap_icalcalendar_get_freebusy, file);
-	 newXS("Net::ICal::icalcluster_new", _wrap_icalcluster_new, file);
-	 newXS("Net::ICal::icalcluster_free", _wrap_icalcluster_free, file);
-	 newXS("Net::ICal::icalcluster_path", _wrap_icalcluster_path, file);
-	 newXS("Net::ICal::icalcluster_get_component", _wrap_icalcluster_get_component, file);
-	 newXS("Net::ICal::icalcluster_mark", _wrap_icalcluster_mark, file);
-	 newXS("Net::ICal::icalcluster_commit", _wrap_icalcluster_commit, file);
-	 newXS("Net::ICal::icalcluster_add_component", _wrap_icalcluster_add_component, file);
-	 newXS("Net::ICal::icalcluster_remove_component", _wrap_icalcluster_remove_component, file);
-	 newXS("Net::ICal::icalcluster_count_components", _wrap_icalcluster_count_components, file);
-	 newXS("Net::ICal::icalcluster_get_current_component", _wrap_icalcluster_get_current_component, file);
-	 newXS("Net::ICal::icalcluster_get_first_component", _wrap_icalcluster_get_first_component, file);
-	 newXS("Net::ICal::icalcluster_get_next_component", _wrap_icalcluster_get_next_component, file);
-	 newXS("Net::ICal::icalstore_new", _wrap_icalstore_new, file);
-	 newXS("Net::ICal::icalstore_free", _wrap_icalstore_free, file);
-	 newXS("Net::ICal::icalstore_add_component", _wrap_icalstore_add_component, file);
-	 newXS("Net::ICal::icalstore_remove_component", _wrap_icalstore_remove_component, file);
-	 newXS("Net::ICal::icalstore_select", _wrap_icalstore_select, file);
-	 newXS("Net::ICal::icalstore_test", _wrap_icalstore_test, file);
-	 newXS("Net::ICal::icalstore_clear", _wrap_icalstore_clear, file);
-	 newXS("Net::ICal::icalstore_fetch", _wrap_icalstore_fetch, file);
-	 newXS("Net::ICal::icalstore_has_uid", _wrap_icalstore_has_uid, file);
-	 newXS("Net::ICal::icalstore_get_first_component", _wrap_icalstore_get_first_component, file);
-	 newXS("Net::ICal::icalstore_get_next_component", _wrap_icalstore_get_next_component, file);
-	 newXS("Net::ICal::icalstore_next_uid_number", _wrap_icalstore_next_uid_number, file);
-	 newXS("Net::ICal::icalattachtype_binary_set", _wrap_icalattachtype_binary_set, file);
-	 newXS("Net::ICal::icalattachtype_binary_get", _wrap_icalattachtype_binary_get, file);
-	 newXS("Net::ICal::icalattachtype_owns_binary_set", _wrap_icalattachtype_owns_binary_set, file);
-	 newXS("Net::ICal::icalattachtype_owns_binary_get", _wrap_icalattachtype_owns_binary_get, file);
-	 newXS("Net::ICal::icalattachtype_base64_set", _wrap_icalattachtype_base64_set, file);
-	 newXS("Net::ICal::icalattachtype_base64_get", _wrap_icalattachtype_base64_get, file);
-	 newXS("Net::ICal::icalattachtype_owns_base64_set", _wrap_icalattachtype_owns_base64_set, file);
-	 newXS("Net::ICal::icalattachtype_owns_base64_get", _wrap_icalattachtype_owns_base64_get, file);
-	 newXS("Net::ICal::icalattachtype_url_set", _wrap_icalattachtype_url_set, file);
-	 newXS("Net::ICal::icalattachtype_url_get", _wrap_icalattachtype_url_get, file);
-	 newXS("Net::ICal::icalattachtype_refcount_set", _wrap_icalattachtype_refcount_set, file);
-	 newXS("Net::ICal::icalattachtype_refcount_get", _wrap_icalattachtype_refcount_get, file);
-	 newXS("Net::ICal::icalgeotype_lat_set", _wrap_icalgeotype_lat_set, file);
-	 newXS("Net::ICal::icalgeotype_lat_get", _wrap_icalgeotype_lat_get, file);
-	 newXS("Net::ICal::icalgeotype_lon_set", _wrap_icalgeotype_lon_set, file);
-	 newXS("Net::ICal::icalgeotype_lon_get", _wrap_icalgeotype_lon_get, file);
+	 newXS("Net::ICal::icaltime_span_start_set", _wrap_icaltime_span_start_set, file);
+	 newXS("Net::ICal::icaltime_span_start_get", _wrap_icaltime_span_start_get, file);
+	 newXS("Net::ICal::icaltime_span_end_set", _wrap_icaltime_span_end_set, file);
+	 newXS("Net::ICal::icaltime_span_end_get", _wrap_icaltime_span_end_get, file);
+	 newXS("Net::ICal::icaltime_span_is_busy_set", _wrap_icaltime_span_is_busy_set, file);
+	 newXS("Net::ICal::icaltime_span_is_busy_get", _wrap_icaltime_span_is_busy_get, file);
 	 newXS("Net::ICal::icaltimetype_year_set", _wrap_icaltimetype_year_set, file);
 	 newXS("Net::ICal::icaltimetype_year_get", _wrap_icaltimetype_year_get, file);
 	 newXS("Net::ICal::icaltimetype_month_set", _wrap_icaltimetype_month_set, file);
@@ -11633,25 +12728,8 @@ XS(boot_Net__ICal) {
 	 newXS("Net::ICal::icaltimetype_is_utc_get", _wrap_icaltimetype_is_utc_get, file);
 	 newXS("Net::ICal::icaltimetype_is_date_set", _wrap_icaltimetype_is_date_set, file);
 	 newXS("Net::ICal::icaltimetype_is_date_get", _wrap_icaltimetype_is_date_get, file);
-	 newXS("Net::ICal::icalrecurrencetype_freq_set", _wrap_icalrecurrencetype_freq_set, file);
-	 newXS("Net::ICal::icalrecurrencetype_freq_get", _wrap_icalrecurrencetype_freq_get, file);
-	 newXS("Net::ICal::icalrecurrencetype_until_set", _wrap_icalrecurrencetype_until_set, file);
-	 newXS("Net::ICal::icalrecurrencetype_until_get", _wrap_icalrecurrencetype_until_get, file);
-	 newXS("Net::ICal::icalrecurrencetype_count_set", _wrap_icalrecurrencetype_count_set, file);
-	 newXS("Net::ICal::icalrecurrencetype_count_get", _wrap_icalrecurrencetype_count_get, file);
-	 newXS("Net::ICal::icalrecurrencetype_interval_set", _wrap_icalrecurrencetype_interval_set, file);
-	 newXS("Net::ICal::icalrecurrencetype_interval_get", _wrap_icalrecurrencetype_interval_get, file);
-	 newXS("Net::ICal::icalrecurrencetype_week_start_set", _wrap_icalrecurrencetype_week_start_set, file);
-	 newXS("Net::ICal::icalrecurrencetype_week_start_get", _wrap_icalrecurrencetype_week_start_get, file);
-	 newXS("Net::ICal::icalrecurrencetype_by_second_get", _wrap_icalrecurrencetype_by_second_get, file);
-	 newXS("Net::ICal::icalrecurrencetype_by_minute_get", _wrap_icalrecurrencetype_by_minute_get, file);
-	 newXS("Net::ICal::icalrecurrencetype_by_hour_get", _wrap_icalrecurrencetype_by_hour_get, file);
-	 newXS("Net::ICal::icalrecurrencetype_by_day_get", _wrap_icalrecurrencetype_by_day_get, file);
-	 newXS("Net::ICal::icalrecurrencetype_by_month_day_get", _wrap_icalrecurrencetype_by_month_day_get, file);
-	 newXS("Net::ICal::icalrecurrencetype_by_year_day_get", _wrap_icalrecurrencetype_by_year_day_get, file);
-	 newXS("Net::ICal::icalrecurrencetype_by_week_no_get", _wrap_icalrecurrencetype_by_week_no_get, file);
-	 newXS("Net::ICal::icalrecurrencetype_by_month_get", _wrap_icalrecurrencetype_by_month_get, file);
-	 newXS("Net::ICal::icalrecurrencetype_by_set_pos_get", _wrap_icalrecurrencetype_by_set_pos_get, file);
+	 newXS("Net::ICal::icaldurationtype_is_neg_set", _wrap_icaldurationtype_is_neg_set, file);
+	 newXS("Net::ICal::icaldurationtype_is_neg_get", _wrap_icaldurationtype_is_neg_get, file);
 	 newXS("Net::ICal::icaldurationtype_days_set", _wrap_icaldurationtype_days_set, file);
 	 newXS("Net::ICal::icaldurationtype_days_get", _wrap_icaldurationtype_days_get, file);
 	 newXS("Net::ICal::icaldurationtype_weeks_set", _wrap_icaldurationtype_weeks_set, file);
@@ -11668,16 +12746,40 @@ XS(boot_Net__ICal) {
 	 newXS("Net::ICal::icalperiodtype_end_get", _wrap_icalperiodtype_end_get, file);
 	 newXS("Net::ICal::icalperiodtype_duration_set", _wrap_icalperiodtype_duration_set, file);
 	 newXS("Net::ICal::icalperiodtype_duration_get", _wrap_icalperiodtype_duration_get, file);
+	 newXS("Net::ICal::icalattachtype_binary_set", _wrap_icalattachtype_binary_set, file);
+	 newXS("Net::ICal::icalattachtype_binary_get", _wrap_icalattachtype_binary_get, file);
+	 newXS("Net::ICal::icalattachtype_owns_binary_set", _wrap_icalattachtype_owns_binary_set, file);
+	 newXS("Net::ICal::icalattachtype_owns_binary_get", _wrap_icalattachtype_owns_binary_get, file);
+	 newXS("Net::ICal::icalattachtype_base64_set", _wrap_icalattachtype_base64_set, file);
+	 newXS("Net::ICal::icalattachtype_base64_get", _wrap_icalattachtype_base64_get, file);
+	 newXS("Net::ICal::icalattachtype_owns_base64_set", _wrap_icalattachtype_owns_base64_set, file);
+	 newXS("Net::ICal::icalattachtype_owns_base64_get", _wrap_icalattachtype_owns_base64_get, file);
+	 newXS("Net::ICal::icalattachtype_url_set", _wrap_icalattachtype_url_set, file);
+	 newXS("Net::ICal::icalattachtype_url_get", _wrap_icalattachtype_url_get, file);
+	 newXS("Net::ICal::icalattachtype_refcount_set", _wrap_icalattachtype_refcount_set, file);
+	 newXS("Net::ICal::icalattachtype_refcount_get", _wrap_icalattachtype_refcount_get, file);
+	 newXS("Net::ICal::icalgeotype_lat_set", _wrap_icalgeotype_lat_set, file);
+	 newXS("Net::ICal::icalgeotype_lat_get", _wrap_icalgeotype_lat_get, file);
+	 newXS("Net::ICal::icalgeotype_lon_set", _wrap_icalgeotype_lon_set, file);
+	 newXS("Net::ICal::icalgeotype_lon_get", _wrap_icalgeotype_lon_get, file);
 	 newXS("Net::ICal::icaltriggertype_time_set", _wrap_icaltriggertype_time_set, file);
 	 newXS("Net::ICal::icaltriggertype_time_get", _wrap_icaltriggertype_time_get, file);
 	 newXS("Net::ICal::icaltriggertype_duration_set", _wrap_icaltriggertype_duration_set, file);
 	 newXS("Net::ICal::icaltriggertype_duration_get", _wrap_icaltriggertype_duration_get, file);
 	 newXS("Net::ICal::icalreqstattype_code_set", _wrap_icalreqstattype_code_set, file);
 	 newXS("Net::ICal::icalreqstattype_code_get", _wrap_icalreqstattype_code_get, file);
-	 newXS("Net::ICal::icalreqstattype_desc_set", _wrap_icalreqstattype_desc_set, file);
-	 newXS("Net::ICal::icalreqstattype_desc_get", _wrap_icalreqstattype_desc_get, file);
-	 newXS("Net::ICal::icalreqstattype_debug_set", _wrap_icalreqstattype_debug_set, file);
-	 newXS("Net::ICal::icalreqstattype_debug_get", _wrap_icalreqstattype_debug_get, file);
+	 newXS("Net::ICal::pvl_elem_t_MAGIC_set", _wrap_pvl_elem_t_MAGIC_set, file);
+	 newXS("Net::ICal::pvl_elem_t_MAGIC_get", _wrap_pvl_elem_t_MAGIC_get, file);
+	 newXS("Net::ICal::pvl_elem_t_d_set", _wrap_pvl_elem_t_d_set, file);
+	 newXS("Net::ICal::pvl_elem_t_d_get", _wrap_pvl_elem_t_d_get, file);
+	 newXS("Net::ICal::pvl_elem_t_next_set", _wrap_pvl_elem_t_next_set, file);
+	 newXS("Net::ICal::pvl_elem_t_next_get", _wrap_pvl_elem_t_next_get, file);
+	 newXS("Net::ICal::pvl_elem_t_prior_set", _wrap_pvl_elem_t_prior_set, file);
+	 newXS("Net::ICal::pvl_elem_t_prior_get", _wrap_pvl_elem_t_prior_get, file);
+	 newXS("Net::ICal::icalcompiter_kind_set", _wrap_icalcompiter_kind_set, file);
+	 newXS("Net::ICal::icalcompiter_kind_get", _wrap_icalcompiter_kind_get, file);
+	 newXS("Net::ICal::icalcompiter_iter_set", _wrap_icalcompiter_iter_set, file);
+	 newXS("Net::ICal::icalcompiter_iter_get", _wrap_icalcompiter_iter_get, file);
 /*
  * These are the pointer type-equivalency mappings. 
  * (Used by the SWIG pointer type-checker).
@@ -11692,10 +12794,14 @@ XS(boot_Net__ICal) {
 	 SWIG_RegisterMapping("long","unsigned long",0);
 	 SWIG_RegisterMapping("long","signed long",0);
 	 SWIG_RegisterMapping("struct icaltimetype","icaltimetype",0);
+	 SWIG_RegisterMapping("struct icalcompiter","icalcompiter",0);
 	 SWIG_RegisterMapping("icaldurationtype","struct icaldurationtype",0);
 	 SWIG_RegisterMapping("signed short","short",0);
 	 SWIG_RegisterMapping("struct icalperiodtype","icalperiodtype",0);
+	 SWIG_RegisterMapping("struct icaltime_span","icaltime_span",0);
 	 SWIG_RegisterMapping("icalreqstattype","struct icalreqstattype",0);
+	 SWIG_RegisterMapping("pvl_elem_t","struct pvl_elem_t",0);
+	 SWIG_RegisterMapping("icaltime_span","struct icaltime_span",0);
 	 SWIG_RegisterMapping("signed int","int",0);
 	 SWIG_RegisterMapping("short","unsigned short",0);
 	 SWIG_RegisterMapping("short","signed short",0);
@@ -11704,10 +12810,10 @@ XS(boot_Net__ICal) {
 	 SWIG_RegisterMapping("int","unsigned int",0);
 	 SWIG_RegisterMapping("int","signed int",0);
 	 SWIG_RegisterMapping("unsigned int","int",0);
-	 SWIG_RegisterMapping("struct icalrecurrencetype","icalrecurrencetype",0);
 	 SWIG_RegisterMapping("icaltimetype","struct icaltimetype",0);
+	 SWIG_RegisterMapping("icalcompiter","struct icalcompiter",0);
 	 SWIG_RegisterMapping("struct icalgeotype","icalgeotype",0);
-	 SWIG_RegisterMapping("icalrecurrencetype","struct icalrecurrencetype",0);
+	 SWIG_RegisterMapping("struct pvl_elem_t","pvl_elem_t",0);
 	 SWIG_RegisterMapping("icalgeotype","struct icalgeotype",0);
 	 SWIG_RegisterMapping("signed long","long",0);
 	 ST(0) = &sv_yes;

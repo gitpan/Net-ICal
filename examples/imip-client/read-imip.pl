@@ -10,8 +10,13 @@
 # If you are using this with send-imp.pl, you probably want to use formail: 
 #       send-imip.pl ../../test-data/rfc2446.ics | formail -ds ./read-imip.pl  
 #
+# The program will have no output if it accepts the component for
+# storage in the calendar. It will output a reply message if the
+# component has any significant errors
+# 
 # Note that each component in the cluster must be a VCALENDAR,
 # hopefully with a VEVENT, VTODO or VJOURNAL embedded inside
+#
 
 use lib "../../blib/lib";
 use lib "../../blib/arch";
@@ -39,7 +44,7 @@ sub add_part {
   my $id = $head->mime_attr('content-id');
   my $filename = $head->mime_attr('content-disposition.filename') || $id;
   
-  push(@$output,[$entity->stringify_body(),
+  push(@$output,[$entity->bodyhandle->as_string(),
 		 $head->mime_attr('content-type'), 
 		 $filename,
 		$id]);
@@ -192,7 +197,7 @@ sub store_incoming{
       
       if (!$version_prop){
 	return_error($to,$from,undef,$comp->as_ical_string,
-		     "No version property");
+		     "No version property",$comp);
 	next;
       }
       

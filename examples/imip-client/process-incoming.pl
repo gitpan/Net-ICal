@@ -18,8 +18,8 @@
 use lib "../../blib/lib";
 use lib "../../blib/arch";
 
-use lib "/home/studio2/local/proj/Net-ICal-0.07/blib/lib";
-use lib "/home/studio2/local/proj/Net-ICal-0.07/blib/arch";
+use lib "/home/studio2/local/proj/Net-ICal-0.07a/blib/lib";
+use lib "/home/studio2/local/proj/Net-ICal-0.07a/blib/arch";
 
 $fpi = "-//Software Studio//NONSGML Libical//EN";
 
@@ -39,7 +39,7 @@ use Getopt::Std;
 
 getopts('o'); # If defined, program will move incoming comps to store. 
 
-#system("date >> /home/studio2/alice-log.txt");
+system("date >> /home/studio2/alice-log.txt");
 
 my $calname  = $ARGV[0]; 
 $calname  =~ s/\/$//;
@@ -60,13 +60,13 @@ for($c = $incoming->first(); $c != undef; $c = $incoming->next()){
   # Book all of the items of METHOD "PUBLISH" or  
 
   if ($method eq "PUBLISH" ) { 
-    print "Publish\n";
+    print "Publish\n".$c->as_ical_string();
 
     book_component($c); # only correct when $c has only one inner component
     
   } elsif ($method eq "REQUEST" ) {
     
-    print "Request\n";
+    print "Request\n".$c->as_ical_string();
 
     my @uids = find_overlaps($c);
 
@@ -148,8 +148,7 @@ sub find_overlaps {
     $dtend = $dtendref->get_value() if $dtendref;
 
   } else {
-    print "No (or both ) of DTEND, DURATION\n";
-    return;
+    print "\nNo (or both ) of DTEND, DURATION. Assuming 1 hour\n";
   }
 
   # Now, build a Gauge to search the calendar.  A component (s1,e1)
@@ -236,6 +235,7 @@ sub make_reply{
   my $attendee = "mailto:$calid";
   my $reply = new Net::ICal::Component::Vcalendar
   (
+   new Net::ICal::Property::Version("2.0"),
    new Net::ICal::Property::Method("REPLY"),
    new Net::ICal::Property::Prodid("$fpi"),
    $type->new
@@ -243,7 +243,8 @@ sub make_reply{
     $dtstampref->clone(),
     $uidref->clone(),
     $organizerref->clone(),
-    new Net::ICal::Property::Attendee($attendee)
+    new Net::ICal::Property::Attendee($attendee),
+    new Net::ICal::Property::RequestStatus("2.0; Success.")
    )
   );
 }
@@ -261,7 +262,7 @@ sub return_reject_reply
 
   $attendeeref->add($partstat);
 
-  send_reply($reply,$comp,"Sorry, I have a nother meeting that conflicts with your proposal");
+  send_reply($reply,$comp,"Sorry, I have another meeting that conflicts with your proposal");
 
 }
 
@@ -305,13 +306,21 @@ sub send_reply
   my $start = $startref->get_value();
 
   my ($endref) = $oinner->properties('DTEND');
-  my $end = $endref->get_value();
+  my $end = $endref->get_value() if $endref;
+
+  $info = "[ This message was generated with libical-0.15g and Net::ICal-0.07a. \nSend bug reports to eric\@softwarestudio.org. See \nhttp://www.softwarestudio.org/libical for more information.]\n\n";
+
 
   my $data=<<EOM;
+
+$info 
+
 $message
 
 Summary: $summary
 From $start to $end
+
+
 EOM
 
   open BF,">$bodyfile" or die;
@@ -322,7 +331,7 @@ EOM
   print CF $comp->as_ical_string;
   close CF;
 
-  system("$metasend -b -s \"Re: $summary\" -t $to -m \"text/plain\" -D \"Text\" -f $bodyfile -n -m \"text/calendar; method=REPLY\" -D \"iCalendar reply\" -f $calfile");
+  system("$metasend -b -s \"Re: $summary\" -F $calid -t $to -m \"text/plain\" -D \"Text\" -f $bodyfile -n -m \"text/calendar; method=REPLY\" -D \"iCalendar reply\" -f $calfile");
 #  print("$metasend -b -s \"$subject\" -t $to -m \"text/plain\" -D \"Text\" -f $bodyfile -n -m \"text/calendar; method=REPLY\" -D \"iCalendar reply\" -f $calfile\n");
 
  unlink $bodyfile;

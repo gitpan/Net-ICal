@@ -100,6 +100,7 @@ sub store_incoming{
   my $to = $calid;
   my $summary = $ENV{'MM_SUMMARY'};
 
+
   $summary =~ /\(from (.*) \)/;
 
   my $from = $1;
@@ -199,7 +200,7 @@ sub store_incoming{
   
   if (!$version_prop){
     return_error($to,$from,undef,$comp->as_ical_string,
-		 "No version property");
+		 "No version property",$comp);
     exit;
   }
   

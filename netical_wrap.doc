@@ -3,6 +3,190 @@ netical_wrap.c
 [ Module : Net__ICal, Package : Net::ICal ]
 
 
+1.  class icaltime_span
+=======================
+[ created from struct icaltime_span ]
+
+
+icaltime_span_start_set(struct icaltime_span *,time_t *);
+icaltime_span_start_get(struct icaltime_span *);
+        [ Member data: returns time_t * ]
+
+icaltime_span_end_set(struct icaltime_span *,time_t *);
+icaltime_span_end_get(struct icaltime_span *);
+        [ Member data: returns time_t * ]
+
+icaltime_span_is_busy_set(struct icaltime_span *,int );
+icaltime_span_is_busy_get(struct icaltime_span *);
+        [ Member data: returns int  ]
+
+2.  class icaltimetype
+======================
+[ created from struct icaltimetype ]
+
+
+icaltimetype_year_set(struct icaltimetype *,int );
+icaltimetype_year_get(struct icaltimetype *);
+        [ Member data: returns int  ]
+
+icaltimetype_month_set(struct icaltimetype *,int );
+icaltimetype_month_get(struct icaltimetype *);
+        [ Member data: returns int  ]
+
+icaltimetype_day_set(struct icaltimetype *,int );
+icaltimetype_day_get(struct icaltimetype *);
+        [ Member data: returns int  ]
+
+icaltimetype_hour_set(struct icaltimetype *,int );
+icaltimetype_hour_get(struct icaltimetype *);
+        [ Member data: returns int  ]
+
+icaltimetype_minute_set(struct icaltimetype *,int );
+icaltimetype_minute_get(struct icaltimetype *);
+        [ Member data: returns int  ]
+
+icaltimetype_second_set(struct icaltimetype *,int );
+icaltimetype_second_get(struct icaltimetype *);
+        [ Member data: returns int  ]
+
+icaltimetype_is_utc_set(struct icaltimetype *,int );
+icaltimetype_is_utc_get(struct icaltimetype *);
+        [ Member data: returns int  ]
+
+icaltimetype_is_date_set(struct icaltimetype *,int );
+icaltimetype_is_date_get(struct icaltimetype *);
+        [ Member data: returns int  ]
+
+----------
+
+icaltime_null_time();
+        [ returns struct icaltimetype  ]
+
+icaltime_is_null_time(t);
+        [ returns int  ]
+
+icaltime_normalize(t);
+        [ returns struct icaltimetype  ]
+
+icaltime_day_of_year(t);
+        [ returns short  ]
+
+icaltime_from_day_of_year(doy,year);
+        [ returns struct icaltimetype  ]
+
+icaltime_day_of_week(t);
+        [ returns short  ]
+
+icaltime_start_doy_of_week(t);
+        [ returns short  ]
+
+icaltime_from_timet(v,is_date,is_utc);
+        [ returns struct icaltimetype  ]
+
+icaltime_from_string(str);
+        [ returns struct icaltimetype  ]
+
+icaltime_as_timet(struct icaltimetype *);
+        [ returns time_t  ]
+
+icaltime_as_ctime(struct icaltimetype *);
+        [ returns char * ]
+
+icaltime_week_number(day_of_month,month,year);
+        [ returns short  ]
+
+icaltime_from_week_number(week_number,year);
+        [ returns struct icaltimetype  ]
+
+icaltime_compare(a,b);
+        [ returns int  ]
+
+icaltime_days_in_month(month,year);
+        [ returns short  ]
+
+icaltime_utc_offset(tt,tzid);
+        [ returns time_t  ]
+
+icaltime_local_utc_offset();
+        [ returns time_t  ]
+
+icaltime_as_utc(tt,tzid);
+        [ returns struct icaltimetype  ]
+
+icaltime_as_zone(tt,tzid);
+        [ returns struct icaltimetype  ]
+
+3.  class icaldurationtype
+==========================
+[ created from struct icaldurationtype ]
+
+
+icaldurationtype_is_neg_set(struct icaldurationtype *,int );
+icaldurationtype_is_neg_get(struct icaldurationtype *);
+        [ Member data: returns int  ]
+
+icaldurationtype_days_set(struct icaldurationtype *,unsigned int );
+icaldurationtype_days_get(struct icaldurationtype *);
+        [ Member data: returns unsigned int  ]
+
+icaldurationtype_weeks_set(struct icaldurationtype *,unsigned int );
+icaldurationtype_weeks_get(struct icaldurationtype *);
+        [ Member data: returns unsigned int  ]
+
+icaldurationtype_hours_set(struct icaldurationtype *,unsigned int );
+icaldurationtype_hours_get(struct icaldurationtype *);
+        [ Member data: returns unsigned int  ]
+
+icaldurationtype_minutes_set(struct icaldurationtype *,unsigned int );
+icaldurationtype_minutes_get(struct icaldurationtype *);
+        [ Member data: returns unsigned int  ]
+
+icaldurationtype_seconds_set(struct icaldurationtype *,unsigned int );
+icaldurationtype_seconds_get(struct icaldurationtype *);
+        [ Member data: returns unsigned int  ]
+
+----------
+
+icaldurationtype_from_timet(t);
+        [ returns struct icaldurationtype  ]
+
+icaldurationtype_from_string(char *);
+        [ returns struct icaldurationtype  ]
+
+icaldurationtype_as_timet(duration);
+        [ returns time_t  ]
+
+4.  class icalperiodtype
+========================
+[ created from struct icalperiodtype ]
+
+
+icalperiodtype_start_set(struct icalperiodtype *,struct icaltimetype *);
+icalperiodtype_start_get(struct icalperiodtype *);
+        [ Member data: returns struct icaltimetype * ]
+
+icalperiodtype_end_set(struct icalperiodtype *,struct icaltimetype *);
+icalperiodtype_end_get(struct icalperiodtype *);
+        [ Member data: returns struct icaltimetype * ]
+
+icalperiodtype_duration_set(struct icalperiodtype *,struct icaldurationtype *);
+icalperiodtype_duration_get(struct icalperiodtype *);
+        [ Member data: returns struct icaldurationtype * ]
+
+----------
+
+icalperiodtype_duration(period);
+        [ returns time_t  ]
+
+icalperiodtype_end(period);
+        [ returns time_t  ]
+
+icaltime_add(t,d);
+        [ returns struct icaltimetype  ]
+
+icaltime_subtract(t1,t2);
+        [ returns struct icaldurationtype  ]
+
 $ICAL_NO_COMPONENT = ICAL_NO_COMPONENT
         [ Constant: int  ]
 
@@ -243,6 +427,24 @@ $ICAL_XLICERROR_PROPERTY = ICAL_XLICERROR_PROPERTY
 $ICAL_XLICCLUSTERCOUNT_PROPERTY = ICAL_XLICCLUSTERCOUNT_PROPERTY
         [ Constant: int  ]
 
+$ICAL_XLICMIMECONTENTTYPE_PROPERTY = ICAL_XLICMIMECONTENTTYPE_PROPERTY
+        [ Constant: int  ]
+
+$ICAL_XLICMIMEENCODING_PROPERTY = ICAL_XLICMIMEENCODING_PROPERTY
+        [ Constant: int  ]
+
+$ICAL_XLICMIMECID_PROPERTY = ICAL_XLICMIMECID_PROPERTY
+        [ Constant: int  ]
+
+$ICAL_XLICMIMEFILENAME_PROPERTY = ICAL_XLICMIMEFILENAME_PROPERTY
+        [ Constant: int  ]
+
+$ICAL_XLICMIMECHARSET_PROPERTY = ICAL_XLICMIMECHARSET_PROPERTY
+        [ Constant: int  ]
+
+$ICAL_XLICMIMEOPTINFO_PROPERTY = ICAL_XLICMIMEOPTINFO_PROPERTY
+        [ Constant: int  ]
+
 $ICAL_NO_PROPERTY = ICAL_NO_PROPERTY
         [ Constant: int  ]
 
@@ -313,6 +515,9 @@ $ICAL_CLASS_CONFIDENTIAL = ICAL_CLASS_CONFIDENTIAL
         [ Constant: int  ]
 
 $ICAL_CLASS_XNAME = ICAL_CLASS_XNAME
+        [ Constant: int  ]
+
+$ICAL_STATUS_NONE = ICAL_STATUS_NONE
         [ Constant: int  ]
 
 $ICAL_STATUS_TENTATIVE = ICAL_STATUS_TENTATIVE
@@ -394,6 +599,9 @@ $ICAL_INTEGER_VALUE = ICAL_INTEGER_VALUE
         [ Constant: int  ]
 
 $ICAL_METHOD_VALUE = ICAL_METHOD_VALUE
+        [ Constant: int  ]
+
+$ICAL_STATUS_VALUE = ICAL_STATUS_VALUE
         [ Constant: int  ]
 
 $ICAL_PERIOD_VALUE = ICAL_PERIOD_VALUE
@@ -567,6 +775,9 @@ $ICAL_PARTSTAT_INPROCESS = ICAL_PARTSTAT_INPROCESS
 $ICAL_PARTSTAT_XNAME = ICAL_PARTSTAT_XNAME
         [ Constant: int  ]
 
+$ICAL_PARTSTAT_NONE = ICAL_PARTSTAT_NONE
+        [ Constant: int  ]
+
 $ICAL_RANGE_THISANDPRIOR = ICAL_RANGE_THISANDPRIOR
         [ Constant: int  ]
 
@@ -609,10 +820,10 @@ $ICAL_ROLE_XNAME = ICAL_ROLE_XNAME
 $ICAL_XLICERRORTYPE_COMPONENTPARSEERROR = ICAL_XLICERRORTYPE_COMPONENTPARSEERROR
         [ Constant: int  ]
 
-$ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR = ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR
+$ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR = ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR
         [ Constant: int  ]
 
-$ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR = ICAL_XLICERRORTYPE_PARAMETERVALUEPARSEERROR
+$ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR = ICAL_XLICERRORTYPE_PARAMETERNAMEPARSEERROR
         [ Constant: int  ]
 
 $ICAL_XLICERRORTYPE_PROPERTYPARSEERROR = ICAL_XLICERRORTYPE_PROPERTYPARSEERROR
@@ -621,7 +832,13 @@ $ICAL_XLICERRORTYPE_PROPERTYPARSEERROR = ICAL_XLICERRORTYPE_PROPERTYPARSEERROR
 $ICAL_XLICERRORTYPE_VALUEPARSEERROR = ICAL_XLICERRORTYPE_VALUEPARSEERROR
         [ Constant: int  ]
 
+$ICAL_XLICERRORTYPE_UNKVCALPROP = ICAL_XLICERRORTYPE_UNKVCALPROP
+        [ Constant: int  ]
+
 $ICAL_XLICERRORTYPE_INVALIDITIP = ICAL_XLICERRORTYPE_INVALIDITIP
+        [ Constant: int  ]
+
+$ICAL_XLICERRORTYPE_MIMEPARSEERROR = ICAL_XLICERRORTYPE_MIMEPARSEERROR
         [ Constant: int  ]
 
 $ICAL_XLICCOMPARETYPE_EQUAL = ICAL_XLICCOMPARETYPE_EQUAL
@@ -692,66 +909,6 @@ $ICAL_VALUE_URI = ICAL_VALUE_URI
 
 $ICAL_VALUE_ERROR = ICAL_VALUE_ERROR
         [ Constant: int  ]
-
-$ICAL_NO_RECURRENCE = ICAL_NO_RECURRENCE
-        [ Constant: int  ]
-
-$ICAL_SECONDLY_RECURRENCE = ICAL_SECONDLY_RECURRENCE
-        [ Constant: int  ]
-
-$ICAL_MINUTELY_RECURRENCE = ICAL_MINUTELY_RECURRENCE
-        [ Constant: int  ]
-
-$ICAL_HOURLY_RECURRENCE = ICAL_HOURLY_RECURRENCE
-        [ Constant: int  ]
-
-$ICAL_DAILY_RECURRENCE = ICAL_DAILY_RECURRENCE
-        [ Constant: int  ]
-
-$ICAL_WEEKLY_RECURRENCE = ICAL_WEEKLY_RECURRENCE
-        [ Constant: int  ]
-
-$ICAL_MONTHLY_RECURRENCE = ICAL_MONTHLY_RECURRENCE
-        [ Constant: int  ]
-
-$ICAL_YEARLY_RECURRENCE = ICAL_YEARLY_RECURRENCE
-        [ Constant: int  ]
-
-$ICAL_NO_WEEKDAY = ICAL_NO_WEEKDAY
-        [ Constant: int  ]
-
-$ICAL_SUNDAY_WEEKDAY = ICAL_SUNDAY_WEEKDAY
-        [ Constant: int  ]
-
-$ICAL_MONDAY_WEEKDAY = ICAL_MONDAY_WEEKDAY
-        [ Constant: int  ]
-
-$ICAL_TUESDAY_WEEKDAY = ICAL_TUESDAY_WEEKDAY
-        [ Constant: int  ]
-
-$ICAL_WEDNESDAY_WEEKDAY = ICAL_WEDNESDAY_WEEKDAY
-        [ Constant: int  ]
-
-$ICAL_THURSDAY_WEEKDAY = ICAL_THURSDAY_WEEKDAY
-        [ Constant: int  ]
-
-$ICAL_FRIDAY_WEEKDAY = ICAL_FRIDAY_WEEKDAY
-        [ Constant: int  ]
-
-$ICAL_SATURDAY_WEEKDAY = ICAL_SATURDAY_WEEKDAY
-        [ Constant: int  ]
-
-$ICAL_RECURRENCE_ARRAY_MAX = ICAL_RECURRENCE_ARRAY_MAX
-        [ Constant: int  ]
-
-$ICAL_RECURRENCE_ARRAY_MAX_BYTE = ICAL_RECURRENCE_ARRAY_MAX_BYTE
-        [ Constant: int  ]
-
-icalenum_recurrence_to_string(kind);
-        [ returns char * ]
-
-icalenum_weekday_to_string(kind);
-        [ returns char * ]
 
 $ICAL_UNKNOWN_STATUS = ICAL_UNKNOWN_STATUS
         [ Constant: int  ]
@@ -897,160 +1054,342 @@ icalenum_method_to_string(icalproperty_method );
 icalenum_string_to_method(string);
         [ returns icalproperty_method  ]
 
-icalcomponent_new(kind);
-        [ returns icalcomponent * ]
-
-icalcomponent_new_clone(component);
-        [ returns icalcomponent * ]
-
-icalcomponent_new_from_string(str);
-        [ returns icalcomponent * ]
-
-icalcomponent_free(component);
-        [ returns void  ]
-
-icalcomponent_as_ical_string(component);
+icalenum_status_to_string(icalproperty_status );
         [ returns char * ]
 
-icalcomponent_is_valid(component);
-        [ returns int  ]
+icalenum_string_to_status(string);
+        [ returns icalproperty_status  ]
 
-icalcomponent_isa(component);
-        [ returns icalcomponent_kind  ]
+5.  class icalattachtype
+========================
+[ created from struct icalattachtype ]
 
-icalcomponent_isa_component(component);
-        [ returns int  ]
 
-icalcomponent_add_property(component,property);
+icalattachtype_binary_set(struct icalattachtype *,void *);
+icalattachtype_binary_get(struct icalattachtype *);
+        [ Member data: returns void * ]
+
+icalattachtype_owns_binary_set(struct icalattachtype *,int );
+icalattachtype_owns_binary_get(struct icalattachtype *);
+        [ Member data: returns int  ]
+
+icalattachtype_base64_set(struct icalattachtype *,char *);
+icalattachtype_base64_get(struct icalattachtype *);
+        [ Member data: returns char * ]
+
+icalattachtype_owns_base64_set(struct icalattachtype *,int );
+icalattachtype_owns_base64_get(struct icalattachtype *);
+        [ Member data: returns int  ]
+
+icalattachtype_url_set(struct icalattachtype *,char *);
+icalattachtype_url_get(struct icalattachtype *);
+        [ Member data: returns char * ]
+
+icalattachtype_refcount_set(struct icalattachtype *,int );
+icalattachtype_refcount_get(struct icalattachtype *);
+        [ Member data: returns int  ]
+
+----------
+
+icalattachtype_new();
+        [ returns struct icalattachtype * ]
+
+icalattachtype_add_reference(v);
         [ returns void  ]
 
-icalcomponent_remove_property(component,property);
+icalattachtype_free(v);
         [ returns void  ]
 
-icalcomponent_count_properties(component,kind);
-        [ returns int  ]
-
-icalcomponent_get_current_property(component);
-        [ returns icalproperty * ]
-
-icalcomponent_get_first_property(component,kind);
-        [ returns icalproperty * ]
-
-icalcomponent_get_next_property(component,kind);
-        [ returns icalproperty * ]
-
-icalcomponent_get_properties(component,kind);
-        [ returns icalproperty ** ]
-
-icalcomponent_add_component(parent,child);
+icalattachtype_set_url(v,url);
         [ returns void  ]
 
-icalcomponent_remove_component(parent,child);
-        [ returns void  ]
-
-icalcomponent_count_components(component,kind);
-        [ returns int  ]
-
-icalcomponent_get_current_component(component);
-        [ returns icalcomponent * ]
-
-icalcomponent_get_first_component(component,kind);
-        [ returns icalcomponent * ]
-
-icalcomponent_get_next_component(component,kind);
-        [ returns icalcomponent * ]
-
-icalcomponent_get_component(component,kind);
-        [ returns icalproperty ** ]
-
-icalcomponent_count_errors(component);
-        [ returns int  ]
-
-icalcomponent_convert_errors(component);
-        [ returns void  ]
-
-icalcomponent_strip_errors(component);
-        [ returns void  ]
-
-icalcomponent_get_parent(component);
-        [ returns icalcomponent * ]
-
-icalcomponent_set_parent(component,parent);
-        [ returns void  ]
-
-icalerror_crash_here();
-        [ returns void  ]
-
-icalerror_stop_here();
-        [ returns void  ]
-
-$ICAL_BADARG_ERROR = ICAL_BADARG_ERROR
-        [ Constant: int  ]
-
-$ICAL_NEWFAILED_ERROR = ICAL_NEWFAILED_ERROR
-        [ Constant: int  ]
-
-$ICAL_MALFORMEDDATA_ERROR = ICAL_MALFORMEDDATA_ERROR
-        [ Constant: int  ]
-
-$ICAL_PARSE_ERROR = ICAL_PARSE_ERROR
-        [ Constant: int  ]
-
-$ICAL_INTERNAL_ERROR = ICAL_INTERNAL_ERROR
-        [ Constant: int  ]
-
-$ICAL_FILE_ERROR = ICAL_FILE_ERROR
-        [ Constant: int  ]
-
-$ICAL_ALLOCATION_ERROR = ICAL_ALLOCATION_ERROR
-        [ Constant: int  ]
-
-$ICAL_USAGE_ERROR = ICAL_USAGE_ERROR
-        [ Constant: int  ]
-
-$ICAL_NO_ERROR = ICAL_NO_ERROR
-        [ Constant: int  ]
-
-$ICAL_MULTIPLEINCLUSION_ERROR = ICAL_MULTIPLEINCLUSION_ERROR
-        [ Constant: int  ]
-
-$ICAL_UNKNOWN_ERROR = ICAL_UNKNOWN_ERROR
-        [ Constant: int  ]
-
-icalerror_clear_errno();
-        [ returns void  ]
-
-icalerror_set_errno(icalerrorenum );
-        [ returns void  ]
-
-icalerror_strerror(e);
+icalattachtype_get_url(v);
         [ returns char * ]
 
-icalmemory_tmp_buffer(size);
-        [ returns void * ]
+icalattachtype_set_base64(v,base64,owns);
+        [ returns void  ]
 
-icalmemory_tmp_copy(str);
+icalattachtype_get_base64(v);
         [ returns char * ]
 
-icalmemory_add_tmp_buffer(void *);
+icalattachtype_set_binary(v,binary,owns);
         [ returns void  ]
 
-icalmemory_free_ring();
-        [ returns void  ]
-
-icalmemory_new_buffer(size);
+icalattachtype_get_binary(v);
         [ returns void * ]
 
-icalmemory_resize_buffer(buf,size);
-        [ returns void * ]
+6.  class icalgeotype
+=====================
+[ created from struct icalgeotype ]
 
-icalmemory_free_buffer(buf);
+
+icalgeotype_lat_set(struct icalgeotype *,float );
+icalgeotype_lat_get(struct icalgeotype *);
+        [ Member data: returns float  ]
+
+icalgeotype_lon_set(struct icalgeotype *,float );
+icalgeotype_lon_get(struct icalgeotype *);
+        [ Member data: returns float  ]
+
+7.  class icaltriggertype
+=========================
+[ created from union icaltriggertype ]
+
+
+icaltriggertype_time_set(union icaltriggertype *,struct icaltimetype *);
+icaltriggertype_time_get(union icaltriggertype *);
+        [ Member data: returns struct icaltimetype * ]
+
+icaltriggertype_duration_set(union icaltriggertype *,struct icaldurationtype *);
+icaltriggertype_duration_get(union icaltriggertype *);
+        [ Member data: returns struct icaldurationtype * ]
+
+8.  class icalreqstattype
+=========================
+[ created from struct icalreqstattype ]
+
+
+icalreqstattype_code_set(struct icalreqstattype *,icalrequeststatus );
+icalreqstattype_code_get(struct icalreqstattype *);
+        [ Member data: returns icalrequeststatus  ]
+
+$icalreqstattype_desc = icalreqstattype::desc
+        [ Constant: char * ]
+
+$icalreqstattype_debug = icalreqstattype::debug
+        [ Constant: char * ]
+
+----------
+
+icalreqstattype_from_string(str);
+        [ returns struct icalreqstattype  ]
+
+icalreqstattype_as_string(struct icalreqstattype *);
+        [ returns char * ]
+
+icalvalue_new(kind);
+        [ returns icalvalue * ]
+
+icalvalue_new_clone(value);
+        [ returns icalvalue * ]
+
+icalvalue_new_from_string(kind,str);
+        [ returns icalvalue * ]
+
+icalvalue_free(value);
         [ returns void  ]
 
-icalmemory_append_string(buf,pos,buf_size,string);
+icalvalue_is_valid(value);
+        [ returns int  ]
+
+icalvalue_as_ical_string(value);
+        [ returns char * ]
+
+icalvalue_isa(value);
+        [ returns icalvalue_kind  ]
+
+icalvalue_isa_value(void *);
+        [ returns int  ]
+
+icalvalue_compare(a,b);
+        [ returns icalparameter_xliccomparetype  ]
+
+icalvalue_new_attach(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_attach(value);
+        [ returns struct icalattachtype  ]
+
+icalvalue_set_attach(value,v);
         [ returns void  ]
 
-icalmemory_append_char(buf,pos,buf_size,ch);
+icalvalue_new_binary(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_binary(value);
+        [ returns char * ]
+
+icalvalue_set_binary(value,v);
+        [ returns void  ]
+
+icalvalue_new_boolean(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_boolean(value);
+        [ returns int  ]
+
+icalvalue_set_boolean(value,v);
+        [ returns void  ]
+
+icalvalue_new_caladdress(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_caladdress(value);
+        [ returns char * ]
+
+icalvalue_set_caladdress(value,v);
+        [ returns void  ]
+
+icalvalue_new_date(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_date(value);
+        [ returns struct icaltimetype  ]
+
+icalvalue_set_date(value,v);
+        [ returns void  ]
+
+icalvalue_new_datetime(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_datetime(value);
+        [ returns struct icaltimetype  ]
+
+icalvalue_set_datetime(value,v);
+        [ returns void  ]
+
+icalvalue_new_datetimedate(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_datetimedate(value);
+        [ returns struct icaltimetype  ]
+
+icalvalue_set_datetimedate(value,v);
+        [ returns void  ]
+
+icalvalue_new_datetimeperiod(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_datetimeperiod(value);
+        [ returns struct icalperiodtype  ]
+
+icalvalue_set_datetimeperiod(value,v);
+        [ returns void  ]
+
+icalvalue_new_duration(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_duration(value);
+        [ returns struct icaldurationtype  ]
+
+icalvalue_set_duration(value,v);
+        [ returns void  ]
+
+icalvalue_new_float(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_float(value);
+        [ returns float  ]
+
+icalvalue_set_float(value,v);
+        [ returns void  ]
+
+icalvalue_new_geo(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_geo(value);
+        [ returns struct icalgeotype  ]
+
+icalvalue_set_geo(value,v);
+        [ returns void  ]
+
+icalvalue_new_integer(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_integer(value);
+        [ returns int  ]
+
+icalvalue_set_integer(value,v);
+        [ returns void  ]
+
+icalvalue_new_method(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_method(value);
+        [ returns icalproperty_method  ]
+
+icalvalue_set_method(value,v);
+        [ returns void  ]
+
+icalvalue_new_period(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_period(value);
+        [ returns struct icalperiodtype  ]
+
+icalvalue_set_period(value,v);
+        [ returns void  ]
+
+icalvalue_new_string(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_string(value);
+        [ returns char * ]
+
+icalvalue_set_string(value,v);
+        [ returns void  ]
+
+icalvalue_new_text(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_text(value);
+        [ returns char * ]
+
+icalvalue_set_text(value,v);
+        [ returns void  ]
+
+icalvalue_new_time(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_time(value);
+        [ returns struct icaltimetype  ]
+
+icalvalue_set_time(value,v);
+        [ returns void  ]
+
+icalvalue_new_trigger(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_trigger(value);
+        [ returns union icaltriggertype  ]
+
+icalvalue_set_trigger(value,v);
+        [ returns void  ]
+
+icalvalue_new_uri(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_uri(value);
+        [ returns char * ]
+
+icalvalue_set_uri(value,v);
+        [ returns void  ]
+
+icalvalue_new_utcoffset(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_utcoffset(value);
+        [ returns int  ]
+
+icalvalue_set_utcoffset(value,v);
+        [ returns void  ]
+
+icalvalue_new_query(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_query(value);
+        [ returns char * ]
+
+icalvalue_set_query(value,v);
+        [ returns void  ]
+
+icalvalue_new_status(v);
+        [ returns icalvalue * ]
+
+icalvalue_get_status(value);
+        [ returns icalproperty_status  ]
+
+icalvalue_set_status(value,v);
         [ returns void  ]
 
 icalparameter_new(kind);
@@ -1296,51 +1635,6 @@ icalparameter_get_xliccomparetype(value);
 icalparameter_set_xliccomparetype(value,v);
         [ returns void  ]
 
-$ICALPARSER_ERROR = ICALPARSER_ERROR
-        [ Constant: int  ]
-
-$ICALPARSER_SUCCESS = ICALPARSER_SUCCESS
-        [ Constant: int  ]
-
-$ICALPARSER_BEGIN_COMP = ICALPARSER_BEGIN_COMP
-        [ Constant: int  ]
-
-$ICALPARSER_END_COMP = ICALPARSER_END_COMP
-        [ Constant: int  ]
-
-$ICALPARSER_IN_PROGRESS = ICALPARSER_IN_PROGRESS
-        [ Constant: int  ]
-
-icalparser_parse_string(str);
-        [ returns icalcomponent * ]
-
-icalparser_new();
-        [ returns icalparser * ]
-
-icalparser_set_gen_data(parser,data);
-        [ returns void  ]
-
-icalparser_add_line(parser,str);
-        [ returns icalcomponent * ]
-
-icalparser_claim(parser);
-        [ returns icalcomponent * ]
-
-icalparser_clean(parser);
-        [ returns icalcomponent * ]
-
-icalparser_get_state(parser);
-        [ returns icalparser_state  ]
-
-icalparser_free(parser);
-        [ returns void  ]
-
-icalparser_parse_value(kind,str,errors);
-        [ returns icalvalue * ]
-
-string_line_generator(out,buf_size,d);
-        [ returns char * ]
-
 icalproperty_new(kind);
         [ returns icalproperty * ]
 
@@ -1363,6 +1657,9 @@ icalproperty_isa_property(property);
         [ returns int  ]
 
 icalproperty_add_parameter(prop,parameter);
+        [ returns void  ]
+
+icalproperty_set_parameter(prop,parameter);
         [ returns void  ]
 
 icalproperty_remove_parameter(prop,kind);
@@ -1398,6 +1695,15 @@ icalproperty_set_method(prop,v);
 icalproperty_get_method(prop);
         [ returns icalproperty_method  ]
 
+icalproperty_new_xlicmimecid(v);
+        [ returns icalproperty * ]
+
+icalproperty_set_xlicmimecid(prop,v);
+        [ returns void  ]
+
+icalproperty_get_xlicmimecid(prop);
+        [ returns char * ]
+
 icalproperty_new_lastmodified(v);
         [ returns icalproperty * ]
 
@@ -1432,7 +1738,7 @@ icalproperty_set_status(prop,v);
         [ returns void  ]
 
 icalproperty_get_status(prop);
-        [ returns char * ]
+        [ returns icalproperty_status  ]
 
 icalproperty_new_description(v);
         [ returns icalproperty * ]
@@ -1479,15 +1785,6 @@ icalproperty_set_tzoffsetfrom(prop,v);
 icalproperty_get_tzoffsetfrom(prop);
         [ returns int  ]
 
-icalproperty_new_rrule(v);
-        [ returns icalproperty * ]
-
-icalproperty_set_rrule(prop,v);
-        [ returns void  ]
-
-icalproperty_get_rrule(prop);
-        [ returns struct icalrecurrencetype  ]
-
 icalproperty_new_attendee(v);
         [ returns icalproperty * ]
 
@@ -1504,6 +1801,24 @@ icalproperty_set_contact(prop,v);
         [ returns void  ]
 
 icalproperty_get_contact(prop);
+        [ returns char * ]
+
+icalproperty_new_xlicmimecontenttype(v);
+        [ returns icalproperty * ]
+
+icalproperty_set_xlicmimecontenttype(prop,v);
+        [ returns void  ]
+
+icalproperty_get_xlicmimecontenttype(prop);
+        [ returns char * ]
+
+icalproperty_new_xlicmimeoptinfo(v);
+        [ returns icalproperty * ]
+
+icalproperty_set_xlicmimeoptinfo(prop,v);
+        [ returns void  ]
+
+icalproperty_get_xlicmimeoptinfo(prop);
         [ returns char * ]
 
 icalproperty_new_relatedto(v);
@@ -1533,15 +1848,6 @@ icalproperty_set_comment(prop,v);
 icalproperty_get_comment(prop);
         [ returns char * ]
 
-icalproperty_new_trigger(v);
-        [ returns icalproperty * ]
-
-icalproperty_set_trigger(prop,v);
-        [ returns void  ]
-
-icalproperty_get_trigger(prop);
-        [ returns union icaltriggertype  ]
-
 icalproperty_new_xlicerror(v);
         [ returns icalproperty * ]
 
@@ -1551,6 +1857,15 @@ icalproperty_set_xlicerror(prop,v);
 icalproperty_get_xlicerror(prop);
         [ returns char * ]
 
+icalproperty_new_trigger(v);
+        [ returns icalproperty * ]
+
+icalproperty_set_trigger(prop,v);
+        [ returns void  ]
+
+icalproperty_get_trigger(prop);
+        [ returns union icaltriggertype  ]
+
 icalproperty_new_class(v);
         [ returns icalproperty * ]
 
@@ -1558,6 +1873,15 @@ icalproperty_set_class(prop,v);
         [ returns void  ]
 
 icalproperty_get_class(prop);
+        [ returns char * ]
+
+icalproperty_new_x(v);
+        [ returns icalproperty * ]
+
+icalproperty_set_x(prop,v);
+        [ returns void  ]
+
+icalproperty_get_x(prop);
         [ returns char * ]
 
 icalproperty_new_tzoffsetto(v);
@@ -1576,6 +1900,15 @@ icalproperty_set_transp(prop,v);
         [ returns void  ]
 
 icalproperty_get_transp(prop);
+        [ returns char * ]
+
+icalproperty_new_xlicmimeencoding(v);
+        [ returns icalproperty * ]
+
+icalproperty_set_xlicmimeencoding(prop,v);
+        [ returns void  ]
+
+icalproperty_get_xlicmimeencoding(prop);
         [ returns char * ]
 
 icalproperty_new_sequence(v);
@@ -1722,6 +2055,15 @@ icalproperty_set_rdate(prop,v);
 icalproperty_get_rdate(prop);
         [ returns struct icalperiodtype  ]
 
+icalproperty_new_xlicmimefilename(v);
+        [ returns icalproperty * ]
+
+icalproperty_set_xlicmimefilename(prop,v);
+        [ returns void  ]
+
+icalproperty_get_xlicmimefilename(prop);
+        [ returns char * ]
+
 icalproperty_new_url(v);
         [ returns icalproperty * ]
 
@@ -1730,15 +2072,6 @@ icalproperty_set_url(prop,v);
 
 icalproperty_get_url(prop);
         [ returns char * ]
-
-icalproperty_new_attach(v);
-        [ returns icalproperty * ]
-
-icalproperty_set_attach(prop,v);
-        [ returns void  ]
-
-icalproperty_get_attach(prop);
-        [ returns struct icalattachtype  ]
 
 icalproperty_new_xlicclustercount(v);
         [ returns icalproperty * ]
@@ -1749,14 +2082,14 @@ icalproperty_set_xlicclustercount(prop,v);
 icalproperty_get_xlicclustercount(prop);
         [ returns int  ]
 
-icalproperty_new_exrule(v);
+icalproperty_new_attach(v);
         [ returns icalproperty * ]
 
-icalproperty_set_exrule(prop,v);
+icalproperty_set_attach(prop,v);
         [ returns void  ]
 
-icalproperty_get_exrule(prop);
-        [ returns struct icalrecurrencetype  ]
+icalproperty_get_attach(prop);
+        [ returns struct icalattachtype  ]
 
 icalproperty_new_query(v);
         [ returns icalproperty * ]
@@ -1803,6 +2136,15 @@ icalproperty_set_geo(prop,v);
 icalproperty_get_geo(prop);
         [ returns struct icalgeotype  ]
 
+icalproperty_new_xlicmimecharset(v);
+        [ returns icalproperty * ]
+
+icalproperty_set_xlicmimecharset(prop,v);
+        [ returns void  ]
+
+icalproperty_get_xlicmimecharset(prop);
+        [ returns char * ]
+
 icalproperty_new_completed(v);
         [ returns icalproperty * ]
 
@@ -1839,6 +2181,410 @@ icalproperty_set_action(prop,v);
 icalproperty_get_action(prop);
         [ returns char * ]
 
+9.  class pvl_elem_t
+====================
+[ created from struct pvl_elem_t ]
+
+
+pvl_elem_t_MAGIC_set(pvl_elem_t *,int );
+pvl_elem_t_MAGIC_get(pvl_elem_t *);
+        [ Member data: returns int  ]
+
+pvl_elem_t_d_set(pvl_elem_t *,void *);
+pvl_elem_t_d_get(pvl_elem_t *);
+        [ Member data: returns void * ]
+
+pvl_elem_t_next_set(pvl_elem_t *,struct pvl_elem_t *);
+pvl_elem_t_next_get(pvl_elem_t *);
+        [ Member data: returns struct pvl_elem_t * ]
+
+pvl_elem_t_prior_set(pvl_elem_t *,struct pvl_elem_t *);
+pvl_elem_t_prior_get(pvl_elem_t *);
+        [ Member data: returns struct pvl_elem_t * ]
+
+----------
+
+pvl_new_element(d,next,prior);
+        [ returns pvl_elem  ]
+
+pvl_newlist();
+        [ returns pvl_list  ]
+
+pvl_free(pvl_list );
+        [ returns void  ]
+
+pvl_unshift(l,d);
+        [ returns void  ]
+
+pvl_shift(l);
+        [ returns void * ]
+
+pvl_head(pvl_list );
+        [ returns pvl_elem  ]
+
+pvl_push(l,d);
+        [ returns void  ]
+
+pvl_pop(l);
+        [ returns void * ]
+
+pvl_tail(pvl_list );
+        [ returns pvl_elem  ]
+
+pvl_insert_ordered(l,f,d);
+        [ returns void  ]
+
+pvl_insert_after(l,e,d);
+        [ returns void  ]
+
+pvl_insert_before(l,e,d);
+        [ returns void  ]
+
+pvl_remove(pvl_list ,pvl_elem );
+        [ returns void * ]
+
+pvl_clear(pvl_list );
+        [ returns void  ]
+
+pvl_count(pvl_list );
+        [ returns int  ]
+
+pvl_next(e);
+        [ returns pvl_elem  ]
+
+pvl_prior(e);
+        [ returns pvl_elem  ]
+
+pvl_data(pvl_elem );
+        [ returns void * ]
+
+pvl_find(l,f,v);
+        [ returns pvl_elem  ]
+
+pvl_find_next(l,f,v);
+        [ returns pvl_elem  ]
+
+pvl_apply(l,f,v);
+        [ returns void  ]
+
+10.  class icalcompiter
+=======================
+[ created from struct icalcompiter ]
+
+
+icalcompiter_kind_set(icalcompiter *,icalcomponent_kind );
+icalcompiter_kind_get(icalcompiter *);
+        [ Member data: returns icalcomponent_kind  ]
+
+icalcompiter_iter_set(icalcompiter *,pvl_elem );
+icalcompiter_iter_get(icalcompiter *);
+        [ Member data: returns pvl_elem  ]
+
+----------
+
+icalcomponent_new(kind);
+        [ returns icalcomponent * ]
+
+icalcomponent_new_clone(component);
+        [ returns icalcomponent * ]
+
+icalcomponent_new_from_string(str);
+        [ returns icalcomponent * ]
+
+icalcomponent_free(component);
+        [ returns void  ]
+
+icalcomponent_as_ical_string(component);
+        [ returns char * ]
+
+icalcomponent_is_valid(component);
+        [ returns int  ]
+
+icalcomponent_isa(component);
+        [ returns icalcomponent_kind  ]
+
+icalcomponent_isa_component(component);
+        [ returns int  ]
+
+icalcomponent_add_property(component,property);
+        [ returns void  ]
+
+icalcomponent_remove_property(component,property);
+        [ returns void  ]
+
+icalcomponent_count_properties(component,kind);
+        [ returns int  ]
+
+icalcomponent_get_current_property(component);
+        [ returns icalproperty * ]
+
+icalcomponent_get_first_property(component,kind);
+        [ returns icalproperty * ]
+
+icalcomponent_get_next_property(component,kind);
+        [ returns icalproperty * ]
+
+icalcomponent_get_properties(component,kind);
+        [ returns icalproperty ** ]
+
+icalcomponent_add_component(parent,child);
+        [ returns void  ]
+
+icalcomponent_remove_component(parent,child);
+        [ returns void  ]
+
+icalcomponent_count_components(component,kind);
+        [ returns int  ]
+
+icalcomponent_end_component(component,kind);
+        [ returns icalcompiter  ]
+
+icalcomponent_get_current_component(component);
+        [ returns icalcomponent * ]
+
+icalcomponent_get_first_component(component,kind);
+        [ returns icalcomponent * ]
+
+icalcomponent_get_next_component(component,kind);
+        [ returns icalcomponent * ]
+
+icalcomponent_count_errors(component);
+        [ returns int  ]
+
+icalcomponent_strip_errors(component);
+        [ returns void  ]
+
+icalcomponent_convert_errors(component);
+        [ returns void  ]
+
+icalcomponent_get_parent(component);
+        [ returns icalcomponent * ]
+
+icalcomponent_set_parent(component,parent);
+        [ returns void  ]
+
+icalcompiter_next(i);
+        [ returns icalcomponent * ]
+
+icalcompiter_prior(i);
+        [ returns icalcomponent * ]
+
+icalcompiter_deref(i);
+        [ returns icalcomponent * ]
+
+icalcomponent_get_first_real_component(c);
+        [ returns icalcomponent * ]
+
+icalcomponent_get_span(comp);
+        [ returns struct icaltime_span  ]
+
+icalcomponent_set_dtstart(comp,v);
+        [ returns void  ]
+
+icalcomponent_get_dtstart(comp);
+        [ returns struct icaltimetype  ]
+
+icalcomponent_get_dtend(comp);
+        [ returns struct icaltimetype  ]
+
+icalcomponent_set_dtend(comp,v);
+        [ returns void  ]
+
+icalcomponent_set_duration(comp,v);
+        [ returns void  ]
+
+icalcomponent_get_duration(comp);
+        [ returns struct icaldurationtype  ]
+
+icalcomponent_set_method(comp,method);
+        [ returns void  ]
+
+icalcomponent_get_method(comp);
+        [ returns icalproperty_method  ]
+
+icalcomponent_get_dtstamp(comp);
+        [ returns struct icaltimetype  ]
+
+icalcomponent_set_dtstamp(comp,v);
+        [ returns void  ]
+
+icalcomponent_set_summary(comp,v);
+        [ returns void  ]
+
+icalcomponent_get_summary(comp);
+        [ returns char * ]
+
+icalcomponent_set_comment(comp,v);
+        [ returns void  ]
+
+icalcomponent_get_comment(comp);
+        [ returns char * ]
+
+icalcomponent_set_organizer(comp,v);
+        [ returns void  ]
+
+icalcomponent_get_organizer(comp);
+        [ returns char * ]
+
+icalcomponent_set_uid(comp,v);
+        [ returns void  ]
+
+icalcomponent_get_uid(comp);
+        [ returns char * ]
+
+icalcomponent_set_recurrenceid(comp,v);
+        [ returns void  ]
+
+icalcomponent_get_recurrenceid(comp);
+        [ returns struct icaltimetype  ]
+
+icalcomponent_new_vcalendar();
+        [ returns icalcomponent * ]
+
+icalcomponent_new_vevent();
+        [ returns icalcomponent * ]
+
+icalcomponent_new_vtodo();
+        [ returns icalcomponent * ]
+
+icalcomponent_new_vjournal();
+        [ returns icalcomponent * ]
+
+icalcomponent_new_vfreebusy();
+        [ returns icalcomponent * ]
+
+icalcomponent_new_vtimezone();
+        [ returns icalcomponent * ]
+
+icalcomponent_new_xstandard();
+        [ returns icalcomponent * ]
+
+icalcomponent_new_xdaylight();
+        [ returns icalcomponent * ]
+
+$ICALPARSER_ERROR = ICALPARSER_ERROR
+        [ Constant: int  ]
+
+$ICALPARSER_SUCCESS = ICALPARSER_SUCCESS
+        [ Constant: int  ]
+
+$ICALPARSER_BEGIN_COMP = ICALPARSER_BEGIN_COMP
+        [ Constant: int  ]
+
+$ICALPARSER_END_COMP = ICALPARSER_END_COMP
+        [ Constant: int  ]
+
+$ICALPARSER_IN_PROGRESS = ICALPARSER_IN_PROGRESS
+        [ Constant: int  ]
+
+icalparser_new();
+        [ returns icalparser * ]
+
+icalparser_add_line(parser,str);
+        [ returns icalcomponent * ]
+
+icalparser_claim(parser);
+        [ returns icalcomponent * ]
+
+icalparser_clean(parser);
+        [ returns icalcomponent * ]
+
+icalparser_get_state(parser);
+        [ returns icalparser_state  ]
+
+icalparser_free(parser);
+        [ returns void  ]
+
+icalparser_parse_string(str);
+        [ returns icalcomponent * ]
+
+icalparser_parse_value(kind,str,errors);
+        [ returns icalvalue * ]
+
+string_line_generator(out,buf_size,d);
+        [ returns char * ]
+
+icalmemory_tmp_buffer(size);
+        [ returns void * ]
+
+icalmemory_tmp_copy(str);
+        [ returns char * ]
+
+icalmemory_add_tmp_buffer(void *);
+        [ returns void  ]
+
+icalmemory_free_ring();
+        [ returns void  ]
+
+icalmemory_new_buffer(size);
+        [ returns void * ]
+
+icalmemory_resize_buffer(buf,size);
+        [ returns void * ]
+
+icalmemory_free_buffer(buf);
+        [ returns void  ]
+
+icalmemory_append_string(buf,pos,buf_size,string);
+        [ returns void  ]
+
+icalmemory_append_char(buf,pos,buf_size,ch);
+        [ returns void  ]
+
+icalmemory_strdup(s);
+        [ returns char * ]
+
+icalerror_stop_here();
+        [ returns void  ]
+
+icalerror_crash_here();
+        [ returns void  ]
+
+$ICAL_BADARG_ERROR = ICAL_BADARG_ERROR
+        [ Constant: int  ]
+
+$ICAL_NEWFAILED_ERROR = ICAL_NEWFAILED_ERROR
+        [ Constant: int  ]
+
+$ICAL_MALFORMEDDATA_ERROR = ICAL_MALFORMEDDATA_ERROR
+        [ Constant: int  ]
+
+$ICAL_PARSE_ERROR = ICAL_PARSE_ERROR
+        [ Constant: int  ]
+
+$ICAL_INTERNAL_ERROR = ICAL_INTERNAL_ERROR
+        [ Constant: int  ]
+
+$ICAL_FILE_ERROR = ICAL_FILE_ERROR
+        [ Constant: int  ]
+
+$ICAL_ALLOCATION_ERROR = ICAL_ALLOCATION_ERROR
+        [ Constant: int  ]
+
+$ICAL_USAGE_ERROR = ICAL_USAGE_ERROR
+        [ Constant: int  ]
+
+$ICAL_NO_ERROR = ICAL_NO_ERROR
+        [ Constant: int  ]
+
+$ICAL_MULTIPLEINCLUSION_ERROR = ICAL_MULTIPLEINCLUSION_ERROR
+        [ Constant: int  ]
+
+$ICAL_TIMEDOUT_ERROR = ICAL_TIMEDOUT_ERROR
+        [ Constant: int  ]
+
+$ICAL_UNKNOWN_ERROR = ICAL_UNKNOWN_ERROR
+        [ Constant: int  ]
+
+icalerror_clear_errno();
+        [ returns void  ]
+
+icalerror_set_errno(icalerrorenum );
+        [ returns void  ]
+
+icalerror_strerror(e);
+        [ returns char * ]
+
 $ICAL_RESTRICTION_NONE = ICAL_RESTRICTION_NONE
         [ Constant: int  ]
 
@@ -1869,602 +2615,15 @@ $ICAL_RESTRICTION_UNKNOWN = ICAL_RESTRICTION_UNKNOWN
 icalrestriction_compare(restr,count);
         [ returns int  ]
 
-icalrestriction_get_property_restriction(method,component,property);
-        [ returns icalrestriction_kind  ]
-
-icalrestriction_get_component_restriction(method,component,subcomponent);
-        [ returns icalrestriction_kind  ]
-
 icalrestriction_is_parameter_allowed(property,parameter);
         [ returns int  ]
 
 icalrestriction_check(comp);
         [ returns int  ]
 
-1.  class icalattachtype
-========================
-[ created from struct icalattachtype ]
-
-
-icalattachtype_binary_set(struct icalattachtype *,void *);
-icalattachtype_binary_get(struct icalattachtype *);
-        [ Member data: returns void * ]
-
-icalattachtype_owns_binary_set(struct icalattachtype *,int );
-icalattachtype_owns_binary_get(struct icalattachtype *);
-        [ Member data: returns int  ]
-
-icalattachtype_base64_set(struct icalattachtype *,char *);
-icalattachtype_base64_get(struct icalattachtype *);
-        [ Member data: returns char * ]
-
-icalattachtype_owns_base64_set(struct icalattachtype *,int );
-icalattachtype_owns_base64_get(struct icalattachtype *);
-        [ Member data: returns int  ]
-
-icalattachtype_url_set(struct icalattachtype *,char *);
-icalattachtype_url_get(struct icalattachtype *);
-        [ Member data: returns char * ]
-
-icalattachtype_refcount_set(struct icalattachtype *,int );
-icalattachtype_refcount_get(struct icalattachtype *);
-        [ Member data: returns int  ]
-
-----------
-
-icalattachtype_new();
-        [ returns struct icalattachtype * ]
-
-icalattachtype_add_reference(v);
-        [ returns void  ]
-
-icalattachtype_free(v);
-        [ returns void  ]
-
-icalattachtype_set_url(v,url);
-        [ returns void  ]
-
-icalattachtype_get_url(v);
-        [ returns char * ]
-
-icalattachtype_set_base64(v,base64,owns);
-        [ returns void  ]
-
-icalattachtype_get_base64(v);
-        [ returns char * ]
-
-icalattachtype_set_binary(v,binary,owns);
-        [ returns void  ]
-
-icalattachtype_get_binary(v);
-        [ returns void * ]
-
-2.  class icalgeotype
-=====================
-[ created from struct icalgeotype ]
-
-
-icalgeotype_lat_set(struct icalgeotype *,float );
-icalgeotype_lat_get(struct icalgeotype *);
-        [ Member data: returns float  ]
-
-icalgeotype_lon_set(struct icalgeotype *,float );
-icalgeotype_lon_get(struct icalgeotype *);
-        [ Member data: returns float  ]
-
-3.  class icaltimetype
-======================
-[ created from struct icaltimetype ]
-
-
-icaltimetype_year_set(struct icaltimetype *,int );
-icaltimetype_year_get(struct icaltimetype *);
-        [ Member data: returns int  ]
-
-icaltimetype_month_set(struct icaltimetype *,int );
-icaltimetype_month_get(struct icaltimetype *);
-        [ Member data: returns int  ]
-
-icaltimetype_day_set(struct icaltimetype *,int );
-icaltimetype_day_get(struct icaltimetype *);
-        [ Member data: returns int  ]
-
-icaltimetype_hour_set(struct icaltimetype *,int );
-icaltimetype_hour_get(struct icaltimetype *);
-        [ Member data: returns int  ]
-
-icaltimetype_minute_set(struct icaltimetype *,int );
-icaltimetype_minute_get(struct icaltimetype *);
-        [ Member data: returns int  ]
-
-icaltimetype_second_set(struct icaltimetype *,int );
-icaltimetype_second_get(struct icaltimetype *);
-        [ Member data: returns int  ]
-
-icaltimetype_is_utc_set(struct icaltimetype *,int );
-icaltimetype_is_utc_get(struct icaltimetype *);
-        [ Member data: returns int  ]
-
-icaltimetype_is_date_set(struct icaltimetype *,int );
-icaltimetype_is_date_get(struct icaltimetype *);
-        [ Member data: returns int  ]
-
-----------
-
-icaltimetype_from_timet(v,is_date);
-        [ returns struct icaltimetype  ]
-
-4.  class icalrecurrencetype
-============================
-[ created from struct icalrecurrencetype ]
-
-
-icalrecurrencetype_freq_set(struct icalrecurrencetype *,icalrecurrencetype_frequency );
-icalrecurrencetype_freq_get(struct icalrecurrencetype *);
-        [ Member data: returns icalrecurrencetype_frequency  ]
-
-icalrecurrencetype_until_set(struct icalrecurrencetype *,struct icaltimetype *);
-icalrecurrencetype_until_get(struct icalrecurrencetype *);
-        [ Member data: returns struct icaltimetype * ]
-
-icalrecurrencetype_count_set(struct icalrecurrencetype *,int );
-icalrecurrencetype_count_get(struct icalrecurrencetype *);
-        [ Member data: returns int  ]
-
-icalrecurrencetype_interval_set(struct icalrecurrencetype *,short );
-icalrecurrencetype_interval_get(struct icalrecurrencetype *);
-        [ Member data: returns short  ]
-
-icalrecurrencetype_week_start_set(struct icalrecurrencetype *,icalrecurrencetype_weekday );
-icalrecurrencetype_week_start_get(struct icalrecurrencetype *);
-        [ Member data: returns icalrecurrencetype_weekday  ]
-
-icalrecurrencetype_by_second_get(struct icalrecurrencetype *);
-        [ Member data: returns short * ]
-
-icalrecurrencetype_by_minute_get(struct icalrecurrencetype *);
-        [ Member data: returns short * ]
-
-icalrecurrencetype_by_hour_get(struct icalrecurrencetype *);
-        [ Member data: returns short * ]
-
-icalrecurrencetype_by_day_get(struct icalrecurrencetype *);
-        [ Member data: returns short * ]
-
-icalrecurrencetype_by_month_day_get(struct icalrecurrencetype *);
-        [ Member data: returns short * ]
-
-icalrecurrencetype_by_year_day_get(struct icalrecurrencetype *);
-        [ Member data: returns short * ]
-
-icalrecurrencetype_by_week_no_get(struct icalrecurrencetype *);
-        [ Member data: returns short * ]
-
-icalrecurrencetype_by_month_get(struct icalrecurrencetype *);
-        [ Member data: returns short * ]
-
-icalrecurrencetype_by_set_pos_get(struct icalrecurrencetype *);
-        [ Member data: returns short * ]
-
-----------
-
-icalrecurrencetype_clear(r);
-        [ returns void  ]
-
-5.  class icaldurationtype
-==========================
-[ created from struct icaldurationtype ]
-
-
-icaldurationtype_days_set(struct icaldurationtype *,unsigned int );
-icaldurationtype_days_get(struct icaldurationtype *);
-        [ Member data: returns unsigned int  ]
-
-icaldurationtype_weeks_set(struct icaldurationtype *,unsigned int );
-icaldurationtype_weeks_get(struct icaldurationtype *);
-        [ Member data: returns unsigned int  ]
-
-icaldurationtype_hours_set(struct icaldurationtype *,unsigned int );
-icaldurationtype_hours_get(struct icaldurationtype *);
-        [ Member data: returns unsigned int  ]
-
-icaldurationtype_minutes_set(struct icaldurationtype *,unsigned int );
-icaldurationtype_minutes_get(struct icaldurationtype *);
-        [ Member data: returns unsigned int  ]
-
-icaldurationtype_seconds_set(struct icaldurationtype *,unsigned int );
-icaldurationtype_seconds_get(struct icaldurationtype *);
-        [ Member data: returns unsigned int  ]
-
-----------
-
-icaldurationtype_from_timet(t);
-        [ returns struct icaldurationtype  ]
-
-icaldurationtype_as_timet(duration);
-        [ returns time_t  ]
-
-icalrecurrencetype_next_occurance(r,after);
-        [ returns struct icaltimetype  ]
-
-6.  class icalperiodtype
-========================
-[ created from struct icalperiodtype ]
-
-
-icalperiodtype_start_set(struct icalperiodtype *,struct icaltimetype *);
-icalperiodtype_start_get(struct icalperiodtype *);
-        [ Member data: returns struct icaltimetype * ]
-
-icalperiodtype_end_set(struct icalperiodtype *,struct icaltimetype *);
-icalperiodtype_end_get(struct icalperiodtype *);
-        [ Member data: returns struct icaltimetype * ]
-
-icalperiodtype_duration_set(struct icalperiodtype *,struct icaldurationtype *);
-icalperiodtype_duration_get(struct icalperiodtype *);
-        [ Member data: returns struct icaldurationtype * ]
-
-----------
-
-icalperiodtype_duration(period);
-        [ returns time_t  ]
-
-icalperiodtype_end(period);
-        [ returns time_t  ]
-
-7.  class icaltriggertype
-=========================
-[ created from union icaltriggertype ]
-
-
-icaltriggertype_time_set(union icaltriggertype *,struct icaltimetype *);
-icaltriggertype_time_get(union icaltriggertype *);
-        [ Member data: returns struct icaltimetype * ]
-
-icaltriggertype_duration_set(union icaltriggertype *,struct icaldurationtype *);
-icaltriggertype_duration_get(union icaltriggertype *);
-        [ Member data: returns struct icaldurationtype * ]
-
-8.  class icalreqstattype
-=========================
-[ created from struct icalreqstattype ]
-
-
-icalreqstattype_code_set(struct icalreqstattype *,icalrequeststatus );
-icalreqstattype_code_get(struct icalreqstattype *);
-        [ Member data: returns icalrequeststatus  ]
-
-icalreqstattype_desc_set(struct icalreqstattype *,char *);
-icalreqstattype_desc_get(struct icalreqstattype *);
-        [ Member data: returns char * ]
-
-icalreqstattype_debug_set(struct icalreqstattype *,char *);
-icalreqstattype_debug_get(struct icalreqstattype *);
-        [ Member data: returns char * ]
-
-----------
-
-icalreqstattype_from_string(str);
-        [ returns struct icalreqstattype  ]
-
-icalreqstattype_as_string(struct icalreqstattype *);
-        [ returns char * ]
-
-icalvalue_new(kind);
-        [ returns icalvalue * ]
-
-icalvalue_new_clone(value);
-        [ returns icalvalue * ]
-
-icalvalue_new_from_string(kind,str);
-        [ returns icalvalue * ]
-
-icalvalue_free(value);
-        [ returns void  ]
-
-icalvalue_is_valid(value);
-        [ returns int  ]
-
-icalvalue_as_ical_string(value);
-        [ returns char * ]
-
-icalvalue_isa(value);
-        [ returns icalvalue_kind  ]
-
-icalvalue_isa_value(void *);
-        [ returns int  ]
-
-icalvalue_compare(a,b);
-        [ returns icalparameter_xliccomparetype  ]
-
-icalvalue_new_attach(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_attach(value);
-        [ returns struct icalattachtype  ]
-
-icalvalue_set_attach(value,v);
-        [ returns void  ]
-
-icalvalue_new_binary(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_binary(value);
-        [ returns char * ]
-
-icalvalue_set_binary(value,v);
-        [ returns void  ]
-
-icalvalue_new_boolean(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_boolean(value);
-        [ returns int  ]
-
-icalvalue_set_boolean(value,v);
-        [ returns void  ]
-
-icalvalue_new_caladdress(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_caladdress(value);
-        [ returns char * ]
-
-icalvalue_set_caladdress(value,v);
-        [ returns void  ]
-
-icalvalue_new_date(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_date(value);
-        [ returns struct icaltimetype  ]
-
-icalvalue_set_date(value,v);
-        [ returns void  ]
-
-icalvalue_new_datetime(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_datetime(value);
-        [ returns struct icaltimetype  ]
-
-icalvalue_set_datetime(value,v);
-        [ returns void  ]
-
-icalvalue_new_datetimedate(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_datetimedate(value);
-        [ returns struct icaltimetype  ]
-
-icalvalue_set_datetimedate(value,v);
-        [ returns void  ]
-
-icalvalue_new_datetimeperiod(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_datetimeperiod(value);
-        [ returns struct icalperiodtype  ]
-
-icalvalue_set_datetimeperiod(value,v);
-        [ returns void  ]
-
-icalvalue_new_duration(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_duration(value);
-        [ returns struct icaldurationtype  ]
-
-icalvalue_set_duration(value,v);
-        [ returns void  ]
-
-icalvalue_new_float(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_float(value);
-        [ returns float  ]
-
-icalvalue_set_float(value,v);
-        [ returns void  ]
-
-icalvalue_new_geo(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_geo(value);
-        [ returns struct icalgeotype  ]
-
-icalvalue_set_geo(value,v);
-        [ returns void  ]
-
-icalvalue_new_integer(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_integer(value);
-        [ returns int  ]
-
-icalvalue_set_integer(value,v);
-        [ returns void  ]
-
-icalvalue_new_method(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_method(value);
-        [ returns icalproperty_method  ]
-
-icalvalue_set_method(value,v);
-        [ returns void  ]
-
-icalvalue_new_period(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_period(value);
-        [ returns struct icalperiodtype  ]
-
-icalvalue_set_period(value,v);
-        [ returns void  ]
-
-icalvalue_new_recur(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_recur(value);
-        [ returns struct icalrecurrencetype  ]
-
-icalvalue_set_recur(value,v);
-        [ returns void  ]
-
-icalvalue_new_text(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_text(value);
-        [ returns char * ]
-
-icalvalue_set_text(value,v);
-        [ returns void  ]
-
-icalvalue_new_time(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_time(value);
-        [ returns struct icaltimetype  ]
-
-icalvalue_set_time(value,v);
-        [ returns void  ]
-
-icalvalue_new_trigger(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_trigger(value);
-        [ returns union icaltriggertype  ]
-
-icalvalue_set_trigger(value,v);
-        [ returns void  ]
-
-icalvalue_new_uri(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_uri(value);
-        [ returns char * ]
-
-icalvalue_set_uri(value,v);
-        [ returns void  ]
-
-icalvalue_new_utcoffset(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_utcoffset(value);
-        [ returns int  ]
-
-icalvalue_set_utcoffset(value,v);
-        [ returns void  ]
-
-icalvalue_new_query(v);
-        [ returns icalvalue * ]
-
-icalvalue_get_query(value);
-        [ returns char * ]
-
-icalvalue_set_query(value,v);
-        [ returns void  ]
-
-icalcalendar_new(dir);
-        [ returns icalcalendar * ]
-
-icalcalendar_free(calendar);
-        [ returns void  ]
-
-icalcalendar_lock(calendar);
-        [ returns int  ]
-
-icalcalendar_unlock(calendar);
-        [ returns int  ]
-
-icalcalendar_islocked(calendar);
-        [ returns int  ]
-
-icalcalendar_ownlock(calendar);
-        [ returns int  ]
-
-icalcalendar_get_booked(calendar);
-        [ returns icalstore * ]
-
-icalcalendar_get_incoming(calendar);
-        [ returns icalcluster * ]
-
-icalcalendar_get_properties(calendar);
-        [ returns icalcluster * ]
-
-icalcalendar_get_freebusy(calendar);
-        [ returns icalcluster * ]
-
-icalcluster_new(path);
-        [ returns icalcluster * ]
-
-icalcluster_free(cluster);
-        [ returns void  ]
-
-icalcluster_path(cluster);
-        [ returns char * ]
-
-icalcluster_get_component(cluster);
-        [ returns icalcomponent * ]
-
-icalcluster_mark(cluster);
-        [ returns void  ]
-
-icalcluster_commit(cluster);
-        [ returns icalerrorenum  ]
-
-icalcluster_add_component(parent,child);
-        [ returns icalerrorenum  ]
-
-icalcluster_remove_component(parent,child);
-        [ returns icalerrorenum  ]
-
-icalcluster_count_components(component,kind);
-        [ returns int  ]
-
-icalcluster_get_current_component(component);
-        [ returns icalcomponent * ]
-
-icalcluster_get_first_component(component,kind);
-        [ returns icalcomponent * ]
-
-icalcluster_get_next_component(component,kind);
-        [ returns icalcomponent * ]
-
-icalstore_new(dir);
-        [ returns icalstore * ]
-
-icalstore_free(store);
-        [ returns void  ]
-
-icalstore_add_component(store,comp);
-        [ returns icalerrorenum  ]
-
-icalstore_remove_component(store,comp);
-        [ returns icalerrorenum  ]
-
-icalstore_select(store,gauge);
-        [ returns icalerrorenum  ]
-
-icalstore_test(comp,gauge);
-        [ returns int  ]
-
-icalstore_clear(store);
-        [ returns void  ]
-
-icalstore_fetch(store,uid);
-        [ returns icalcomponent * ]
-
-icalstore_has_uid(store,uid);
-        [ returns int  ]
-
-icalstore_get_first_component(store);
-        [ returns icalcomponent * ]
-
-icalstore_get_next_component(store);
-        [ returns icalcomponent * ]
-
-icalstore_next_uid_number(store);
-        [ returns int  ]
+$ICAL_RECURRENCE_ARRAY_MAX = ICAL_RECURRENCE_ARRAY_MAX
+        [ Constant: int  ]
+
+$ICAL_RECURRENCE_ARRAY_MAX_BYTE = ICAL_RECURRENCE_ARRAY_MAX_BYTE
+        [ Constant: int  ]
 

@@ -21,7 +21,7 @@ netical.i
 netical_wrap.c
 netical_wrap.doc
 test-data/2446.mime
-test-data/clusterin.ics
+test-data/single-with-error
 test-data/error
 test-data/mail-examples
 test-data/no-error

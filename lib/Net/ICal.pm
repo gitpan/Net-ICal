@@ -13,7 +13,7 @@ use Net::ICal::Property;
 use Net::ICal::Parameter;
 use Net::ICal::Value;
 
-$VERSION = "0.08";
+$VERSION = "0.11";
 
 1;
 

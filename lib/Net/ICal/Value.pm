@@ -7,28 +7,23 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Value.pm,v 1.3 2000/04/07 05:32:23 eric Exp $
+#  $Id: Value.pm,v 1.6 2000/05/24 04:41:32 eric Exp $
 #  $Locker:  $
 #
-# (C) COPYRIGHT 1999 Eric Busboom
-# http://www.softwarestudio.org 
+# (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 #
-# The contents of this file are subject to the Mozilla Public License
-# Version 1.0 (the "License"); you may not use this file except in
-# compliance with the License. You may obtain a copy of the License at
-# http://www.mozilla.org/MPL/
-# 
-# Software distributed under the License is distributed on an "AS IS"
-# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
-# the License for the specific language governing rights and
-# limitations under the License.
-# 
+# This package is free software and is provided "as is" without express
+# or implied warranty.  It may be used, redistributed and/or modified
+# under the same terms as perl itself. ( Either the Artistic License or the
+# GPL. ) 
+#
 # The Original Code is Value.pm. The Initial Developer of the Original
 # Code is Eric Busboom
 #
 #======================================================================
 
 package Net::ICal::Value;
+use Net::ICal;
 
 sub new_from_ref{
    my $self = [];
@@ -153,7 +148,7 @@ sub split_time
 		    undef,undef,undef));
   }
 
-  return ($usec,$umin,$uhour,$umday,$umon,$uyear,$uwday,$uyday,$uisdst);
+  return ($usec,$umin,$uhour,$umday,$umon+1,$uyear,$uwday,$uyday,$uisdst);
 
 }
 
@@ -178,6 +173,66 @@ sub new_from_split
   }
 
   return new Net::ICal::Value::DateTime(sprintf($fmt,$year+1900,$mon+1,$mday,$hour,$min,$sec));
+
+}
+
+package Net::ICal::Value::Date;
+use Net::ICal;
+use Time::Local;
+@ISA=qw(Net::ICal::Value);
+
+sub isutc {
+  return 0;
+}
+
+sub split_time
+{
+
+  my $self = shift;
+  my $impl = $self->_impl();
+  my $tt = Net::ICal::icalvalue_get_datetime($impl);
+
+  my ($year,$month,$day,$hour,$minute,$second,$isutc,$isdate) = 
+  (Net::ICal::icaltimetype_year_get($tt),
+  Net::ICal::icaltimetype_month_get($tt),
+  Net::ICal::icaltimetype_day_get($tt),
+   0,
+   0,
+   0,
+   0,
+  Net::ICal::icaltimetype_is_date_get($tt));
+
+  my($usec,$umin,$uhour,$umday,$umon,$uyear,$uwday,$uyday,$uisdst) 
+  = localtime(timelocal($second,$minute,$hour,$day,$month-1,$year-1900,
+			undef,undef,undef));
+
+
+
+  return (0,0,0,$umday,$umon+1,$uyear,$uwday,$uyday,0);
+
+}
+
+sub new_from_localtime
+{
+  
+  my $time = shift;
+
+  return new_from_split(localtime($time),0);
+} 
+
+sub new_from_split
+{
+  my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst,$isutc) = @_;
+
+  my $fmt;
+
+  if($isutc){
+    $fmt = "%04s%02s%02s";
+  } else {
+    $fmt = "%04s%02s%02s";
+  }
+
+  return new Net::ICal::Value::Date(sprintf($fmt,$year+1900,$mon+1,$mday));
 
 }
 
@@ -223,7 +278,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -238,7 +292,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::Binary; 
 use Net::ICal::Value;
@@ -280,7 +333,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -295,7 +347,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::Boolean; 
 use Net::ICal::Value;
@@ -337,7 +388,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -352,7 +402,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::CalAddress; 
 use Net::ICal::Value;
@@ -394,7 +443,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -409,7 +457,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::Date; 
 use Net::ICal::Value;
@@ -451,7 +498,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -466,7 +512,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::DateTime; 
 use Net::ICal::Value;
@@ -505,7 +550,9 @@ sub set
          Net::ICal::icalvalue_free($self->[0]);
           $self->[0] = $new_value;
       }
+
    }
+
 }
 
 sub get
@@ -520,7 +567,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::DateTimeDate; 
 use Net::ICal::Value;
@@ -562,7 +608,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -577,7 +622,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::DateTimePeriod; 
 use Net::ICal::Value;
@@ -619,7 +663,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -634,7 +677,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::Duration; 
 use Net::ICal::Value;
@@ -676,7 +718,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -691,7 +732,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::Float; 
 use Net::ICal::Value;
@@ -733,7 +773,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -748,7 +787,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::Geo; 
 use Net::ICal::Value;
@@ -790,7 +828,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -805,7 +842,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::Integer; 
 use Net::ICal::Value;
@@ -847,6 +883,60 @@ sub set
 
    }
 
+}
+
+sub get
+{
+   my $self = shift;
+   my $impl = $self->[0];   
+
+   if (defined $impl){
+
+     return  Net::ICal::icalvalue_as_ical_string($impl);
+
+   }
+}
+
+
+package Net::ICal::Value::Method; 
+use Net::ICal::Value;
+@ISA=qw(Net::ICal::Value);
+sub new
+{
+   my $self = [];
+   my $package = shift;
+   my $value = shift;
+
+   bless $self, $package;
+
+   my $p;
+
+   if ($value){
+      $p = Net::ICal::icalvalue_new_from_string($Net::ICal::ICAL_METHOD_VALUE,$value);
+   } else {
+      $p = Net::ICal::icalvalue_new($Net::ICal::ICAL_METHOD_VALUE);
+   }
+
+   $self->[0] = $p;
+
+   return $self;
+}
+
+sub set
+{
+   my $self = shift;
+   my $v = shift;
+
+   my $impl = $self->_impl();
+
+   if ($v) {
+      my $new_value = Net::ICal::icalvalue_new_from_string($Net::ICal::ICAL_METHOD_VALUE,$v);
+      if ($new_value){
+         Net::ICal::icalvalue_free($self->[0]);
+          $self->[0] = $new_value;
+      }
+
+   }
 
 }
 
@@ -862,7 +952,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::Period; 
 use Net::ICal::Value;
@@ -904,7 +993,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -919,7 +1007,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::Recur; 
 use Net::ICal::Value;
@@ -961,6 +1048,60 @@ sub set
 
    }
 
+}
+
+sub get
+{
+   my $self = shift;
+   my $impl = $self->[0];   
+
+   if (defined $impl){
+
+     return  Net::ICal::icalvalue_as_ical_string($impl);
+
+   }
+}
+
+
+package Net::ICal::Value::String; 
+use Net::ICal::Value;
+@ISA=qw(Net::ICal::Value);
+sub new
+{
+   my $self = [];
+   my $package = shift;
+   my $value = shift;
+
+   bless $self, $package;
+
+   my $p;
+
+   if ($value){
+      $p = Net::ICal::icalvalue_new_from_string($Net::ICal::ICAL_STRING_VALUE,$value);
+   } else {
+      $p = Net::ICal::icalvalue_new($Net::ICal::ICAL_STRING_VALUE);
+   }
+
+   $self->[0] = $p;
+
+   return $self;
+}
+
+sub set
+{
+   my $self = shift;
+   my $v = shift;
+
+   my $impl = $self->_impl();
+
+   if ($v) {
+      my $new_value = Net::ICal::icalvalue_new_from_string($Net::ICal::ICAL_STRING_VALUE,$v);
+      if ($new_value){
+         Net::ICal::icalvalue_free($self->[0]);
+          $self->[0] = $new_value;
+      }
+
+   }
 
 }
 
@@ -976,7 +1117,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::Text; 
 use Net::ICal::Value;
@@ -1018,7 +1158,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -1033,7 +1172,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::Time; 
 use Net::ICal::Value;
@@ -1075,7 +1213,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -1090,7 +1227,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::Trigger; 
 use Net::ICal::Value;
@@ -1132,7 +1268,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -1147,7 +1282,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::Uri; 
 use Net::ICal::Value;
@@ -1189,7 +1323,6 @@ sub set
 
    }
 
-
 }
 
 sub get
@@ -1204,7 +1337,6 @@ sub get
    }
 }
 
-1;
 
 package Net::ICal::Value::UtcOffset; 
 use Net::ICal::Value;
@@ -1246,6 +1378,60 @@ sub set
 
    }
 
+}
+
+sub get
+{
+   my $self = shift;
+   my $impl = $self->[0];   
+
+   if (defined $impl){
+
+     return  Net::ICal::icalvalue_as_ical_string($impl);
+
+   }
+}
+
+
+package Net::ICal::Value::Query; 
+use Net::ICal::Value;
+@ISA=qw(Net::ICal::Value);
+sub new
+{
+   my $self = [];
+   my $package = shift;
+   my $value = shift;
+
+   bless $self, $package;
+
+   my $p;
+
+   if ($value){
+      $p = Net::ICal::icalvalue_new_from_string($Net::ICal::ICAL_QUERY_VALUE,$value);
+   } else {
+      $p = Net::ICal::icalvalue_new($Net::ICal::ICAL_QUERY_VALUE);
+   }
+
+   $self->[0] = $p;
+
+   return $self;
+}
+
+sub set
+{
+   my $self = shift;
+   my $v = shift;
+
+   my $impl = $self->_impl();
+
+   if ($v) {
+      my $new_value = Net::ICal::icalvalue_new_from_string($Net::ICal::ICAL_QUERY_VALUE,$v);
+      if ($new_value){
+         Net::ICal::icalvalue_free($self->[0]);
+          $self->[0] = $new_value;
+      }
+
+   }
 
 }
 
@@ -1262,7 +1448,3 @@ sub get
 }
 
 1;
-
-
-1;
-

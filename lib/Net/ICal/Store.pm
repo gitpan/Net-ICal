@@ -7,22 +7,16 @@
 # DESCRIPTION:
 #   
 #
-#  $Id: Store.pm,v 1.2 2000/03/17 08:24:12 eric Exp $
+#  $Id: Store.pm,v 1.4 2000/05/24 04:41:32 eric Exp $
 #  $Locker:  $
 #
-# (C) COPYRIGHT 2000 Eric Busboom
-# http://www.softwarestudio.org 
+# (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 #
-# The contents of this file are subject to the Mozilla Public License
-# Version 1.0 (the "License"); you may not use this file except in
-# compliance with the License. You may obtain a copy of the License at
-# http://www.mozilla.org/MPL/
-# 
-# Software distributed under the License is distributed on an "AS IS"
-# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
-# the License for the specific language governing rights and
-# limitations under the License.
-# 
+# This package is free software and is provided "as is" without express
+# or implied warranty.  It may be used, redistributed and/or modified
+# under the same terms as perl itself. ( Either the Artistic License or the
+# GPL. ) 
+#
 # The Original Code is Store.pm. The Initial Developer of the Original
 # Code is Eric Busboom
 #
@@ -124,7 +118,7 @@ sub clear {
 
 }
 
-sub get_first {
+sub first {
   my $self = shift;
   my $impl = $self->_impl();
   my $type = shift;
@@ -134,7 +128,7 @@ sub get_first {
   return Net::ICal::Component::new_from_ref($c);
 }
 
-sub get_next {
+sub next {
   my $self = shift;
   my $impl = $self->_impl();
   my $type = shift;

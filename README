@@ -1,22 +1,21 @@
-ICal version 0.02
-Copyright (c) 1999, Eric Busboom
+ICal version 0.09
+Copyright (c) 2000, Eric Busboom
 
 ------------------------------------------------------------------------
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the Artistic License, a copy of which can be
-    found with perl.
+ (C) COPYRIGHT 2000, Eric Busboom, http://www.softwarestudio.org
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    Artistic License for more details.
+ This package is free software and is provided "as is" without express
+ or implied warranty.  It may be used, redistributed and/or modified
+ under the same terms as perl itself. ( Either the Artistic License or the
+ GPL. ) 
+
 ------------------------------------------------------------------------
 
 
 #########################################################################
-Note, this is alpha level software. It is and is primarily intended
-for developers and those who want an early peek. It works OK for all
-of the example programs, but any serious diversion will probably break
+Note, this is alpha level software. It is primarily intended for
+developers and those who want an early peek. It works OK for all of
+the example programs, but any serious diversion will probably break
 it.
 #########################################################################
 
@@ -45,22 +44,31 @@ and a mailing list that you can join by sending the following mail:
 
 REQUIREMENTS
 
-1) libical-0.15a or later
-2) the MIME perl module. 
+1) libical-0.20
 and maybe 
+2) the MIME perl module. 
 3) SWIG
 
 You will need SWIG if netical_wrap.c fails to compile. You can get
 SWIG from www.swig.org.
 
+You will need the MIME module to run some of the example programs in
+examples/imip-client
+
 INSTALLATION
 
-First, you will need to install libical. You can get this from
-http://softwarestudio.org/libical
+First, you will need to install libical. YOU MUST GET VERSION 0.21 FOR
+USE WITH Net-ICal-0.11. This is available at:
+http://www.softwarestudio.org/download/libical-0.21a.tar.gz
+
+You should probably change the libical configureation so it does not
+abort on errors. Put "dnl" at the front of the line in configure.in
+that reads "AC_DEFINE(ICAL_ERRORS_ARE_FATAL,1)", delete config.h and
+re-make
 
 Next, edit the Makefile.PL to refer to the lib and include directories
 where you installed libical. You should have set these with the
-"--prefix" flag given to 'configure," or it will be "/usr/local/lib"
+"--prefix" flag given to 'configure'," or it will be "/usr/local/lib"
 if you did not set it.
 
 Finally, make the perl distribution as normal.
@@ -106,3 +114,10 @@ comonents in the incoming cluster and book them in the calendar.
 Before you run process-incoming, there should be components in the
 file 'alice/incoming.ics'. After running it, 'incoming.ics' should be
 empty, and there will be cluster files in the 'alice/booked' directory
+
+TROUBLESHOOTING
+
+Mostly, you are on your own. If perl crashes, you are probably
+triggering an error in libical -- it aborts on errors if
+ICAL_ERRORS_ARE_FATAL is set. You should probably compile libical
+without this option ( change it in configure.in )

@@ -23,7 +23,6 @@ use MIME::Parser;
 
 use Getopt::Std;
 
-
 sub send_mime{
 
   my $c = shift;
@@ -32,15 +31,16 @@ sub send_mime{
   @props = $c->properties('METHOD');
   
   if ($props[0]){
-    $method = $props[0]->get_value_ref->as_ical_string();
+    $methodref = $props[0]->get_value_ref;
+    $method = $methodref->get();
   } else {
     $method = "PUBLISH";
   }
   
   $top = build MIME::Entity Type    =>"multipart/mixed",
   From    => "eric\@busboom.org",
-  To      => "alice",
-  Subject => "Hello, nurse!",
+  To      => "alice\@cal.softwarestudio.org",
+  Subject => "Meeting Request",
   Data => "This is a calendar";
 
   
@@ -62,5 +62,14 @@ sub send_mime{
 my $cluster = new Net::ICal::Cluster($ARGV[0]);
 
 for ($c = $cluster->first();$c != undef;$c = $cluster->next()){
-  send_mime($c);
+
+  $c->check_restrictions();
+  
+  if($c->count_errors()>0){
+    print stdout "\nThis component has one or more errors\nHere is the text of the component, including libical error properties\n";
+    print stdout $c->as_ical_string();
+  } else {
+
+    send_mime($c);
+  }
 }

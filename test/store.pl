@@ -1,4 +1,6 @@
 #!/usr/bin/perl
+#
+# Store.pl. read the components out of a cluster and put them into a Store
 
 use lib "../blib/lib";
 use lib "../blib/arch";

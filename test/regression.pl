@@ -23,7 +23,7 @@ print "\n---------- Test Prop ------------------\n";
 test_prop();
 
 print "\n---------- Test Restriction -----------\n";
-test_restriction("foo");
+test_restriction("../test-data/single-with-error");
 
 print "\n---------- Test Requeststatus ---------\n";
  test_requeststatus();
@@ -34,6 +34,15 @@ sub test_requeststatus()
   my $r = new Net::ICal::Property::RequestStatus("2.0; Success");
 
   print $r->as_ical_string();
+
+  $r = new Net::ICal::Property::RequestStatus("3.1; Horrible Failure; Info about the failure");
+
+  print $r->as_ical_string();
+
+  $r = new Net::ICal::Property::RequestStatus("3.2");
+
+  print $r->as_ical_string();
+
 
 }
 
@@ -47,6 +56,8 @@ sub test_restriction
   my $text = <FH>;
   $/ = "\n";
   close FH;
+
+  print "Getting text of component \n$text\n";
 
 
   $comp = new Net::ICal::Component(\$text);
